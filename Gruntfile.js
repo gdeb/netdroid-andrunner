@@ -8,6 +8,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-traceur');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-exec');
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
@@ -46,10 +47,20 @@ module.exports = function(grunt) {
             }
         },
 
+        //--------------------------------------------------
+        exec: {
+          make_public_dir: {
+            command: 'mkdir public'
+          },
+          launch_server: {
+            command: 'nodemon src/index.js',
+          },
+        },
     });
 
-    grunt.registerTask('init', ['copy', 'traceur'])
-    // Default task(s).
+
+    grunt.registerTask('init', ['exec:make_public_dir', 'copy','traceur']);
+    grunt.registerTask('start-dev', ['watch', 'exec:launch_server']);
     grunt.registerTask('default', 'watch');
     // grunt.registerTask('copy', 'copy');
 
