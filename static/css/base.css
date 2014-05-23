@@ -1,21 +1,19 @@
-body {
-    /*background-color: lightgray;*/
-    padding-top: 50px;
+.container {
+    margin-top:50px;
+    display: flex;
+    width: 800px;
+    height: 600px;
 }
+
 .main {
-    /*margin-top: 50px;*/
-    height:600px;
-    background-color:#333;
-    padding: 15px;
+    width:480px;
+    height:100%;
+    background-color: #333;
     border-radius: 20px;
-}
-.sidebar {
-    /*margin-top: 50px;*/
-    height:600px;
-    background-color: #333;    
-    border-radius: 20px;
+    margin-right: 20px;
     padding: 15px;
 }
+
 .textbox {
     height:540px;
     width:100%;
@@ -23,21 +21,30 @@ body {
     color: white;
     overflow: auto;
 }
-.textbox p {
+
+p {
     margin: 0;
 }
+
 .inputbox{
     margin-top: 5px;
     width: 100%;
+    height: 30px;
+    display: flex;
+    align-items: center;
 }
+
 .prompt {
     color: white;
     margin-right: 5px;
-    padding-right: 5px;
-    width:1%;
 }
+
 .command-prompt {
-    width:100%;
-    background-color: black;
-    color: white;
+    flex: auto;
+}
+.secondary {
+    width: 300px;
+    height: 100%;
+    background-color: #333;
+    border-radius: 20px;
 }
