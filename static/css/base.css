@@ -1,8 +1,8 @@
 .container {
-    margin-top:50px;
     display: flex;
     width: 800px;
     height: 600px;
+    margin: auto;
 }
 
 .main {
@@ -11,12 +11,12 @@
     background-color: #333;
     border-radius: 20px;
     margin-right: 20px;
-    padding: 15px;
 }
 
 .textbox {
+    margin: 15px 15px 0 15px;
     height:540px;
-    width:100%;
+    width:450px;
     background-color: black;
     color: white;
     overflow: auto;
@@ -27,8 +27,8 @@ p {
 }
 
 .inputbox{
-    margin-top: 5px;
-    width: 100%;
+    margin: 5px 15px 0 15px;
+    width: 450px;
     height: 30px;
     display: flex;
     align-items: center;

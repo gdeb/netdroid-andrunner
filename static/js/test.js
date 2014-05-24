@@ -1,7 +1,8 @@
 /*jslint node: true */
 'use strict';
 
-
+let test = 'brol'
+console.log(test);
 window.addEventListener("DOMContentLoaded", start);
 // function() {
 
@@ -32,6 +33,9 @@ window.addEventListener("DOMContentLoaded", start);
 
 function start () {
   bindInput();
+  let c = new WebSocket(`ws://${window.location.hostname}:8080`);
+  c.onopen = () => c.send('prout');
+  // c.onopen = function () {c.send('prout'); };
 }
 
 function bindInput() {
