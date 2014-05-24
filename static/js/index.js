@@ -1,9 +1,19 @@
-/*jslint node: true */
 'use strict';
 
-let test = 'brol'
+window.addEventListener("DOMContentLoaded", function () {
+    // create client
+    // let client = new anr.Client();
+    // client.start()
+});
+
+let test = 'brolbrol';
 console.log(test);
 window.addEventListener("DOMContentLoaded", start);
+
+// import * from 'EventEmitter';
+// console.log('ntnsrt', y);
+// let event_emitter = System.get('EventEmitter');
+// console.log(event_emitter);
 // function() {
 
 //     console.log('dom loaded');

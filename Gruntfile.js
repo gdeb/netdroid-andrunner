@@ -19,7 +19,11 @@ module.exports = function(grunt) {
                 blockBinding: true,
             },
             custom: {
-                files:{'public/all.js': ['static/js/**/*.js']}
+                files:{
+                    'public/framework.js': ['static/js/framework.js'],
+                    'public/all.js': ['static/js/**/*.js', '!static/js/framework.js', '!static/js/index.js'],
+                    'public/index.js': ['static/js/index.js'],
+                },
             },
         },
         //--------------------------------------------------
