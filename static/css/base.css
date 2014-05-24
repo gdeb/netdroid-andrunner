@@ -13,7 +13,7 @@
     margin-right: 20px;
 }
 
-.textbox {
+#textbox {
     margin: 15px 15px 0 15px;
     height:540px;
     width:450px;
@@ -39,7 +39,7 @@ p {
     margin-right: 5px;
 }
 
-.command-prompt {
+#command-prompt {
     flex: auto;
 }
 .secondary {

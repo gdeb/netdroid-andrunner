@@ -1,6 +1,10 @@
 'use strict';
+
 let anr = {
     framework: {},
+    models: {},
+    views: {},
+    controllers: {},
 };
 
 anr.framework.EventEmitter = class {
@@ -23,6 +27,18 @@ anr.framework.EventEmitter = class {
 };
 
 anr.framework.Model = class {
+    constructor () {
+
+    }
+};
+
+anr.framework.View = class {
+    constructor () {
+
+    }
+};
+
+anr.framework.Controller = class {
     constructor () {
 
     }
