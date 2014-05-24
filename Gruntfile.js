@@ -62,7 +62,7 @@ module.exports = function(grunt) {
             command: 'mkdir public'
           },
           launch_server: {
-            command: 'nodemon src/index.js',
+            command: 'nodemon --harmony src/index.js',
           },
         },
     });

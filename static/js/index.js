@@ -34,7 +34,8 @@ window.addEventListener("DOMContentLoaded", start);
 function start () {
   bindInput();
   let c = new WebSocket(`ws://${window.location.hostname}:8080`);
-  c.onopen = () => c.send('prout');
+  c.onopen = () => c.send('prout ma chère');
+  c.onmessage = (msg) => console.log('received: ' + JSON.parse(msg.data).yopla);
   // c.onopen = function () {c.send('prout'); };
 }
 
