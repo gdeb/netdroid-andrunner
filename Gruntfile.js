@@ -20,9 +20,9 @@ module.exports = function(grunt) {
             },
             custom: {
                 files:{
-                    'public/framework.js': ['static/js/framework.js'],
-                    'public/all.js': ['static/js/**/*.js', '!static/js/framework.js', '!static/js/index.js'],
+                    'public/client.js': ['static/js/client.js'],
                     'public/index.js': ['static/js/index.js'],
+                    'public/framework.js': ['static/js/framework.js'],
                 },
             },
         },
