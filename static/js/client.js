@@ -6,8 +6,16 @@ anr.Client = class {
         this.controller = new anr.controllers.Lobby();
     }
     start () {
-        this.web_socket.onopen = () => this.web_socket.send('prout ma chère');
-        this.web_socket.onmessage = (msg) => console.log('received: ' + JSON.parse(msg.data).yopla);
+        let self = this;
+        this.web_socket.onopen = function () {
+            self.web_socket.send('msg1');
+            self.web_socket.send('msg2');
+            self.web_socket.send('msg3');
+        };
+        this.web_socket.onmessage = function (msg) {
+            self.web_socket.onmessage = self.controller.read;
+            self.controller.connect(msg, self.web_socket);
+        };
     }
 };
 

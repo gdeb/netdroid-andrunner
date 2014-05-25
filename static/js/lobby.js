@@ -1,7 +1,7 @@
 'use strict';
 
 //-----------------------------------------------------------------------------
-anr.models.Notifications = class extends anr.framework.Model {
+anr.models.Lobby = class extends anr.framework.Model {
     constructor (...args) {
         super(...args);
         this.add_list_property('notifications');
@@ -38,11 +38,18 @@ anr.views.Lobby = class extends anr.framework.View {
 //-----------------------------------------------------------------------------
 anr.controllers.Lobby = class extends anr.framework.Controller {
     constructor () {
-        this.model = new anr.models.Notifications ();
+        this.model = new anr.models.Lobby ();
         this.view = new anr.views.Lobby(this, this.model);
     }
     notify_input(input) {
         this.model.notifications.push(input);
+    }
+
+    connect (msg, socket) {
+        console.log('initial message', msg.data);
+    }
+    read (msg) { // from web_socket
+        console.log(msg);
     }
 };
 
