@@ -37,7 +37,8 @@ anr.views.Lobby = class extends anr.framework.View {
 
 //-----------------------------------------------------------------------------
 anr.controllers.Lobby = class extends anr.framework.Controller {
-    constructor () {
+    constructor (client) {
+        super(client);
         this.model = new anr.models.Lobby ();
         this.view = new anr.views.Lobby(this, this.model);
     }
@@ -47,9 +48,7 @@ anr.controllers.Lobby = class extends anr.framework.Controller {
 
     connect (msg, socket) {
         console.log('initial message', msg.data);
-    }
-    read (msg) { // from web_socket
-        console.log(msg);
+        this.send({type:'prout'});
     }
 };
 

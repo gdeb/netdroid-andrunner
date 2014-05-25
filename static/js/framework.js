@@ -157,8 +157,14 @@ anr.framework.View = class {
 
 //-----------------------------------------------------------------------------
 anr.framework.Controller = class {
-    constructor () {
-
+    constructor (client) {
+        this.client = client;
     }
+    read (msg) { // from web_socket
+        console.log('controller', msg);
+    }
+    send (msg) {
+        this.client.web_socket.send(JSON.stringify(msg));
+    }    
 };
 

@@ -3,7 +3,7 @@
 anr.Client = class {
     constructor () {
         this.web_socket = new WebSocket(`ws://${window.location.hostname}:8080`);
-        this.controller = new anr.controllers.Lobby();
+        this.controller = new anr.controllers.Lobby(this);
     }
     start () {
         let self = this;
@@ -14,7 +14,7 @@ anr.Client = class {
         };
         this.web_socket.onmessage = function (msg) {
             self.web_socket.onmessage = self.controller.read;
-            self.controller.connect(msg, self.web_socket);
+            self.controller.connect(msg);
         };
     }
 };
