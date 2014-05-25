@@ -7,17 +7,18 @@ let anr = {
     controllers: {},
 };
 
+//-----------------------------------------------------------------------------
 anr.framework.EventEmitter = class {
     constructor () {
-        this.callbacks = {};
+        this._callbacks = {};
     }
     addListener (event_name, callback) {
-        this.callbacks[event_name] = this.callbacks[event_name] || [];
-        this.callbacks[event_name].push(callback);
+        this._callbacks[event_name] = this._callbacks[event_name] || [];
+        this._callbacks[event_name].push(callback);
         return this;
     }
     emit (event_name, ...data) {
-        let callbacks = this.callbacks[event_name];
+        let callbacks = this._callbacks[event_name];
         if (!callbacks) return this;
         for (let callback of callbacks) {
             callback(...data);
@@ -26,18 +27,87 @@ anr.framework.EventEmitter = class {
     }    
 };
 
-anr.framework.Model = class {
-    constructor () {
+//-----------------------------------------------------------------------------
+anr.framework.Model = class extends anr.framework.EventEmitter{
+    constructor (...args) {
+        super(...args);
+        this._simple_properties = {};
+        this._list_properties = {};
+    }
+
+    add_property (name, initial_value) {
+        if (this[name]) {
+            throw new Error(`Property ${name} already exists`);
+        }
+        let self = this;
+        this._simple_properties[name] = initial_value;
+        this[name] = {
+            get () { return self._simple_properties[name]; },
+            set (new_value) {
+                if (new_value === self._simple_properties[name]) return;
+                let old_value = self._simple_properties[name];
+                self._simple_properties[name] = new_value;
+                self.emit(`change:${name}`, {
+                    type: `change:${name}`,
+                    old_value: old_value,
+                    new_value: new_value,
+                });
+            }
+        };
+    }
+
+    add_list_property (name) {
+        if (this[name]) {
+            throw new Error(`Property ${name} already exists`);
+        }
+        let self = this;
+        this._list_properties[name] = [];
+        this[name] = {
+            length () { return self._list_properties[name].length; },
+            get (index) { 
+                return (index === undefined) 
+                    ? self._list_properties[name].slice(0)
+                    : self._list_properties[name][index]; 
+            },
+            push (data) {
+                let index = self._list_properties[name].push(data);
+                self.emit(`add:${name}`, {
+                    type: `add:${name}`, 
+                    new_value: data,
+                    index: index,
+                });
+            },
+            set (i, data) {
+                let list = self._list_properties[name];
+                if (i >= list.length) {
+                    throw new Error('Index out of list bound. Use push instead');
+                }
+                if (list[i] === data) return;
+                let old_value = list[i];
+                list[i] = data;
+                self.emit(`change:${name}`, {
+                    type: `change:${name}`,
+                    new_value: data,
+                    old_value: old_value,
+                    index: i,
+                });
+            }
+        };
+    }
+
+    add_list_dict_property () {
 
     }
 };
 
+//-----------------------------------------------------------------------------
 anr.framework.View = class {
-    constructor () {
-
+    constructor (controller) {
+        this.controller = controller;
     }
 };
 
+//-----------------------------------------------------------------------------
 anr.framework.Controller = class {
     constructor () {
 
