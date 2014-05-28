@@ -27,8 +27,6 @@ class Lobby {
         socket.on('message', function (msg) {
             console.log('received socket msg', msg);
         });
-        console.log('in lobby');
-        console.log(msg);
         player.send({
             id:0,
             answer:0,

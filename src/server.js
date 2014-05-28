@@ -2,6 +2,7 @@
 'use strict';
 
 let express = require('express'),
+    logger = require('./logger.js'),
     WebSocketServer = require('ws').Server,
     Lobby = require('./lobby.js');
 
@@ -19,12 +20,12 @@ class Server {
         // web socket server
         this.socket_server = new WebSocketServer({port:8080});
         this.socket_server.on('connection', function (socket) {
-            console.log('Incoming connection');
+            logger.info('Incoming connection');
             socket.once('message', msg => self.lobby.add_player(msg, socket));
         });
     }
     start () {
-        console.log('Server started: http://localhost:3000');
+        logger.info('Server started: http://localhost:3000');
         this.app.listen(3000);
     }
 }

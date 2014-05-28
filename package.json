@@ -17,6 +17,7 @@
     "grunt-exec": "~0.4.5"
   },
   "dependencies": {
-    "traceur": "0.0.42"
+    "traceur": "0.0.42",
+    "colors": "~0.6.2"
   }
 }
