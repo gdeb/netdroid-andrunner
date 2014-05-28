@@ -46,9 +46,9 @@ anr.controllers.Lobby = class extends anr.framework.Controller {
         this.model.notifications.push(input);
     }
 
-    connect (msg, socket) {
+    connect (msg) {
         console.log('initial message', msg.data);
-        this.send({type:'prout'});
+        // this.client.send({type:'prout'});
     }
 };
 

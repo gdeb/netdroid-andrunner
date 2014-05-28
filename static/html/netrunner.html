@@ -3,10 +3,15 @@
     <title>Android:Netrunner</title>
     <link href="base.css" rel="stylesheet">
     <script src="traceur-runtime.js" ></script>
+
+    <script>var anr = {models:{}, views:{}, controllers:{}};</script>
+    <script src="utils.js" ></script>
     <script src="framework.js" ></script>
     <script src="lobby.js" ></script>
     <script src="client.js" ></script>
     <script src="index.js" ></script>
+    <script>window.addEventListener("DOMContentLoaded", function () {new anr.Client();});</script>
+
 </head>
  
 <body>

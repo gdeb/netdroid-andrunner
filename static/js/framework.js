@@ -1,11 +1,6 @@
 'use strict';
 
-let anr = {
-    framework: {},
-    models: {},
-    views: {},
-    controllers: {},
-};
+anr.framework = {};
 
 //-----------------------------------------------------------------------------
 anr.framework.EventEmitter = class {

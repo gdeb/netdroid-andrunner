@@ -29,7 +29,12 @@ class Lobby {
         });
         console.log('in lobby');
         console.log(msg);
-        player.send({test:'sendtoplayer'});
+        player.send({
+            id:0,
+            answer:0,
+            type: 'login_successful',
+            content: {name:'yop', users_list:[{name:'anonymous'}]}
+        });
         player.send({encore:'nnrst'});
     }
 }

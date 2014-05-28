@@ -24,6 +24,7 @@ module.exports = function(grunt) {
                     'public/index.js': ['static/js/index.js'],
                     'public/framework.js': ['static/js/framework.js'],
                     'public/lobby.js': ['static/js/lobby.js'],
+                    'public/utils.js': ['static/js/utils.js'],
                 },
             },
         },
