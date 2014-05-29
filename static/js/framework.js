@@ -13,6 +13,7 @@ anr.framework.EventEmitter = class {
         return this;
     }
     emit (event_name, ...data) {
+        if (anr.debug) { console.log('Event emitted: ', event_name, ...data);}
         let callbacks = this._callbacks[event_name];
         if (!callbacks) return this;
         for (let callback of callbacks) {
@@ -100,13 +101,15 @@ anr.framework.Model = class extends anr.framework.EventEmitter{
         list_dict[name] = [];
         this[name] = {
             length () { return list_dict[name].length; },
-            push (data) {
+            push (data, options = {}) {
                 let index = list_dict[name].push(data);
-                self.emit(`add:${name}`, {
-                    type: `add:${name}`, 
-                    new_value: data,
-                    index: index,
-                });
+                if (!options.silent) {
+                    self.emit(`add:${name}`, {
+                        type: `add:${name}`, 
+                        new_value: data,
+                        index: index,
+                    });
+                }
             },
             get (index) {
                 return (index === undefined) 
@@ -138,6 +141,16 @@ anr.framework.Model = class extends anr.framework.EventEmitter{
                         attribute: attr,
                     });
                 }
+            },
+            reset (list_dict, options = {}) {
+                list_dict[name] = [];
+                for (let obj of list_dict) {
+                    list_dict[name].push(obj);
+                }
+                self.emit(`reset:${name}`, {
+                    type: `reset:${name}`,
+                    new_value: list_dict.slice(0),
+                });
             }
         };
     }

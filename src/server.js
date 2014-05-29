@@ -57,7 +57,7 @@ class Server {
     }
     start () {
         logger.info('Server started: http://localhost:3000');
-        this.app.listen(3000);
+        this.app.listen(3000, '0.0.0.0');
     }
     handle_connection (socket) {
         let anr_socket = new ANRSocket(socket);

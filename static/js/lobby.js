@@ -17,7 +17,8 @@ anr.views.Lobby = class extends anr.framework.View {
 
         model.addListener('add:notifications', ev => this.update_textbox(ev));
         model.addListener('change:name', ev => this.update_prompt(ev));
-        model.addListener('add:players', ev => this.update_players_list(ev));
+        model.addListener('reset:players', ev => this.reset_player(ev));
+        model.addListener('add:players', ev => this.add_player(ev));
 
         this.input = document.getElementById('command-prompt');
         this.textbox = document.getElementById('textbox');
@@ -45,11 +46,24 @@ anr.views.Lobby = class extends anr.framework.View {
         let prompt = `${event.new_value}@netrunner:/lobby/>`;
         this.prompt.innerHTML = prompt;
     }
-    update_players_list (event) {
-        console.log('new player', event);
+    add_player_to_list (player) {
         let player_info = document.createElement('p');
-        player_info.textContent = `[${event.new_value.name}]`;
+        player_info.textContent = `[${player.name}]`;
         this.top.appendChild(player_info);
+    }
+    add_notification (notif) {
+        let notif_elem = document.createElement('p');
+        notif_elem.textContent = `${notif}`;
+        this.textbox.appendChild(notif_elem);        
+    }
+    add_player (event) {
+        this.add_player_to_list (event.new_value);
+        this.add_notification(`[${event.new_value.name}] joined the lobby`);
+    }
+    reset_player (event) {
+        for (let player of event.new_value) {
+            this.add_player_to_list(player);
+        }
     }
 };
 
@@ -65,12 +79,8 @@ anr.controllers.Lobby = class extends anr.framework.Controller {
     }
 
     connect (msg) {
-        console.log('initial message', msg.content);
         this.model.name.set(msg.content.name);
-        for (let player of msg.content.users_list) {
-            this.model.players.push(player);
-        }
-        console.log('mesg', msg);
+        this.model.players.reset(msg.content.users_list);
         this.client.send({type:'prout'});
     }
 
