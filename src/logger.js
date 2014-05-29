@@ -21,4 +21,8 @@ module.exports = {
         args.unshift(getTimeStamp(), '- error - '.red);
         console.log(...args);
     },
+    debug: function (...args) {
+        args.unshift('[DEBUG] '.cyan);
+        console.log(...args);
+    },
 };

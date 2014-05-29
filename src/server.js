@@ -8,6 +8,40 @@ let express = require('express'),
     Lobby = require('./lobby.js');
 
 //-----------------------------------------------------------------------------
+class ANRSocket {
+    constructor (socket) {
+        this.socket = socket;
+        this.id = utils.uniqueId();
+        logger.info(`New web socket open, with id ${this.id}`);
+        socket.on('close', () => logger.info(`Connection closed: socket ${this.id}`));
+        socket.on('message', msg => logger.info(`[${this.id}, ▲] ${msg}`));
+    }
+    write (msg) {
+        let msg_out = JSON.stringify({
+            id: utils.uniqueId(),
+            type: msg.type,
+            content: msg.content,
+            answer: msg.answer,
+        });
+        logger.info(`[${this.id}, ▼] ${msg_out}`);
+        this.socket.send(msg_out);
+    }
+    send (type, content, answered_msg) {
+        this.write({
+            type: type, 
+            content:content, 
+            answer: answered_msg && answered_msg.id,
+        });
+    }
+    on_next_message(callback) {
+        this.socket.once('message', msg => callback(JSON.parse(msg)));
+    }
+    on_message(callback) {
+        this.socket.on('message', msg => callback(JSON.parse(msg)));
+    }
+}
+
+//-----------------------------------------------------------------------------
 class Server {
     constructor () {
         this.lobby = new Lobby(this);
@@ -26,17 +60,8 @@ class Server {
         this.app.listen(3000);
     }
     handle_connection (socket) {
-        let socket_id = utils.uniqueId();
-        logger.info('Incoming connection: socket', socket_id);
-
-        let old_send = socket.send.bind(socket);
-        socket.send = function (data, ...args) {
-            logger.info(`[${socket_id}, ▼] ${data}`);
-            old_send(data, ...args);
-        }
-        socket.on('message', msg => logger.info(`[${socket_id}, ▲] ${msg}`));
-
-        socket.once('message', msg => this.lobby.add_player(msg, socket));
+        let anr_socket = new ANRSocket (socket);
+        anr_socket.on_next_message(msg => this.lobby.add_player(msg, anr_socket));
     }
 }
 

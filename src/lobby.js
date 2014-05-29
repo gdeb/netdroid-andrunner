@@ -1,14 +1,17 @@
 /*jslint node: true */
 'use strict';
 
+let logger = require('./logger.js'),
+    utils = require('./utils.js');
+
 //-----------------------------------------------------------------------------
 class Player {
     constructor (name, socket) {
         this.name = name;
         this.socket = socket;
     }
-    send (msg) {
-        this.socket.send(JSON.stringify(msg));
+    send (...args) {
+        this.socket.send(...args);
     }
 }
 
@@ -20,20 +23,20 @@ class Lobby {
     }
 
     add_player (msg, socket) {
-        let player = new Player('yop', socket);
+        let name = this.get_unique_name(msg.content),
+            player = new Player(name, socket);
 
         this.players.push(player);
 
-        socket.on('message', function (msg) {
-            console.log('received socket msg', msg);
-        });
-        player.send({
-            id:0,
-            answer:0,
-            type: 'login_successful',
-            content: {name:'yop', users_list:[{name:'anonymous'}]}
-        });
-        player.send({encore:'nnrst'});
+        socket.on_message(msg => logger.debug('received socket msg', msg));
+        player.send('login_successful', {name:player.name, users_list:[{name:'anonymous'}]}, msg);
+    }
+
+    get_unique_name (name, suffix = 0) {
+        let test_name = suffix > 0 ? name + suffix : name,
+            name_list = this.players.map(p => p.name),
+            is_unique = name_list.indexOf(test_name) === -1;
+        return is_unique ? test_name : this.get_unique_name(name, suffix + 1);
     }
 }
 module.exports = Lobby;

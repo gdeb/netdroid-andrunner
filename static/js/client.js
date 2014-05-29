@@ -20,7 +20,6 @@ anr.Client = class {
     // web socket communication
     //-------------------------------------------------------------------------
     read (msg) {
-        console.log('[IN] :', msg);
         if (msg.hasOwnProperty('answer')) {
             let callback = this.callbacks[msg.answer];
             delete this.callbacks[msg.answer];
@@ -37,8 +36,6 @@ anr.Client = class {
             type: msg.type,
             content: msg.content,
         };
-        console.log('[OUT]:', msg_out);
-
         this.web_socket.send(JSON.stringify(msg_out));
         return id;
     }    
