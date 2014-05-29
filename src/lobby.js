@@ -29,8 +29,15 @@ class Lobby {
         this.players.push(player);
         socket.on_message(msg => this.handle_message(msg, player));
 
-        let players = this.players.map(p => ({name:p.name}));
-        player.send('login_successful', {name:player.name, users_list:players}, msg);
+        let players = this.players.map(p => ({name:p.name})),
+            response = {name: player.name, users_list: players};
+        player.send('login_successful', response, msg);
+
+        for (let p of this.players) {
+            if (p !== player) {
+                p.send('new_player', {name: player.name});
+            }
+        }
     }
 
     get_unique_name (name, suffix = 0) {

@@ -73,5 +73,11 @@ anr.controllers.Lobby = class extends anr.framework.Controller {
         console.log('mesg', msg);
         this.client.send({type:'prout'});
     }
+
+    read (msg) {
+        if (msg.type === 'new_player') {
+            this.model.players.push(msg.content);
+        }
+    }
 };
 
