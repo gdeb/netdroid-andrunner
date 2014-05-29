@@ -13,6 +13,9 @@ class Player {
     send (...args) {
         this.socket.send(...args);
     }
+    on_close (callback) {
+        this.socket.on_close(callback);
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -28,6 +31,7 @@ class Lobby {
 
         this.players.push(player);
         socket.on_message(msg => this.handle_message(msg, player));
+        player.on_close(() => this.remove_player(player));
 
         let players = this.players.map(p => ({name:p.name})),
             response = {name: player.name, users_list: players};
@@ -51,6 +55,15 @@ class Lobby {
     handle_message (msg, player) {
         // to do
         // logger.debug('handle_message');
+    }
+
+    remove_player (player) {
+        logger.info(`Player ${player.name} left the lobby`);
+        let index = this.players.indexOf(player);
+        this.players.splice(index, 1);
+        for (let p of this.players) {
+            p.send('player_disconnect', {name: player.name});
+        }
     }
 }
 module.exports = Lobby;

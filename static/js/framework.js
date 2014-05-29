@@ -88,7 +88,7 @@ anr.framework.Model = class extends anr.framework.EventEmitter{
                     old_value: old_value,
                     index: i,
                 });
-            }
+            },
         };
     }
 
@@ -142,15 +142,29 @@ anr.framework.Model = class extends anr.framework.EventEmitter{
                     });
                 }
             },
-            reset (list_dict, options = {}) {
+            reset (new_list_dict, options = {}) {
                 list_dict[name] = [];
-                for (let obj of list_dict) {
+                for (let obj of new_list_dict) {
                     list_dict[name].push(obj);
                 }
                 self.emit(`reset:${name}`, {
                     type: `reset:${name}`,
-                    new_value: list_dict.slice(0),
+                    new_value: list_dict[name].slice(0),
                 });
+            },
+            remove (filter) {
+                let old_list = list_dict[name];
+                list_dict[name] = [];
+                for (let obj of old_list) {
+                    if (filter(obj)) {
+                        self.emit(`remove:${name}`, {
+                            type: `remove:${name}`,
+                            removed: obj,
+                        });
+                    } else {
+                        list_dict[name].push(obj);
+                    }
+                }
             }
         };
     }

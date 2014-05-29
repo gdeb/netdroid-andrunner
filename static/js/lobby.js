@@ -14,11 +14,13 @@ anr.models.Lobby = class extends anr.framework.Model {
 anr.views.Lobby = class extends anr.framework.View {
     constructor (controller, model) {
         super(controller);
+        this.model = model;
 
         model.addListener('add:notifications', ev => this.update_textbox(ev));
         model.addListener('change:name', ev => this.update_prompt(ev));
         model.addListener('reset:players', ev => this.reset_player(ev));
         model.addListener('add:players', ev => this.add_player(ev));
+        model.addListener('remove:players', ev => this.remove_player(ev));
 
         this.input = document.getElementById('command-prompt');
         this.textbox = document.getElementById('textbox');
@@ -60,6 +62,13 @@ anr.views.Lobby = class extends anr.framework.View {
         this.add_player_to_list (event.new_value);
         this.add_notification(`[${event.new_value.name}] joined the lobby`);
     }
+    remove_player (event) {
+        this.top.innerHTML = '';
+        for (let player of this.model.players.get()) {
+            this.add_player_to_list(player);
+        }
+        this.add_notification(`[${event.removed.name}] left the lobby`);
+    }
     reset_player (event) {
         for (let player of event.new_value) {
             this.add_player_to_list(player);
@@ -81,12 +90,14 @@ anr.controllers.Lobby = class extends anr.framework.Controller {
     connect (msg) {
         this.model.name.set(msg.content.name);
         this.model.players.reset(msg.content.users_list);
-        this.client.send({type:'prout'});
     }
 
     read (msg) {
         if (msg.type === 'new_player') {
             this.model.players.push(msg.content);
+        }
+        if (msg.type === 'player_disconnect') {
+            this.model.players.remove(p => p.name === msg.content.name);
         }
     }
 };

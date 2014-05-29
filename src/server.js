@@ -39,6 +39,9 @@ class ANRSocket {
     on_message(callback) {
         this.socket.on('message', msg => callback(JSON.parse(msg)));
     }
+    on_close(callback) {
+        this.socket.on('close', callback);
+    }
 }
 
 //-----------------------------------------------------------------------------
