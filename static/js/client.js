@@ -48,3 +48,6 @@ anr.Client = class {
     }
 };
 
+anr.start = function () {
+    new anr.Client();
+};

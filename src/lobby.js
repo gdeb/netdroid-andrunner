@@ -27,9 +27,10 @@ class Lobby {
             player = new Player(name, socket);
 
         this.players.push(player);
-
         socket.on_message(msg => this.handle_message(msg, player));
-        player.send('login_successful', {name:player.name, users_list:[{name:'anonymous'}]}, msg);
+
+        let players = this.players.map(p => ({name:p.name}));
+        player.send('login_successful', {name:player.name, users_list:players}, msg);
     }
 
     get_unique_name (name, suffix = 0) {
@@ -42,7 +43,7 @@ class Lobby {
 
     handle_message (msg, player) {
         // to do
-        logger.debug('handle_message');
+        // logger.debug('handle_message');
     }
 }
 module.exports = Lobby;

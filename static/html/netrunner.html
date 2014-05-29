@@ -10,8 +10,7 @@
     <script src="lobby.js" ></script>
     <script src="client.js" ></script>
     <script src="index.js" ></script>
-    <script>window.addEventListener("DOMContentLoaded", function () {new anr.Client();});</script>
-
+    <script>window.addEventListener("DOMContentLoaded", anr.start);</script>
 </head>
  
 <body>
@@ -20,7 +19,7 @@
     <div class="main">
         <div id="textbox"></div>
         <div class="inputbox">
-            <p class="prompt">anonymous@netrunner:/lobby/></p>
+            <p id="prompt">anonymous@netrunner:/lobby/></p>
             <input id="command-prompt"></input>
         </div>
     </div>

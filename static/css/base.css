@@ -34,7 +34,7 @@ p {
     align-items: center;
 }
 
-.prompt {
+#prompt {
     color: white;
     margin-right: 5px;
 }

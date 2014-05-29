@@ -4,20 +4,23 @@
 anr.models.Lobby = class extends anr.framework.Model {
     constructor (...args) {
         super(...args);
+        this.add_property('name', 'anonymous');
         this.add_list_property('notifications');
     }
 };
 
 //-----------------------------------------------------------------------------
 anr.views.Lobby = class extends anr.framework.View {
-    constructor (controller, notifications) {
+    constructor (controller, model) {
         super(controller);
 
-        notifications.addListener('add:notifications', 
-                                    this.update_textbox.bind(this));
+        model.addListener('add:notifications', ev => this.update_textbox(ev));
+        model.addListener('change:name', ev => this.update_prompt(ev));
+
         this.input = document.getElementById('command-prompt');
         this.textbox = document.getElementById('textbox');
-        this.input.addEventListener('keypress', this.handle_input.bind(this));
+        this.prompt = document.getElementById('prompt');
+        this.input.addEventListener('keypress', ev => this.handle_input(ev));
         this.input.focus();
     }
     handle_input () {
@@ -31,6 +34,10 @@ anr.views.Lobby = class extends anr.framework.View {
         notif.textContent = event.new_value;
         this.textbox.appendChild(notif);
         this.textbox.scrollTop = this.textbox.scrollHeight;
+    }
+    update_prompt (event) {
+        let prompt = `${event.new_value}@netrunner:/lobby/>`;
+        this.prompt.innerHTML = prompt;
 
     }
 };
@@ -47,7 +54,8 @@ anr.controllers.Lobby = class extends anr.framework.Controller {
     }
 
     connect (msg) {
-        console.log('initial message', msg.data);
+        console.log('initial message', msg.content);
+        this.model.name.set(msg.content.name);
         console.log('mesg', msg);
         this.client.send({type:'prout'});
     }
