@@ -70,11 +70,18 @@ module.exports = function(grunt) {
           launch_server: {
             command: 'nodemon --harmony src/index.js',
           },
+          count_loc: {
+            command: 'sloc -e "node_modules|public" ./',
+          },
+          count_js_loc: {
+            command: 'git ls-files | grep "\.js" | xargs wc -l | sort -n',
+          }
         },
     });
 
     grunt.registerTask('init', ['exec:make_public_dir', 'copy','traceur']);
     grunt.registerTask('start', ['exec:launch_server']);
+    grunt.registerTask('stats', ['exec:count_loc', 'exec:count_js_loc']);
     grunt.registerTask('default', 'start');
 
 };
