@@ -6,6 +6,7 @@ anr.models.Lobby = class extends anr.framework.Model {
         super(...args);
         this.add_property('name', 'anonymous');
         this.add_list_property('notifications');
+        this.add_list_dict_property('players');
     }
 };
 
@@ -16,10 +17,15 @@ anr.views.Lobby = class extends anr.framework.View {
 
         model.addListener('add:notifications', ev => this.update_textbox(ev));
         model.addListener('change:name', ev => this.update_prompt(ev));
+        model.addListener('add:players', ev => this.update_players_list(ev));
 
         this.input = document.getElementById('command-prompt');
         this.textbox = document.getElementById('textbox');
         this.prompt = document.getElementById('prompt');
+        this.top = document.getElementById('top');
+        this.middle = document.getElementById('middle');
+        this.bottom = document.getElementById('bottom');
+
         this.input.addEventListener('keypress', ev => this.handle_input(ev));
         this.input.focus();
     }
@@ -38,7 +44,12 @@ anr.views.Lobby = class extends anr.framework.View {
     update_prompt (event) {
         let prompt = `${event.new_value}@netrunner:/lobby/>`;
         this.prompt.innerHTML = prompt;
-
+    }
+    update_players_list (event) {
+        console.log('new player', event);
+        let player_info = document.createElement('p');
+        player_info.textContent = `[${event.new_value.name}]`;
+        this.top.appendChild(player_info);
     }
 };
 
@@ -56,6 +67,9 @@ anr.controllers.Lobby = class extends anr.framework.Controller {
     connect (msg) {
         console.log('initial message', msg.content);
         this.model.name.set(msg.content.name);
+        for (let player of msg.content.users_list) {
+            this.model.players.push(player);
+        }
         console.log('mesg', msg);
         this.client.send({type:'prout'});
     }
