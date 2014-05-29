@@ -28,7 +28,7 @@ class Lobby {
 
         this.players.push(player);
 
-        socket.on_message(msg => logger.debug('received socket msg', msg));
+        socket.on_message(msg => this.handle_message(msg, player));
         player.send('login_successful', {name:player.name, users_list:[{name:'anonymous'}]}, msg);
     }
 
@@ -36,7 +36,13 @@ class Lobby {
         let test_name = suffix > 0 ? name + suffix : name,
             name_list = this.players.map(p => p.name),
             is_unique = name_list.indexOf(test_name) === -1;
+
         return is_unique ? test_name : this.get_unique_name(name, suffix + 1);
+    }
+
+    handle_message (msg, player) {
+        // to do
+        logger.debug('handle_message');
     }
 }
 module.exports = Lobby;

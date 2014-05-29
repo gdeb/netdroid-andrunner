@@ -53,14 +53,14 @@ class Server {
 
         // web socket server
         this.socket_server = new WebSocketServer({port:8080});
-        this.socket_server.on('connection', this.handle_connection.bind(this));
+        this.socket_server.on('connection', s => this.handle_connection(s));
     }
     start () {
         logger.info('Server started: http://localhost:3000');
         this.app.listen(3000);
     }
     handle_connection (socket) {
-        let anr_socket = new ANRSocket (socket);
+        let anr_socket = new ANRSocket(socket);
         anr_socket.on_next_message(msg => this.lobby.add_player(msg, anr_socket));
     }
 }

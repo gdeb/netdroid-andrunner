@@ -48,7 +48,8 @@ anr.controllers.Lobby = class extends anr.framework.Controller {
 
     connect (msg) {
         console.log('initial message', msg.data);
-        // this.client.send({type:'prout'});
+        console.log('mesg', msg);
+        this.client.send({type:'prout'});
     }
 };
 

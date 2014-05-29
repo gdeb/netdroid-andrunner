@@ -1,5 +1,3 @@
-'use strict';
-
 
 
 anr.Client = class {
@@ -11,9 +9,9 @@ anr.Client = class {
         let socket_url = `ws://${window.location.hostname}:8080`;
         this.web_socket = new WebSocket(socket_url);
         this.web_socket.onopen = function () {
-            self.ask('login', 'anonymous', self.controller.connect.bind(this));
-        }
-        this.web_socket.onmessage = (msg) => this.read(JSON.parse(msg.data));
+            self.ask('login', 'anonymous', msg => self.controller.connect(msg));
+        };
+        this.web_socket.onmessage = msg => this.read(JSON.parse(msg.data));
     }
 
     //-------------------------------------------------------------------------
@@ -41,7 +39,7 @@ anr.Client = class {
     }    
 
     send (type, content) {
-        return this.write({type:type, content: content})
+        return this.write({type:type, content: content});
     }
 
     ask (type, content, callback) {
