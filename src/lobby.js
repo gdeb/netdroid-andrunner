@@ -13,9 +13,6 @@ class Player {
     send (...args) {
         this.socket.send(...args);
     }
-    on_close (callback) {
-        this.socket.on_close(callback);
-    }
 }
 
 //-----------------------------------------------------------------------------
@@ -31,7 +28,7 @@ class Lobby {
 
         this.players.push(player);
         socket.on_message(msg => this.handle_message(msg, player));
-        player.on_close(() => this.remove_player(player));
+        socket.on_close(() => this.remove_player(player));
 
         let players = this.players.map(p => ({name:p.name})),
             response = {name: player.name, users_list: players};
