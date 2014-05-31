@@ -51,18 +51,19 @@ class Server {
 
         // http server
         this.app = express();
-        this.app.use(express.static(`${__dirname}/../public`)); 
+        this.app.use(express.static(`${__dirname}/../../static`)); 
         this.app.get('/', (_, res) => res.redirect('netrunner.html'));
 
         // web socket server
         this.socket_server = new WebSocketServer({port:8080});
         this.socket_server.on('connection', s => this.handle_connection(s));
-    }
-    start () {
+
         logger.info('Server started: http://localhost:3000');
         this.app.listen(3000, '0.0.0.0');
     }
+
     handle_connection (socket) {
+        logger.info('Incoming connection');
         let anr_socket = new ANRSocket(socket);
         anr_socket.on_next_message(msg => this.lobby.add_player(msg, anr_socket));
     }

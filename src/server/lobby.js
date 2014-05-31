@@ -2,7 +2,7 @@
 'use strict';
 
 let logger = require('./logger.js'),
-    utils = require('./utils.js');
+    utils = require('../common/utils.js');
 
 //-----------------------------------------------------------------------------
 class Player {
