@@ -3,7 +3,7 @@
 
 let express = require('express'),
     logger = require('./logger.js'),
-    utils = require('./utils.js'),
+    utils = require('../common/utils.js'),
     WebSocketServer = require('ws').Server,
     Lobby = require('./lobby.js');
 
