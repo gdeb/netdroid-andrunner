@@ -5,7 +5,7 @@
 			"folder_exclude_patterns":
 			[
 				"node_modules",
-				"public"
+				"static"
 			],
 			"follow_symlinks": true,
 			"path": "."
