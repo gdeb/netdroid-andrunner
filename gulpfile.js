@@ -2,6 +2,9 @@ var gulp = require('gulp'),
     nodemon = require('gulp-nodemon'),
     runSequence = require('run-sequence'),
     traceur = require('gulp-traceur'),
+    rename = require('gulp-rename'),
+    browserify = require('gulp-browserify'),
+    uglify = require('gulp-uglify'),
     clean = require('gulp-clean');
 
 //-----------------------------------------------------------------------------
@@ -21,13 +24,19 @@ gulp.task('html', function() {
 });
 
 gulp.task('js', function() {
-    return gulp.src('src/client/**/*.js')
+    return gulp.src('src/client/js/index.js')
+        .pipe(rename({basename: 'netrunner'}))
+        .pipe(browserify({
+            insertGlobals : true,
+            debug : true,
+        }))
         .pipe(traceur({sourceMap: true, experimental: true}))
-        .pipe(gulp.dest('static/'));
+        .pipe(gulp.dest('static/js/'));
 });
 
 gulp.task('traceur_runtime', function () {
     return gulp.src('node_modules/traceur/bin/traceur-runtime.js')
+        .pipe(uglify())
         .pipe(gulp.dest('static/js/'));
 });
 

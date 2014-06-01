@@ -1,9 +1,10 @@
+/*jslint node: true */
 'use strict';
 
-anr.framework = {};
+
 
 //-----------------------------------------------------------------------------
-anr.framework.EventEmitter = class {
+class EventEmitter{
     constructor () {
         this._callbacks = {};
     }
@@ -13,7 +14,7 @@ anr.framework.EventEmitter = class {
         return this;
     }
     emit (event_name, ...data) {
-        if (anr.debug) { console.log('Event emitted: ', event_name, ...data);}
+        // if (anr.debug) { console.log('Event emitted: ', event_name, ...data);}
         let callbacks = this._callbacks[event_name];
         if (!callbacks) return this;
         for (let callback of callbacks) {
@@ -21,10 +22,10 @@ anr.framework.EventEmitter = class {
         }
         return this;
     }    
-};
+}
 
 //-----------------------------------------------------------------------------
-anr.framework.Model = class extends anr.framework.EventEmitter{
+module.exports.Model = class extends EventEmitter{
     constructor (...args) {
         super(...args);
         this._simple_properties = {};
@@ -147,10 +148,12 @@ anr.framework.Model = class extends anr.framework.EventEmitter{
                 for (let obj of new_list_dict) {
                     list_dict[name].push(obj);
                 }
-                self.emit(`reset:${name}`, {
-                    type: `reset:${name}`,
-                    new_value: list_dict[name].slice(0),
-                });
+                if (!options.silent) {
+                    self.emit(`reset:${name}`, {
+                        type: `reset:${name}`,
+                        new_value: list_dict[name].slice(0),
+                    });
+                }
             },
             remove (filter) {
                 let old_list = list_dict[name];
@@ -171,14 +174,14 @@ anr.framework.Model = class extends anr.framework.EventEmitter{
 };
 
 //-----------------------------------------------------------------------------
-anr.framework.View = class {
+module.exports.View = class {
     constructor (controller) {
         this.controller = controller;
     }
 };
 
 //-----------------------------------------------------------------------------
-anr.framework.Controller = class {
+module.exports.Controller = class {
     constructor (client) {
         this.client = client;
     }

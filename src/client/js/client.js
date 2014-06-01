@@ -1,10 +1,14 @@
+/*jslint node: true */
+'use strict';
 
+let LobbyController = require('./lobby.js').Controller,
+    utils = require('../../common/utils.js');
 
-anr.Client = class {
+module.exports = class Client {
     constructor () {
         let self = this;
         this.callbacks = {};
-        this.controller = new anr.controllers.Lobby(this);
+        this.controller = new LobbyController(this);
 
         let socket_url = `ws://${window.location.hostname}:8080`;
         this.web_socket = new WebSocket(socket_url);
@@ -28,7 +32,7 @@ anr.Client = class {
     }
 
     write (msg) {
-        let id = anr.utils.uniqueId();
+        let id = utils.uniqueId();
         let msg_out = {
             id: id,
             type: msg.type,
@@ -46,8 +50,4 @@ anr.Client = class {
         let msg_id = this.send(type, content);
         this.callbacks[msg_id] = callback;
     }
-};
-
-anr.start = function () {
-    new anr.Client();
 };

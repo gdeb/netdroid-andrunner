@@ -1,10 +1,10 @@
+/*jslint node: true */
 'use strict';
 
-anr.utils = {};
-
 //-----------------------------------------------------------------------------
-{
-    let __id_counter = 0;
 
-    anr.utils.uniqueId = () => __id_counter++;
-}
+let __id_counter = 0;
+
+module.exports.uniqueId = function () {
+    return __id_counter++;
+};

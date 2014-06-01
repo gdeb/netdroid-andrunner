@@ -1,17 +1,23 @@
+/*jslint node: true */
 'use strict';
 
+let framework = require('./framework.js'),
+    Model = framework.Model,
+    View = framework.View,
+    Controller = framework.Controller;
+
 //-----------------------------------------------------------------------------
-anr.models.Lobby = class extends anr.framework.Model {
+class LobbyModel extends Model {
     constructor (...args) {
         super(...args);
         this.add_property('name', 'anonymous');
         this.add_list_property('notifications');
         this.add_list_dict_property('players');
     }
-};
+}
 
 //-----------------------------------------------------------------------------
-anr.views.Lobby = class extends anr.framework.View {
+class LobbyView extends View {
     constructor (controller, model) {
         super(controller);
         this.model = model;
@@ -74,14 +80,14 @@ anr.views.Lobby = class extends anr.framework.View {
             this.add_player_to_list(player);
         }
     }
-};
+}
 
 //-----------------------------------------------------------------------------
-anr.controllers.Lobby = class extends anr.framework.Controller {
+class LobbyController extends Controller {
     constructor (client) {
         super(client);
-        this.model = new anr.models.Lobby ();
-        this.view = new anr.views.Lobby(this, this.model);
+        this.model = new LobbyModel ();
+        this.view = new LobbyView(this, this.model);
     }
     notify_input(input) {
         this.model.notifications.push(input);
@@ -100,5 +106,5 @@ anr.controllers.Lobby = class extends anr.framework.Controller {
             this.model.players.remove(p => p.name === msg.content.name);
         }
     }
-};
-
+}
+module.exports.Controller = LobbyController;
