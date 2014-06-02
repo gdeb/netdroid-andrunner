@@ -23,6 +23,7 @@ class EventEmitter{
         return this;
     }    
 }
+module.exports.EventEmitter = EventEmitter;
 
 //-----------------------------------------------------------------------------
 module.exports.Model = class extends EventEmitter{

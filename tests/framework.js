@@ -6,12 +6,24 @@ traceur.require.makeDefault();
 traceur.options.blockBinding = true;
 
 
-var framework = require('../src/client/js/framework.js'),
+var assert = require('assert'),
+    framework = require('../src/client/js/framework.js'),
+    EventEmitter = framework.EventEmitter,
     Model = framework.Model;
 
+//-----------------------------------------------------------------------------
+describe('EventEmitter', function () {
+    it('should accept listener and emit events', function (done) {
+        var emitter = new EventEmitter();
+        emitter.addListener('test_event', function (data) {
+            assert.strictEqual(data, 'data');
+            done();
+        });
+        emitter.emit('test_event', 'data');
+    });
+});
 
-var assert = require("assert");
-
+//-----------------------------------------------------------------------------
 describe('Model', function(){
     describe('#add_property', function(){
         it('should set a property', function(){
@@ -20,6 +32,7 @@ describe('Model', function(){
             assert.strictEqual(true, model.hasOwnProperty('name'));
             assert.strictEqual(undefined, model.name.get());
         });
+
         it('should behave like a property', function () {
             var model = new Model();
             model.add_property('name', 'george');
@@ -27,6 +40,7 @@ describe('Model', function(){
             model.name.set('charles');
             assert.strictEqual(model.name.get(), 'charles');
         });
+
         it('should emit events', function (done) {
             var model = new Model();
             model.add_property('name');
@@ -39,7 +53,7 @@ describe('Model', function(){
                 done();
             });
             model.name.set('blip');
-
         });
     });
 });
+
