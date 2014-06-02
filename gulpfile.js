@@ -41,6 +41,14 @@ gulp.task('traceur_runtime', function () {
 });
 
 //-----------------------------------------------------------------------------
+gulp.task('test', function (cb) {
+    var spawn = require('child_process').spawn;
+    var tests = spawn('mocha', ['tests'], {stdio: 'inherit'});
+    tests.on('close', cb);
+
+});
+
+//-----------------------------------------------------------------------------
 gulp.task('prepare', function (cb) {
     runSequence('clean', ['css','js', 'html', 'traceur_runtime'], cb);
 });
@@ -56,6 +64,9 @@ gulp.task('develop', ['prepare'], function () {
     gulp.watch('src/client/css/*.css', ['css']);
     gulp.watch('src/client/js/*.js', ['js']);
     gulp.watch('src/client/html/*.html', ['html']);
+
+    gulp.watch('src/**/*.js', ['test']);
+    gulp.watch('tests/**/*.js', ['test']);
 });
 
 //-----------------------------------------------------------------------------
