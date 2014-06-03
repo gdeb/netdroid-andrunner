@@ -1,7 +1,7 @@
 netdroid-andrunner
 ==================
 
-Netdroid Andrunner is a javascript implementation of a board game.  This is a nice excuse to learn various technologies.
+Netdroid Andrunner is a javascript implementation of a board game.  The game is great, but this is also a nice excuse to learn various technologies.
 
 
 Getting started
@@ -19,7 +19,11 @@ Look at gulpfile.js for more details on each task.  The two most important tasks
 
 Technologies
 ------------
-The client and server are written in javascript (server is run by node.js).  The javascript code is actually ES6 (mostly for classes and nice syntax), translated to regular JS by traceur.  The test runner is mocha.  Task handling is done by gulp.  Also, an important point is that the client code is modularized by browserify, so it is actually node-compatible (excellent for running tests)
+* ES6 (javascript 6): the client and server are written in javascript (server is run by node.js).  It is actually ES6 (mostly for classes and nice syntax), 
+* traceur: to translate ES6 to regular JS,
+* mocha: test runner. 
+* gulp: to handle various tasks. I tried grunt, but gulp philosophy is easier for me.
+* browserify:  the client code is modularized by browserify, so it is actually node-compatible (excellent for running tests, and to share code betweet client/server).  
 
 Note that since this is quite a mix of new technologies, and since this is a personal project, support for older browser is not really a concern.  Especially since I try to use vanilla JS without jquery on the client side.
 
