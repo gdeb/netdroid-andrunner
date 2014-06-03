@@ -69,7 +69,7 @@ module.exports.Model = class extends EventEmitter{
                     : self._list_properties[name][index]; 
             },
             push (data) {
-                let index = self._list_properties[name].push(data);
+                let index = self._list_properties[name].push(data) - 1;
                 self.emit(`add:${name}`, {
                     type: `add:${name}`, 
                     new_value: data,
