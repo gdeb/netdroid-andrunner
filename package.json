@@ -21,7 +21,8 @@
     "run-sequence": "~0.3.6"
   },
   "dependencies": {
-    "traceur": "0.0.42",
-    "colors": "~0.6.2"
+    "colors": "~0.6.2",
+    "express": "^4.4.1",
+    "traceur": "0.0.43"
   }
 }
