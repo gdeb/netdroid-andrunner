@@ -1,8 +1,6 @@
 /*jslint node: true */
 'use strict';
 
-
-
 //-----------------------------------------------------------------------------
 class EventEmitter{
     constructor () {
@@ -53,6 +51,7 @@ module.exports.Model = class extends EventEmitter{
                 });
             }
         };
+        return this;
     }
 
     add_list_property (name) {
@@ -104,7 +103,7 @@ module.exports.Model = class extends EventEmitter{
         this[name] = {
             length () { return list_dict[name].length; },
             push (data, options = {}) {
-                let index = list_dict[name].push(data);
+                let index = list_dict[name].push(data) - 1;
                 if (!options.silent) {
                     self.emit(`add:${name}`, {
                         type: `add:${name}`, 
@@ -114,15 +113,28 @@ module.exports.Model = class extends EventEmitter{
                 }
             },
             get (index) {
-                return (index === undefined) 
-                    ? list_dict[name].map(x => Object.assign({}, x))
-                    : Object.assign({}, list_dict[name]);
+                if (index === undefined)
+                    return list_dict[name].map(x => Object.assign({}, x));
+                if (index >= list_dict[name].length) 
+                    return undefined;
+                return Object.assign({}, list_dict[name][index]);
             },
             set (index, attr, value) {
                 if (index >= list_dict[name].length) {
                     throw new Error('Index out of list bound. Use push instead');                    
                 }
                 let obj = list_dict[name][index];
+                if (typeof attr === 'object') {
+                    if (attr === obj) return;
+                    list_dict[name][index] = attr;
+                    self.emit(`change:${name}`, {
+                        type: `change:${name}`,
+                        new_value: attr,
+                        old_value: obj,
+                        index: index,
+                    });
+                    return;
+                }
                 if (obj.hasOwnProperty(attr)) {
                     if (obj[attr] === value) return;
                     let old_value = obj[attr];
@@ -171,6 +183,7 @@ module.exports.Model = class extends EventEmitter{
                 }
             }
         };
+        return this;
     }
 };
 
