@@ -8,7 +8,7 @@ Getting started
 ---------------
 * clone the repository
 * install node.js, gulp.js
-* type 'npm init' to download dependencies
+* type 'npm install' to download dependencies
 * type 'gulp serve' in command prompt
 * open a (recent) browser at http://localhost:3000
 
