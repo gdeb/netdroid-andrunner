@@ -204,7 +204,7 @@ describe('Model', function () {
             }).to.throwError();
         });
 
-        it.skip('should not emit event', function (done) {
+        it('should not emit event', function () {
             var model = new Model();
             model.add_list_dict_property('name');
             model.name.push({raphael:'stephane'});

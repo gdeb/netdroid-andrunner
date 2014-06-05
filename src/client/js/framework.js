@@ -24,6 +24,17 @@ class EventEmitter{
 module.exports.EventEmitter = EventEmitter;
 
 //-----------------------------------------------------------------------------
+
+// return true if two objects have the same keys and the same
+// values (values are compared with ===)
+function is_equal(obj1, obj2) {
+    if (Object.keys(obj1).length !== Object.keys(obj2).length) 
+        return false;
+    for (let key of Object.keys(obj1)) 
+        if (obj1[key] !== obj2[key]) return false;
+    return true;
+}
+
 module.exports.Model = class extends EventEmitter{
     constructor (...args) {
         super(...args);
@@ -125,7 +136,7 @@ module.exports.Model = class extends EventEmitter{
                 }
                 let obj = list_dict[name][index];
                 if (typeof attr === 'object') {
-                    if (attr === obj) return;
+                    if (is_equal(attr, obj)) return;
                     list_dict[name][index] = attr;
                     self.emit(`change:${name}`, {
                         type: `change:${name}`,
