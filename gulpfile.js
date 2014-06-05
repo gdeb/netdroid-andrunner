@@ -23,7 +23,7 @@ gulp.task('html', function() {
         .pipe(gulp.dest('static/'));
 });
 
-gulp.task('js', ['traceur_runtime'], function() {
+gulp.task('js', function() {
     return gulp.src('src/client/js/index.js')
         .pipe(rename({basename: 'netrunner'}))
         .pipe(browserify({
