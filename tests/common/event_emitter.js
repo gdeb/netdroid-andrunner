@@ -18,4 +18,16 @@ describe('EventEmitter', function () {
         });
         emitter.emit('test_event', 'data');
     });
+
+    it('should emit events just once if asked', function (done) {
+        var emitter = new EventEmitter(),
+            n = 0;
+        emitter.once('test_event', function (data) {
+            n++;
+            if (n === 1) { done();}
+            else throw new Error();
+        });
+        emitter.emit('test_event', 'data');
+        emitter.emit('test_event', 'data');
+    });
 });
