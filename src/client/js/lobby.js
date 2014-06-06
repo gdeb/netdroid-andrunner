@@ -21,11 +21,11 @@ class LobbyView extends View {
         super(controller);
         this.model = model;
 
-        model.addListener('add:notifications', ev => this.update_textbox(ev));
-        model.addListener('change:name', ev => this.update_prompt(ev));
-        model.addListener('reset:players', ev => this.reset_player(ev));
-        model.addListener('add:players', ev => this.add_player(ev));
-        model.addListener('remove:players', ev => this.remove_player(ev));
+        model.on('add:notifications', ev => this.update_textbox(ev));
+        model.on('change:name', ev => this.update_prompt(ev));
+        model.on('reset:players', ev => this.reset_player(ev));
+        model.on('add:players', ev => this.add_player(ev));
+        model.on('remove:players', ev => this.remove_player(ev));
 
         this.input = document.getElementById('command-prompt');
         this.textbox = document.getElementById('textbox');
