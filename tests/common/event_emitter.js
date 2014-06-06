@@ -12,7 +12,7 @@ var EventEmitter = require('../../src/common/event_emitter.js');
 describe('EventEmitter', function () {
     it('should accept listener and emit events', function (done) {
         var emitter = new EventEmitter();
-        emitter.addListener('test_event', function (data) {
+        emitter.on('test_event', function (data) {
             expect(data).to.be('data');
             done();
         });
