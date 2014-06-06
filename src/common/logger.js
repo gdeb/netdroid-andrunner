@@ -3,6 +3,7 @@
 
 require('colors');
 
+//-----------------------------------------------------------------------------
 let pad = (x) => String(x).length === 1 ? "0" + x : String(x);
 
 function getTimeStamp() {
@@ -13,21 +14,27 @@ function getTimeStamp() {
     return `${hours}:${minutes}:${seconds}`;
 }
 
+//-----------------------------------------------------------------------------
+let silent = false,
+    colored = true;
+
+function log(type, color, ...args) {
+    if (silent) return;
+    let logged_type = (colored) ? type[color] : type;
+    args.unshift(getTimeStamp(), logged_type);
+    console.log(...args);
+}
+
 module.exports = {
-    info: function (...args) {
-        args.unshift(getTimeStamp(), '- info  - '.green);
-        console.log(...args);
-    },
-    warn: function (...args) {
-        args.unshift(getTimeStamp(), '- warn  - '.yellow);
-        console.log(...args);
-    },
-    error: function (...args) {
-        args.unshift(getTimeStamp(), '- error - '.red);
-        console.log(...args);
-    },
-    debug: function (...args) {
-        args.unshift('[DEBUG] '.cyan);
-        console.log(...args);
-    },
+    info: (...args) => log('- info  -', 'green', ...args),
+    warn: (...args) => log('- warn  -', 'yellow', ...args),
+    error: (...args) => log('- error -', 'red', ...args),
+    debug: (...args) => log(' [DEBUG] ', 'cyan', ...args),
+
+    config: function (options) {
+        if (options.hasOwnProperty('silent'))
+            silent =  options.silent;
+        if (options.hasOwnProperty('color'))
+            colored = options.color;
+    }
 };
