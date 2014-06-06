@@ -36,7 +36,7 @@ gulp.task('js', function() {
 
 gulp.task('traceur_runtime', function () {
     return gulp.src('node_modules/traceur/bin/traceur-runtime.js')
-        .pipe(uglify())
+        // .pipe(uglify())
         .pipe(gulp.dest('static/js/'));
 });
 

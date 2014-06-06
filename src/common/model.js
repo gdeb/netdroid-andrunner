@@ -1,7 +1,6 @@
 /*jslint node: true */
 'use strict';
 
-//-----------------------------------------------------------------------------
 let EventEmitter = require('./event_emitter.js');
 // let EventEmitter = require('events').EventEmitter;
 
@@ -18,7 +17,7 @@ function is_equal(obj1, obj2) {
     return true;
 }
 
-module.exports.Model = class extends EventEmitter{
+module.exports = class Model extends EventEmitter{
     constructor (...args) {
         super(...args);
         this._simple_properties = {};
@@ -181,25 +180,5 @@ module.exports.Model = class extends EventEmitter{
         };
         return this;
     }
-};
-
-//-----------------------------------------------------------------------------
-module.exports.View = class {
-    constructor (controller) {
-        this.controller = controller;
-    }
-};
-
-//-----------------------------------------------------------------------------
-module.exports.Controller = class {
-    constructor (client) {
-        this.client = client;
-    }
-    read (msg) { // from web_socket
-        console.log('controller', msg);
-    }
-    send (msg) {
-        this.client.web_socket.send(JSON.stringify(msg));
-    }    
 };
 
