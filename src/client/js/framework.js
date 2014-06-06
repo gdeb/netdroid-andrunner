@@ -2,6 +2,7 @@
 'use strict';
 
 //-----------------------------------------------------------------------------
+// let EventEmitter = require('events').EventEmitter;
 class EventEmitter{
     constructor () {
         this._callbacks = {};
@@ -168,6 +169,7 @@ module.exports.Model = class extends EventEmitter{
                 }
             },
             reset (new_list_dict, options = {}) {
+                let old_value = list_dict[name];
                 list_dict[name] = [];
                 for (let obj of new_list_dict) {
                     list_dict[name].push(obj);
@@ -176,6 +178,7 @@ module.exports.Model = class extends EventEmitter{
                     self.emit(`reset:${name}`, {
                         type: `reset:${name}`,
                         new_value: list_dict[name].slice(0),
+                        old_value: old_value,
                     });
                 }
             },

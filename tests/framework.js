@@ -204,7 +204,7 @@ describe('Model', function () {
             }).to.throwError();
         });
 
-        it('should not emit event', function () {
+        it('should not emit event when setting obj', function () {
             var model = new Model();
             model.add_list_dict_property('name');
             model.name.push({raphael:'stephane'});
@@ -212,6 +212,30 @@ describe('Model', function () {
                 throw new Error();
             });
             model.name.set(0, {raphael:'stephane'});
+        });
+
+        it('should not emit event when setting value', function () {
+            var model = new Model();
+            model.add_list_dict_property('name');
+            model.name.push({raphael:'stephane'});
+            model.addListener('change:name:raphael', function () {
+                throw new Error();
+            });
+            model.name.set(0, 'raphael', 'stephane');
+        });
+
+        it('should emit add:name event', function (done) {
+            var model = new Model();
+            model.add_list_dict_property('name');
+            model.addListener('add:name', function (event) {
+                expect(event).to.eql({
+                    type: 'add:name',
+                    new_value: {test:'xavier'},
+                    index: 0,
+                });
+                done();
+            });
+            model.name.push({test:'xavier'});
         });
 
         it('should emit change:name event', function (done) {
@@ -247,6 +271,66 @@ describe('Model', function () {
             model.name.set(0, 'test', 'raphael');
         });
 
+        it('should emit add:name:attr event', function (done) {
+            var model = new Model();
+            model.add_list_dict_property('name');
+            model.name.push({test:'xavier'});
+            model.addListener('add:name:simon', function (event) {
+                expect(event).to.eql({
+                    type: 'add:name:simon',
+                    new_value: 'test',
+                    attribute: 'simon',
+                    index: 0,
+                });
+                done();
+            });
+            model.name.set(0,'simon', 'test');
+        });
+
+        it('should reset properly', function () {
+            var model = new Model();
+            model.add_list_dict_property('name');
+            model.name.push({test:'xavier'});
+            model.name.reset([{xavier:'test'}]);
+            expect(model.name.get()).to.eql([{xavier:'test'}]);
+        });
+
+        it('should emit reset event', function (done) {
+            var model = new Model();
+            model.add_list_dict_property('name');
+            model.addListener('reset:name', function (event) {
+                expect(event).to.eql({
+                    type:'reset:name',
+                    new_value: [{xavier: 'test'}],
+                    old_value: [{test:'xavier'}],
+                });
+                done();
+            });
+            model.name.push({test:'xavier'});
+            model.name.reset([{xavier:'test'}]);
+        });
+
+        it('should remove elements', function () {
+            var model = new Model();
+            model.add_list_dict_property('name');
+            model.name.reset([{a:1}, {a:2}, {a:3}]);
+            model.name.remove(function (obj) { return obj.a === 2;});
+            expect(model.name.get()).to.eql([{a:1},{a:3}]);
+        });
+
+        it('should emit remove elements', function (done) {
+            var model = new Model();
+            model.add_list_dict_property('name');
+            model.name.push({a:1});
+            model.addListener('remove:name', function (event) {
+                expect(event).to.eql({
+                    type: 'remove:name',
+                    removed: {a:1},
+                });
+                done();
+            });
+            model.name.remove(function () {return true;});
+        });
     });
     
 });
