@@ -1,7 +1,7 @@
 /*jslint node: true */
 'use strict';
 
-let framework = require('./framework.js'),
+let framework = require('../../common/framework.js'),
     Model = framework.Model,
     View = framework.View,
     Controller = framework.Controller;
