@@ -5,13 +5,13 @@ let LobbyController = require('./lobby.js').Controller,
     utils = require('../../common/utils.js');
 
 module.exports = class Client {
-    constructor () {
+    constructor (websocket) {
         let self = this;
         this.callbacks = {};
         this.controller = new LobbyController(this);
 
         let socket_url = `ws://${window.location.hostname}:8080`;
-        this.web_socket = new WebSocket(socket_url);
+        this.web_socket = websocket || new WebSocket(socket_url);
         this.web_socket.onopen = function () {
             self.ask('login', 'anonymous', msg => self.controller.connect(msg));
         };
