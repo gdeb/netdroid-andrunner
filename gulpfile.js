@@ -43,7 +43,7 @@ gulp.task('traceur_runtime', function () {
 //-----------------------------------------------------------------------------
 gulp.task('test', function (cb) {
     var spawn = require('child_process').spawn;
-    var tests = spawn('mocha', ['tests', '-R','spec'], {stdio: 'inherit'});
+    var tests = spawn('mocha', ['tests', '--recursive','-R','spec'], {stdio: 'inherit'});
     tests.on('close', cb);
 
     tests.on('error', function () {

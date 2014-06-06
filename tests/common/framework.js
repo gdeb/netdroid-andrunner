@@ -7,7 +7,7 @@ var traceur = require('traceur');
 traceur.require.makeDefault();
 traceur.options.blockBinding = true;
 
-var framework = require('../src/common/framework.js'),
+var framework = require('../../src/common/framework.js'),
     EventEmitter = framework.EventEmitter,
     Model = framework.Model;
 
