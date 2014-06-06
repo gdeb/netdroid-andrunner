@@ -2,10 +2,15 @@
 'use strict';
 
 require('colors');
-let dateformat = require('dateformat');
+
+let pad = (x) => String(x).length === 1 ? "0" + x : String(x);
 
 function getTimeStamp() {
-    return dateformat(new Date(), 'HH:MM:ss');
+    let now = new Date(),
+        hours = pad(now.getHours()),
+        minutes = pad(now.getMinutes()),
+        seconds = pad(now.getSeconds());
+    return `${hours}:${minutes}:${seconds}`;
 }
 
 module.exports = {
