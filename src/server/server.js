@@ -2,7 +2,7 @@
 'use strict';
 
 let express = require('express'),
-    logger = require('./logger.js'),
+    logger = require('../common/logger.js'),
     utils = require('../common/utils.js'),
     WebSocketServer = require('ws').Server,
     Lobby = require('./lobby.js');

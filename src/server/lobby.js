@@ -1,7 +1,7 @@
 /*jslint node: true */
 'use strict';
 
-let logger = require('./logger.js'),
+let logger = require('../common/logger.js'),
     utils = require('../common/utils.js');
 
 //-----------------------------------------------------------------------------
