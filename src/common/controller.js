@@ -9,8 +9,8 @@ module.exports = class Controller {
     read (msg) { // from web_socket
         console.log('controller', msg);
     }
-    send (msg) {
-        this.client.web_socket.send(JSON.stringify(msg));
+    send (...args) {
+        this.client.send(...args);
     }    
 };
 
