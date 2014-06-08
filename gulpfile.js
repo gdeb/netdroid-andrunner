@@ -1,11 +1,12 @@
 var gulp = require('gulp'),
-    nodemon = require('gulp-nodemon'),
     runSequence = require('run-sequence'),
     traceur = require('gulp-traceur'),
     rename = require('gulp-rename'),
     browserify = require('gulp-browserify'),
     uglify = require('gulp-uglify'),
-    clean = require('gulp-clean');
+    clean = require('gulp-clean'),
+    nodemon = require('nodemon'),
+    spawn = require('child_process').spawn;
 
 //-----------------------------------------------------------------------------
 gulp.task('clean', function () {  
@@ -42,7 +43,6 @@ gulp.task('traceur_runtime', function () {
 
 //-----------------------------------------------------------------------------
 gulp.task('test', function (cb) {
-    var spawn = require('child_process').spawn;
     var tests = spawn('mocha', ['tests', '--recursive','-R','spec'], {stdio: 'inherit'});
     tests.on('close', cb);
 
@@ -59,13 +59,12 @@ gulp.task('prepare', function (cb) {
 });
 
 //-----------------------------------------------------------------------------
-gulp.task('develop', ['prepare'], function () {
-    nodemon({ 
-        script: './src/server/index.js', 
-        watch: ['./src/server', './src/common'],
-        options: '--harmony',
-        ext: 'js',
-    });
+gulp.task('develop', ['prepare'], function (done) {
+    nodemon({
+        script: './src/server/index.js',
+        watch: ['./src/server', './src/common']
+    }).on('log', function (log) { console.log(log.colour); });
+
     gulp.watch('src/client/css/*.css', ['css']);
     gulp.watch('src/client/js/*.js', ['js']);
     gulp.watch('src/client/html/*.html', ['html']);
