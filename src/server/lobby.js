@@ -5,30 +5,20 @@ let logger = require('../common/logger.js'),
     utils = require('../common/utils.js');
 
 //-----------------------------------------------------------------------------
-class Player {
-    constructor (name, socket) {
-        this.name = name;
-        this.socket = socket;
-    }
-    send (...args) {
-        this.socket.send(...args);
-    }
-}
-
-//-----------------------------------------------------------------------------
 class Lobby {
     constructor (client) {
         this.client = client;
         this.players = [];
     }
 
-    add_player (msg, socket) {
-        let name = this.get_unique_name(msg.content),
-            player = new Player(name, socket);
+    add_player (msg, player) {
+        let name = this.get_unique_name(msg.content);
+
+        player.set_name(name);
 
         this.players.push(player);
-        socket.on_message(msg => this.handle_message(msg, player));
-        socket.on_close(() => this.remove_player(player));
+        player.on_message(msg => this.handle_message(msg, player));
+        player.on_close(() => this.remove_player(player));
 
         let players = this.players.map(p => ({name:p.name})),
             response = {name: player.name, users_list: players};

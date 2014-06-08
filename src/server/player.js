@@ -18,6 +18,11 @@ class Player {
         socket.on('message', msg => logger.info(`[${this.id}, ▲] ${msg}`));
     }
 
+    set_name (name) { 
+        this.name = name; 
+    }
+
+    //-------------------------------------------------------------------------
     write (msg) {
         let msg_out = JSON.stringify({
             id: utils.uniqueId(),
