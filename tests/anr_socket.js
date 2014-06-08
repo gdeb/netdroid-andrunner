@@ -7,7 +7,7 @@ var traceur = require('traceur');
 traceur.require.makeDefault();
 traceur.options.blockBinding = true;
 
-var ANRSocket = require('../../src/server/anr_socket.js');
+var ANRSocket = require('../src/server/anr_socket.js');
 
 var EventEmitter = require('events').EventEmitter;
 

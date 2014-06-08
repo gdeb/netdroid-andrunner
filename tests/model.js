@@ -7,7 +7,7 @@ var traceur = require('traceur');
 traceur.require.makeDefault();
 traceur.options.blockBinding = true;
 
-var Model = require('../../src/common/model.js');
+var Model = require('../src/common/model.js');
 
 //-----------------------------------------------------------------------------
 describe('Model', function () {

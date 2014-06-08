@@ -6,7 +6,7 @@ var traceur = require('traceur');
 traceur.require.makeDefault();
 traceur.options.blockBinding = true;
 
-var EventEmitter = require('../../src/common/event_emitter.js');
+var EventEmitter = require('../src/common/event_emitter.js');
 
 //-----------------------------------------------------------------------------
 describe('EventEmitter', function () {
