@@ -4,7 +4,7 @@
 let express = require('express'),
     logger = require('../common/logger.js'),
     WebSocketServer = require('ws').Server,
-    ANRSocket = require('./anr_socket.js'),
+    Player = require('./player.js'),
     Lobby = require('./lobby.js');
 
 
@@ -28,8 +28,8 @@ class Server {
 
     handle_connection (socket) {
         logger.info('Incoming connection');
-        let anr_socket = new ANRSocket(socket);
-        anr_socket.on_next_message(msg => this.lobby.add_player(msg, anr_socket));
+        let player = new Player(socket);
+        player.on_next_message(msg => this.lobby.add_player(msg, player));
     }
 }
 

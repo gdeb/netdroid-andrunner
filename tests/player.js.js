@@ -7,7 +7,7 @@ var traceur = require('traceur');
 traceur.require.makeDefault();
 traceur.options.blockBinding = true;
 
-var ANRSocket = require('../src/server/anr_socket.js');
+var Player = require('../src/server/player.js');
 
 var EventEmitter = require('events').EventEmitter;
 
@@ -22,14 +22,14 @@ mock_socket.send = function (msg) {
 };
 
 //-----------------------------------------------------------------------------
-describe('ANRSocket', function () {
+describe('Player', function () {
     it('should write messages', function () {
-        var anr_socket = new ANRSocket(mock_socket, mock_logger);
+        var anr_socket = new Player(mock_socket, mock_logger);
         anr_socket.write({type:'type', content:'content'});
     });
 
     it('should send messages', function () {
-        var anr_socket = new ANRSocket(mock_socket, mock_logger);
+        var anr_socket = new Player(mock_socket, mock_logger);
         anr_socket.send("type", "content");
     });
 });
