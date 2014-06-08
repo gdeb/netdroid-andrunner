@@ -29,7 +29,7 @@ class Server {
     handle_connection (socket) {
         logger.info('Incoming connection');
         let player = new Player(socket);
-        player.on_next_message(msg => this.lobby.add_player(msg, player));
+        player.on_next_message(msg => this.lobby.login(msg, player));
     }
 }
 

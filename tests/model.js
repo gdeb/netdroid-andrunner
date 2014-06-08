@@ -102,6 +102,30 @@ describe('Model', function () {
             model.name.push('roger');
         });
 
+        it('should remove elements', function () {
+            var model = new Model();
+            model.add_list_property('name');
+            model.name.push('stephane');
+            model.name.push('xavier');
+            model.name.remove(0);
+            expect(model.name.get()).to.eql(['xavier']);
+        });
+
+        it('should emit remove elements', function (done) {
+            var model = new Model();
+            model.add_list_property('name');
+            model.name.push('stephane');
+            model.addListener('remove:name', function (event) {
+                expect(event).to.eql({
+                    type: 'remove:name',
+                    removed: 'stephane',
+                    index: 0,
+                });
+                done();
+            });
+            model.name.remove(0);
+        });
+
         it('should emit change events', function (done) {
             var model = new Model();
             model.add_list_property('name');
@@ -119,12 +143,21 @@ describe('Model', function () {
             model.name.set(1, 'simon')
         });
 
-        it('should refuse index out of bound', function () {
+        it('should refuse index out of bound when calling set', function () {
             var model = new Model();
             model.add_list_property('name');
             model.name.push('george');
             expect(function () {
                 model.name.set(1,'stephane');
+            }).to.throwError();
+        });
+
+        it('should refuse index out of bound when remove', function () {
+            var model = new Model();
+            model.add_list_property('name');
+            model.name.push('george');
+            expect(function () {
+                model.name.remove(1);
             }).to.throwError();
         });
     });
@@ -312,6 +345,7 @@ describe('Model', function () {
                 expect(event).to.eql({
                     type: 'remove:name',
                     removed: {a:1},
+                    index: 0,
                 });
                 done();
             });

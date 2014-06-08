@@ -68,6 +68,19 @@ module.exports = class Model extends EventEmitter{
                     index: index,
                 });
             },
+            remove (index) {
+                let list = self._list_properties[name];
+                if (index >= list.length) {
+                    throw new Error('Index out of list bound. Use push instead');
+                }
+                let removed = list.splice(index,1)[0];
+                self.emit(`remove:${name}`, {
+                    type: `remove:${name}`,
+                    removed: removed,
+                    index: index,
+                });
+            },
+
             set (i, data) {
                 let list = self._list_properties[name];
                 if (i >= list.length) {
@@ -171,6 +184,7 @@ module.exports = class Model extends EventEmitter{
                         self.emit(`remove:${name}`, {
                             type: `remove:${name}`,
                             removed: obj,
+                            index: old_list.indexOf(obj),
                         });
                     } else {
                         list_dict[name].push(obj);

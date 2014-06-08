@@ -2,38 +2,47 @@
 'use strict';
 
 let logger = require('../common/logger.js'),
+    Model = require('../common/model.js'),
     utils = require('../common/utils.js');
 
 //-----------------------------------------------------------------------------
 class Lobby {
     constructor (client) {
         this.client = client;
-        this.players = [];
+        this.model = new Model();
+        this.model.add_list_property('players');
+        this.model.add_list_property('chat');
+
+        this.model.on('add:players', this.broadcast_new_player.bind(this));
+        this.model.on('remove:players', this.remove_player.bind(this));
     }
 
-    add_player (msg, player) {
+    login (msg, player) {
         let name = this.get_unique_name(msg.content);
 
         player.set_name(name);
 
-        this.players.push(player);
         player.on_message(msg => this.handle_message(msg, player));
-        player.on_close(() => this.remove_player(player));
+        // player.on_close(() => this.remove_player(player));
 
-        let players = this.players.map(p => ({name:p.name})),
+        this.model.players.push(player);
+
+        let players = this.model.players.get().map(p => ({name:p.name})),
             response = {name: player.name, users_list: players};
         player.send('login_successful', response, msg);
+    }
 
-        for (let p of this.players) {
-            if (p !== player) {
-                p.send('new_player', {name: player.name});
+    broadcast_new_player (event) {
+        for (let p of this.model.players.get()) {
+            if (p !== event.new_value) {
+                p.send('new_player', {name: event.new_value.name});
             }
-        }
+        }        
     }
 
     get_unique_name (name, suffix = 0) {
         let test_name = suffix > 0 ? name + suffix : name,
-            name_list = this.players.map(p => p.name),
+            name_list = this.model.players.get().map(p => p.name),
             is_unique = name_list.indexOf(test_name) === -1;
 
         return is_unique ? test_name : this.get_unique_name(name, suffix + 1);
@@ -44,11 +53,11 @@ class Lobby {
         // logger.debug('handle_message');
     }
 
-    remove_player (player) {
+    remove_player (event) {
+        let player = event.removed;
+        logger.debug(event);
         logger.info(`Player ${player.name} left the lobby`);
-        let index = this.players.indexOf(player);
-        this.players.splice(index, 1);
-        for (let p of this.players) {
+        for (let p of this.model.players.get()) {
             p.send('player_disconnect', {name: player.name});
         }
     }
