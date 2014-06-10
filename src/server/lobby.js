@@ -10,11 +10,11 @@ class Lobby {
     constructor (client) {
         this.client = client;
         this.model = new Model();
-        this.model.add_list_property('players');
-        this.model.add_list_property('chat');
+        this.model.add_property('players', 'list');
+        this.model.add_property('chat', 'list');
 
         this.model.on('add:players', this.broadcast_new_player.bind(this));
-        this.model.on('remove:players', this.remove_player.bind(this));
+        // this.model.on('remove:players', this.remove_player.bind(this));
     }
 
     login (msg, player) {
