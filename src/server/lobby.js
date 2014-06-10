@@ -25,7 +25,7 @@ class Lobby {
         player.on_message(msg => this.handle_message(msg, player));
         // player.on_close(() => this.remove_player(player));
 
-        this.model.players.push(player);
+        this.model.players.add(player);
 
         let players = this.model.players.get().map(p => ({name:p.name})),
             response = {name: player.name, users_list: players};

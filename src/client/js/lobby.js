@@ -9,9 +9,9 @@ let Model = require('../../common/model.js'),
 class LobbyModel extends Model {
     constructor (...args) {
         super(...args);
-        this.add_property('name', 'anonymous');
-        this.add_list_property('notifications');
-        this.add_list_dict_property('players');
+        this.add_property('name', 'value', 'anonymous');
+        this.add_property('notifications', 'list');
+        this.add_property('players', 'list:dict');
     }
 }
 
