@@ -52,6 +52,16 @@ describe('Model', function () {
             model.names.set(1, 'raphael');
         });
 
+        it('should not emit change event', function () {
+            var model = new Model();
+            model.add_property('names', 'list', ['stephane','xavier']);
+            model.on('names:change', function (event) {
+                throw new Error();
+            });
+            model.names.set(1, 'xavier');
+        });
+
+
         it('should emit add events', function (done) {
             var model = new Model();
             model.add_property('names', 'list', ['stephane','xavier']);
@@ -79,17 +89,17 @@ describe('Model', function () {
             model.names.remove(0);
         });
 
-        it('should emit remove events when filtering', function (done) {
+        it('should emit also remove events', function (done) {
             var model = new Model();
             model.add_property('names', 'list', ['stephane','xavier']);
             model.on('names:remove', function (event) {
                 expect(event).to.eql({
                     type: 'names:remove',
-                    removed_value: 'stephane',
+                    removed_value: 'xavier',
                 });
                 done();
             });
-            model.names.filter(function (n) {
+            model.names.remove(function (n) {
                 return n === 'xavier';
             });
         });
@@ -151,6 +161,15 @@ describe('Model', function () {
             model.players.set(0, {name: 'xavier'});
         });
 
+        it('should not emit change event', function () {
+            var model = new Model();
+            model.add_property('players', 'list:dict', [{name:'stephane'}]);
+            model.on('players:change', function (event) {
+                throw new Error();
+            });
+            model.players.set(0, {name: 'stephane'});
+        });
+
         it('should emit change attr event', function (done) {
             var model = new Model();
             model.add_property('players', 'list:dict', [{name:'stephane'}]);
@@ -165,6 +184,29 @@ describe('Model', function () {
             });
             model.players.set(0, 'name', 'xavier');
         });
+
+        it('should not emit change attr event', function () {
+            var model = new Model();
+            model.add_property('players', 'list:dict', [{name:'stephane'}]);
+            model.on('players:change:name', function (event) {
+                throw new Error();
+            });
+            model.players.set(0, 'name', 'stephane');
+        });
+
+        it('should emit remove events', function (done) {
+            var model = new Model();
+            model.add_property('players', 'list:dict', [{name:'xavier'}]);
+            model.on('players:remove', function (event) {
+                expect(event).to.eql({
+                    type: 'players:remove',
+                    removed_value: {name:'xavier'},
+                });
+                done();
+            });
+            model.players.remove(0);
+        });
+
     });
 });
 

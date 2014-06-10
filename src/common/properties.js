@@ -1,7 +1,8 @@
 /*jslint node: true */
 'use strict';
 
-let EventEmitter = require('./event_emitter.js');
+let EventEmitter = require('./event_emitter.js'),
+    is_object_equal = require('./utils.js').is_object_equal;
 
 //-----------------------------------------------------------------------------
 class Property {
@@ -65,6 +66,8 @@ class ListProperty extends Property {
         if (index < 0 || index >= this._list.length)
             throw new Error('index out of bounds');
         let old_value = this._list[index];
+        if (value === old_value) 
+            return;
         this._list[index] = value;
         this.notify({
             type: 'change',
@@ -86,27 +89,28 @@ class ListProperty extends Property {
     }
 
     remove (index) {
-        if (index < 0 || index >= this._list.length)
-            throw new Error('index out of bounds');
-        let removed = this._list.splice(index, 1)[0];
-        this.notify({
-            type: 'remove',
-            removed_value: removed,
-        });
-    }
-
-    filter (predicate) {
-        let new_list = [];
-        for (let elem of this._list) {
-            if (predicate(elem)) 
-                new_list.push(elem);
-            else
-                this.notify({
-                    type: 'remove',
-                    removed_value: elem
-                });
+        if (typeof index === 'function') {
+            let new_list = [],
+                predicate = index;
+            for (let elem of this._list) {
+                if (!predicate(elem)) 
+                    new_list.push(elem);
+                else
+                    this.notify({
+                        type: 'remove',
+                        removed_value: elem
+                    });
+            }
+            this._list = new_list;
+        } else {
+            if (index < 0 || index >= this._list.length)
+                throw new Error('index out of bounds');
+            let removed = this._list.splice(index, 1)[0];
+            this.notify({
+                type: 'remove',
+                removed_value: removed,
+            });
         }
-        this._list = new_list;
     }
 
     reset(...new_list) {
@@ -156,6 +160,8 @@ class ListDictProperty extends ListProperty {
         if (typeof obj === 'string') {
             // obj = key, value = value
             let old_value = this._list[index][obj];
+            if (old_value === value)
+                return;
             this._list[index][obj] = value;
             this.notify({
                 type: 'change:' + obj,
@@ -165,12 +171,28 @@ class ListDictProperty extends ListProperty {
             });
         } else {
             // obj = obj to set, value = undefined
+            if (is_object_equal(obj, this._list[index]))
+                return;
             super(index, Object.assign({}, obj));
         }
     }
 
     reset(...elements) {
         super(...elements.map(elem => Object.assign({}, elem)));
+    }
+
+    remove(object) {
+        if (typeof object !== 'object')
+            return super(object);
+        let keys = Object.keys(object);
+
+        let to_remove = function (elem) {
+            for (let key of keys) {
+                if (elem[key] !== object[key]) return false;
+            }
+            return true;
+        };
+        return super(to_remove);
     }
 }
 

@@ -128,9 +128,9 @@ describe('ListProperty', function () {
         }).to.throwError();
     });
 
-    it('should filter elements', function () {
+    it('should remove elements by index', function () {
         var numbers = make_numbers();
-        numbers.filter(function (n) { return n > 7});
+        numbers.remove(function (n) { return n <= 6});
         expect(numbers.get()).to.eql([12, 24])
     });
 
@@ -194,5 +194,39 @@ describe('ListDictProperty', function () {
             {name:'stephane', faction: 'corp'},
             {name:'simon', faction:'runner'}
         ]);
-    })
+    });
+
+    it('should be able to add elements', function () {
+        var players = make_players();
+        players.add({name:'simon'}, {name:'richard'});
+        expect(players.get()).to.eql([
+            {name:'stephane', faction: 'runner'}, 
+            {name:'xavier', faction: 'corp'},
+            {name:'simon'}, {name: 'richard'}
+        ]);
+    });
+
+    it('should remove elements by index', function () {
+        var players = make_players();
+        players.remove(0);
+        expect(players.get()).to.eql([{name: 'xavier', faction: 'corp'}]);
+    });
+
+    it('should remove elements by predicate', function () {
+        var players = make_players();
+        players.remove(function (p) {return p.faction === 'corp'});
+        expect(players.get()).to.eql([{
+            name: 'stephane',
+            faction: 'runner',
+        }]);
+    });
+
+    it('should remove elems by object comparison', function () {
+        var players = make_players();
+        players.remove({faction: 'corp'});
+        expect(players.get()).to.eql([{
+            name: 'stephane',
+            faction: 'runner',
+        }]);
+    });
 });
