@@ -23,6 +23,9 @@
   "dependencies": {
     "colors": "~0.6.2",
     "express": "^4.4.1",
-    "traceur": "0.0.43"
+    "mustache": "^0.8.2",
+    "passport": "^0.2.0",
+    "traceur": "0.0.43",
+    "zurb-foundation-npm": "0.0.1"
   }
 }

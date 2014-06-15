@@ -20,20 +20,34 @@
       </li> 
     </ul> 
 
-    <section class="top-bar-section"> 
+<!--     <section class="top-bar-section"> 
       <ul class="right"> 
         <li class="active">
           <a href="login.html">Login</a>
         </li> 
       </ul> 
     </section> 
-  </nav>
+ -->  </nav>
 </div>
 
 <div class="row welcome">
   <div class="medium-6 column small-centered">
-    <p>Welcome to Netdroid:Andrunner.</p>
-    <p>This application is still a work in progress, but you can try to <a href="login.html">login</a>.  It might work if you are lucky.</p>
+
+     <form action="/login" method="post">
+      <div>
+        <label>Username:</label>
+        <input type="text" name="username" />
+        <br/>
+      </div>
+      <div>
+        <label>Password:</label>
+        <input type="password" name="password" />
+      </div>
+      <div>
+        <input type="submit" value="Login" />
+      </div>
+    </form>
+
   </div>
 </div>
 
