@@ -3,48 +3,49 @@
 
 var express = require('express'),
     logger = require('../logger'),
-    fs = require('fs'),
+    consolidate = require('consolidate'),
     Mustache = require('mustache');
 
 
-
+var port = process.env.PORT || 8080;
 
 var app = express();
 
+app.engine('html', consolidate.mustache);
+app.set('view engine', 'html');
+app.set('views', './views');
+
+
 app.use(express.static('.tmp/')); 
 
+function get_partials() {
+    return {
+        header: 'header',
+        footer: 'footer',
+        navbar: 'navbar',    
+    };
+};
 
-function send_view(res, template, context) {
-    var file = "views/" + template;
-    fs.readFile(file, function (err, data) {
-        if (err) throw err;
-        res.send(Mustache.render(data.toString(), context));
-    });
-}
-
-app.get('/', function(req, res){
-    send_view(res, 'index.html', {});
+app.get('/', function(req, res) {
+    res.redirect('index.html');
 });
 
 app.get('/index.html', function (req, res) {
-    send_view(res, 'index.html', {});
+    res.render('index', {
+        login: true,
+        partials: get_partials()
+    });
 });
 
 app.get('/login.html', function (req, res) {
-    send_view(res, 'login.html', {});
+    res.render('login', {
+        locals: {},
+        partials: get_partials()
+    });
 });
 
 
-app.listen(process.env.PORT || 8080);
+app.listen(port);
 
-logger.info('server started');
+logger.info('server started on port ' + port);
 
-// var view = {
-//   title: "Joe",
-//   calc: function () {
-//     return 2 + 4;
-//   }
-// };
-
-// var output = Mustache.render("{{title}} spends {{calc}}", view);
-// console.log(output);

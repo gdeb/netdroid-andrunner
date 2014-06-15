@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "colors": "~0.6.2",
+    "consolidate": "^0.10.0",
     "express": "^4.4.1",
     "mustache": "^0.8.2",
     "passport": "^0.2.0",
