@@ -25,14 +25,6 @@ app.use(express.static('.tmp/', { maxAge: '99999'}));
 app.use(cookieParser('TopSecret'));
 app.use(bodyParser());
 app.use(session());
-app.use(function (req, res, next) {
-	if (req.session.last) {
-		logger.debug('Last page:' + req.session.last);
-	}
-	req.session.last = req.url;
-	next();
-});
-
 
 function restrict (req, res, next) {
 	if (!req.session.user) {
@@ -52,11 +44,8 @@ function get_partials() {
 };
 
 app.get('/', function(req, res) {
-    res.redirect('index.html');
-});
-
-app.get('/index.html', function (req, res) {
     res.render('index', {
+    	error: req.session.error,
         login: true,
         partials: get_partials()
     });
@@ -64,7 +53,8 @@ app.get('/index.html', function (req, res) {
 
 app.get('/login', function (req, res) {
 	var error = req.session.error;
-	delete req.session;
+	logger.debug(error);
+	delete req.session.error;
     res.render('login', {
     	error: error,
         partials: get_partials()
@@ -85,6 +75,7 @@ app.post('/login', function (req, res) {
 
 app.get('/lobby', restrict, function (req, res) {
     res.render('lobby', {
+    	error: req.session.error,
         partials: get_partials()
     });
 });
