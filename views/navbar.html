@@ -2,7 +2,7 @@
   <nav class="top-bar" data-topbar>
     <ul class="title-area"> 
       <li class="name"> 
-        <h1><a href="index.html">Netdroid:Andrunner</a></h1> 
+        <h1><a href="/">Netdroid:Andrunner</a></h1> 
       </li> 
     </ul> 
 {{#login}}
@@ -20,3 +20,6 @@
 {{#error}}
 <div class="alert-box alert" data-alert=""> Error: {{error}} <a class="close">x</a></div>
 {{/error}}
+{{#success}}
+<div class="alert-box success" data-alert=""> {{success}} <a class="close">x</a></div>
+{{/success}}
