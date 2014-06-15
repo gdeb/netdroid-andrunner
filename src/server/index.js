@@ -63,8 +63,10 @@ app.get('/index.html', function (req, res) {
 });
 
 app.get('/login', function (req, res) {
+	var error = req.session.error;
+	delete req.session;
     res.render('login', {
-        locals: {},
+    	error: error,
         partials: get_partials()
     });
 });
@@ -83,7 +85,6 @@ app.post('/login', function (req, res) {
 
 app.get('/lobby', restrict, function (req, res) {
     res.render('lobby', {
-        locals: {},
         partials: get_partials()
     });
 });
