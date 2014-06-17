@@ -100,7 +100,6 @@ function restrictAccess(req, res, next) {
 	res.redirect('login');
 }
 
-
 function adapt_logger(logger) {
 	return function (req, res, next) {
 		const start = process.hrtime();
@@ -112,8 +111,8 @@ function adapt_logger(logger) {
 	      		http = req.httpVersionMajor + '.' + req.httpVersionMinor,
 	      		url = req.originalUrl || req.url;
 	      	
-	      	let log = `${req.ip}, ${req.method} ${req.url} (HTTP/${http}),` +
-	      			  `status:${res.statusCode}, ${request_time} ms`;
+	      	let log = `${req.ip}, ${req.method} ${req.url} (HTTP/${http}), ` +
+	      			  `status: ${res.statusCode}, ${request_time} ms`;
 	      	logger.info(log);
 	    }
 	    res.on('finish', logRequest);
