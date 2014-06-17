@@ -3,7 +3,8 @@ var gulp = require('gulp'),
     es6transpiler = require('gulp-es6-transpiler'),
     clean = require('gulp-clean'),
     newer = require('gulp-newer'),
-    nodemon = require('nodemon');
+    nodemon = require('nodemon'),
+    Datastore = require('nedb');
 
 var src_path = 'src',
     assets_path = 'assets',
@@ -40,11 +41,20 @@ gulp.task('server-es6-to-es5', function() {
         .pipe(gulp.dest(server_path));
 });
 
+gulp.task('create-db', function () {
+    var filename = build_path + '/users.db',
+        users_db = new Datastore({filename:filename, autoload:true});
+
+    users_db.insert({username: 'gery', password: 'gery'});
+    users_db.insert({username: 'test', password: 'test'});
+});
+
 gulp.task('prepare', function (cb) {
     var tasks = [
         'foundation-css',
         'foundation-js',
         'css',
+        'create-db',
         'server-es6-to-es5'
     ];
     runSequence('clean', tasks, cb);

@@ -6,6 +6,8 @@ let express = require('express'),
     cookieParser = require('cookie-parser'),
     bodyParser = require('body-parser'),
     session = require('express-session'),
+	Datastore = require('nedb'),
+	users_db = new Datastore({filename:'.tmp/users.db', autoload:true}),
     compression = require('compression');
 
 //-----------------------------------------------------------------------------
@@ -46,16 +48,21 @@ class Server {
 		app.get('/lobby', (req, res) => this.render_view(res, 'lobby', req.session));
 
 		app.post('/login', function (req, res) {
-			if (req.body.username === 'gery' && req.body.password === 'gery') {
-				req.session.regenerate(function () {
-					req.session.user = 'gery';
-					req.session.success = 'Success';
-					res.redirect('lobby');
-				});
-			} else {
-				req.session.error = "Login failed.  Try again.";
-				res.redirect('login');
-			}
+			users_db.find({
+				username: req.body.username, 
+				password: req.body.password
+			}, function (err, users) {
+				if (users.length) {
+					req.session.regenerate(function () {
+						req.session.user = 'gery';
+						req.session.success = 'Success';
+						res.redirect('lobby');
+					});
+				} else {
+					req.session.error = "Login failed.  Try again.";
+					res.redirect('login');
+				}
+			});
 		});
 
 		app.get('/logout', function (req, res) {
