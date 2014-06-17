@@ -6,12 +6,11 @@ let express = require('express'),
     cookieParser = require('cookie-parser'),
     bodyParser = require('body-parser'),
     session = require('express-session'),
-    compression = require('compression'),
-    morgan = require('morgan');
+    compression = require('compression');
 
 //-----------------------------------------------------------------------------
 class Server {
-	constructor (port = 8080, options = {}) {
+	constructor (port = 8080, options = {})  {
 		this.logger = options.logger || require('../logger');
 
 		let app = express();
@@ -31,7 +30,7 @@ class Server {
 	}
 
 	config_middlewares (app) {
-		app.use(morgan('short'));
+		app.use(adapt_logger(this.logger));
 		app.use(ignoreFavicon);
 		app.use(compression());
 		app.use(express.static('.tmp/static/', { maxAge: '99999'})); 
@@ -100,3 +99,25 @@ function restrictAccess(req, res, next) {
 	req.session.error = "Access denied";
 	res.redirect('login');
 }
+
+
+function adapt_logger(logger) {
+	return function (req, res, next) {
+		const start = process.hrtime();
+
+	   	function logRequest(){
+	      	res.removeListener('finish', logRequest);
+	      	let diff = process.hrtime(start),
+	      		request_time = (diff[0] * 1e3 + diff[1] * 1e-6).toFixed(3),
+	      		http = req.httpVersionMajor + '.' + req.httpVersionMinor,
+	      		url = req.originalUrl || req.url;
+	      	
+	      	let log = `${req.ip}, ${req.method} ${req.url} (HTTP/${http}),` +
+	      			  `status:${res.statusCode}, ${request_time} ms`;
+	      	logger.info(log);
+	    }
+	    res.on('finish', logRequest);
+		next();
+	};
+}
+
