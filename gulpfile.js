@@ -1,26 +1,56 @@
 var gulp = require('gulp'),
     runSequence = require('run-sequence'),
     es6transpiler = require('gulp-es6-transpiler'),
-    // rename = require('gulp-rename'),
-    // browserify = require('gulp-browserify'), // BLACKLISTED
-    // uglify = require('gulp-uglify'),
     clean = require('gulp-clean'),
+    newer = require('gulp-newer'),
     nodemon = require('nodemon');
-    // spawn = require('child_process').spawn;
 
-
-
-// gulp.task('default', function () {
-//     return gulp.src('src/app.js')
-//         .pipe(es6transpiler())
-//         .pipe(gulp.dest('dist'));
-// });
+var src_path = 'src',
+    assets_path = 'assets',
+    build_path = '.tmp',
+    server_path = build_path + '/server',
+    static_path = build_path + '/static';
+    
 
 //-----------------------------------------------------------------------------
-// gulp.task('start-server', ['prepare'], function () {
-//     require('./src/server');
-// });
+gulp.task('clean', function () {  
+    return gulp.src(build_path, {read: false})
+        .pipe(clean());
+});
 
+gulp.task('foundation-css', function() {
+    return gulp.src('node_modules/zurb-foundation-npm/css/*.css')
+        .pipe(gulp.dest(static_path + '/css'));
+});
+
+gulp.task('foundation-js', function() {
+    return gulp.src('node_modules/zurb-foundation-npm/**/*.js')
+        .pipe(gulp.dest(static_path));
+});
+
+gulp.task('css', function() {
+    return gulp.src(assets_path + '/styles/*.css')
+        .pipe(gulp.dest(static_path + '/css'));
+});
+
+gulp.task('server-es6-to-es5', function() {
+    return gulp.src([src_path + '/**/*.js', '!src/client{,/**}'])
+        .pipe(newer(server_path))
+        .pipe(es6transpiler())
+        .pipe(gulp.dest(server_path));
+});
+
+gulp.task('prepare', function (cb) {
+    var tasks = [
+        'foundation-css',
+        'foundation-js',
+        'css',
+        'server-es6-to-es5'
+    ];
+    runSequence('clean', tasks, cb);
+});
+
+//-----------------------------------------------------------------------------
 gulp.task('develop', ['prepare'], function (done) {
     nodemon({
         script: './.tmp/server/server/index.js',
@@ -28,48 +58,17 @@ gulp.task('develop', ['prepare'], function (done) {
     }).on('log', function (log) { console.log(log.colour); });
 
     gulp.watch('assets/styles/*.css', ['css']);
-
-    gulp.watch('src/**/*.js', ['prepare-server-js']);
+    gulp.watch(src_path + '/**/*.js', ['server-es6-to-es5']);
 });
 
-
-gulp.task('prepare-server-js', function() {
-    return gulp.src('src/**/*.js')
-        // .pipe(browserify({
-        //     insertGlobals : true,
-        //     debug : true,
-        // }))
-        .pipe(es6transpiler())
-        .pipe(gulp.dest('.tmp/server/'));
-});
-
-//-----------------------------------------------------------------------------
 gulp.task('default', ['develop']);
 
-//-----------------------------------------------------------------------------
-gulp.task('clean', function () {  
-    return gulp.src('.tmp', {read: false})
-        .pipe(clean());
-});
 
-gulp.task('foundation-css', function() {
-    return gulp.src('node_modules/zurb-foundation-npm/css/*.css')
-        .pipe(gulp.dest('.tmp/static/css/'));
-});
 
-gulp.task('foundation-js', function() {
-    return gulp.src('node_modules/zurb-foundation-npm/**/*.js')
-        .pipe(gulp.dest('.tmp/static/'));
-});
-
-gulp.task('css', function() {
-    return gulp.src('assets/styles/*.css')
-        .pipe(gulp.dest('.tmp/static/css/'));
-});
-
-gulp.task('prepare', function (cb) {
-    runSequence('clean', ['foundation-css', 'foundation-js', 'css', 'prepare-server-js'], cb);
-});
+    // rename = require('gulp-rename'),
+    // browserify = require('gulp-browserify'), // BLACKLISTED
+    // uglify = require('gulp-uglify'),
+    // spawn = require('child_process').spawn;
 
 
 // gulp.task('css', function() {
