@@ -4,33 +4,32 @@
 require('colors');
 
 //-----------------------------------------------------------------------------
-function pad(x) {
-    return String(x).length === 1 ? "0" + x : String(x);
-}
+let pad = (x) => String(x).length === 1 ? "0" + x : String(x);
 
 function getTimeStamp() {
-    var now = new Date(),
+    let now = new Date(),
         hours = pad(now.getHours()),
         minutes = pad(now.getMinutes()),
         seconds = pad(now.getSeconds());
-    return hours + ":" + minutes + ":" + seconds;
+    return `${hours}:${minutes}:${seconds}`;
 }
 
 //-----------------------------------------------------------------------------
-var silent = false,
+let silent = false,
     colored = true;
 
-function log(type, color, arg) {
+function log(type, color, ...args) {
     if (silent) return;
-    var logged_type = (colored) ? type[color] : type;
-    console.log(getTimeStamp(), logged_type, arg);
+    let logged_type = (colored) ? type[color] : type;
+    args.unshift(getTimeStamp(), logged_type);
+    console.log(...args);
 }
 
 module.exports = {
-    info: function (arg) { log('- info  -', 'green', arg);},
-    warn: function (arg) { log('- warn  -', 'yellow', arg);},
-    error: function (arg) { log('- error -', 'red', arg);},
-    debug: function (arg) { log(' [DEBUG] ', 'cyan', arg);},
+    info: (...args) => log('- info  -', 'green', ...args),
+    warn: (...args) => log('- warn  -', 'yellow', ...args),
+    error: (...args) => log('- error -', 'red', ...args),
+    debug: (...args) => log(' [DEBUG] ', 'cyan', ...args),
 
     config: function (options) {
         if (options.hasOwnProperty('silent'))
