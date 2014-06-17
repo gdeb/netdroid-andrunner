@@ -1,25 +1,46 @@
 var gulp = require('gulp'),
     runSequence = require('run-sequence'),
+    es6transpiler = require('gulp-es6-transpiler'),
     // rename = require('gulp-rename'),
-    // browserify = require('gulp-browserify'),
+    // browserify = require('gulp-browserify'), // BLACKLISTED
     // uglify = require('gulp-uglify'),
     clean = require('gulp-clean'),
     nodemon = require('nodemon');
     // spawn = require('child_process').spawn;
 
+
+
+// gulp.task('default', function () {
+//     return gulp.src('src/app.js')
+//         .pipe(es6transpiler())
+//         .pipe(gulp.dest('dist'));
+// });
+
 //-----------------------------------------------------------------------------
-gulp.task('start-server', ['prepare'], function () {
-    require('./src/server');
-});
+// gulp.task('start-server', ['prepare'], function () {
+//     require('./src/server');
+// });
 
 gulp.task('develop', ['prepare'], function (done) {
     nodemon({
-        script: './src/server/index.js',
-        watch: ['./src']
+        script: './.tmp/server/server/index.js',
+        watch: ['./.tmp/server']
     }).on('log', function (log) { console.log(log.colour); });
 
     gulp.watch('assets/styles/*.css', ['css']);
 
+    gulp.watch('src/**/*.js', ['prepare-server-js']);
+});
+
+
+gulp.task('prepare-server-js', function() {
+    return gulp.src('src/**/*.js')
+        // .pipe(browserify({
+        //     insertGlobals : true,
+        //     debug : true,
+        // }))
+        .pipe(es6transpiler())
+        .pipe(gulp.dest('.tmp/server/'));
 });
 
 //-----------------------------------------------------------------------------
@@ -33,21 +54,21 @@ gulp.task('clean', function () {
 
 gulp.task('foundation-css', function() {
     return gulp.src('node_modules/zurb-foundation-npm/css/*.css')
-        .pipe(gulp.dest('.tmp/css/'));
+        .pipe(gulp.dest('.tmp/static/css/'));
 });
 
 gulp.task('foundation-js', function() {
     return gulp.src('node_modules/zurb-foundation-npm/**/*.js')
-        .pipe(gulp.dest('.tmp/'));
+        .pipe(gulp.dest('.tmp/static/'));
 });
 
 gulp.task('css', function() {
     return gulp.src('assets/styles/*.css')
-        .pipe(gulp.dest('.tmp/css/'));
+        .pipe(gulp.dest('.tmp/static/css/'));
 });
 
 gulp.task('prepare', function (cb) {
-    runSequence('clean', ['foundation-css', 'foundation-js', 'css'], cb);
+    runSequence('clean', ['foundation-css', 'foundation-js', 'css', 'prepare-server-js'], cb);
 });
 
 

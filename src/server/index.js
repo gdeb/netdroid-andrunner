@@ -7,12 +7,15 @@ var express = require('express'),
     cookieParser = require('cookie-parser'),
     bodyParser = require('body-parser'),
     session = require('express-session'),
+    compression = require('compression'),
     morgan = require('morgan'),
-    Mustache = require('mustache');
+    Mustache = require('mustache'),
+    Server = require('./server.js');
 
 //-----------------------------------------------------------------------------
-var port = process.env.PORT || 8080,
-	app = express();
+const port = process.env.PORT || 8080,
+	app = express(),
+	server = new Server();
 
 //-----------------------------------------------------------------------------
 app.engine('html', consolidate.mustache);
@@ -30,7 +33,8 @@ app.use(function ignoreFavicon (req, res, next) {
 		next();
 });
 
-app.use(express.static('.tmp/', { maxAge: '99999'})); 
+app.use(compression());
+app.use(express.static('.tmp/static/', { maxAge: '99999'})); 
 app.use(cookieParser('TopSecret'));
 app.use(bodyParser());
 app.use(session());
@@ -47,7 +51,7 @@ function render_view(res, view, session) {
 	res.render(view, {
 		error: session.error,
 		success: session.success,
-		username: session.username,
+		user: session.user,
 		partials: {
 			header: 'header',
 			navbar: 'navbar',
@@ -81,6 +85,11 @@ app.post('/login', function (req, res) {
 		req.session.error = "Login failed.  Try again.";
 		res.redirect('login');
 	}
+});
+
+app.get('/logout', function (req, res) {
+	req.session.destroy();
+	res.redirect('/');
 });
 
 app.get('/lobby', function (req, res) {

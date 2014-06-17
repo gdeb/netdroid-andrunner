@@ -5,15 +5,21 @@
         <h1><a href="/">Netdroid:Andrunner</a></h1> 
       </li> 
     </ul> 
-{{#login}}
     <section class="top-bar-section"> 
       <ul class="right"> 
-        <li class="active">
-          <a href="login">Login</a>
+{{^user}}
+        <li class="active"><a href="login">Login</a></li> 
+{{/user}}
+{{#user}}
+        <li class="has-dropdown not-click">
+          <a href="#">{{user}}</a>
+          <ul class="dropdown">
+            <li><a href="logout">Log Out</a></li>
+          </ul>
         </li> 
+{{/user}}
       </ul> 
     </section> 
-{{/login}}
 
   </nav>
 </div>

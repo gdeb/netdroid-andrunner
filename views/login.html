@@ -4,6 +4,7 @@
 <div class="row welcome">
   <div class="medium-6 column small-centered">
 
+{{^user}}
     <h3>Log in</h3>
     <form action="/login" method="post">
       <div>
@@ -18,6 +19,11 @@
         <input type="submit" value="Login" />
       </div>
     </form>
+{{/user}}
+{{#user}}
+    <h3>You are already logged in</h3>
+    <p>If you are here, it is probably a mistake.  Or you might want to <a href="logout">log out</a> before logging as another user.</p>
+{{/user}}
 
   </div>
 </div>
