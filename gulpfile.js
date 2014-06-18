@@ -14,12 +14,14 @@ var gulp = require('gulp'),
 
 //-----------------------------------------------------------------------------
 var assets_path = 'assets',
+    view_path = 'views',
     build_path = '.tmp',
     static_path = build_path + '/static',
     src_path = 'src',
     build_src_path = build_path + '/src',
     server_path = build_src_path + '/server',
     client_path = build_src_path + '/client',
+    views_bpath = build_path + '/views',
     tests_path = build_path + '/tests';    
 
 //-----------------------------------------------------------------------------
@@ -40,6 +42,7 @@ gulp.task('foundation-js', function() {
 
 gulp.task('css', function() {
     return gulp.src(assets_path + '/styles/*.css')
+        .pipe(newer(static_path + '/css'))
         .pipe(gulp.dest(static_path + '/css'));
 });
 
@@ -49,6 +52,12 @@ gulp.task('es6-to-es5', function() {
         .pipe(es6transpiler())
             .on('error', function (error) { console.log(error.stack); this.emit('end'); })
         .pipe(gulp.dest(build_src_path));
+});
+
+gulp.task('move-views', function() {
+    return gulp.src(view_path + '/**/*.html')
+        .pipe(newer(views_bpath))
+        .pipe(gulp.dest(views_bpath));
 });
 
 gulp.task('create-db', function () {
@@ -71,6 +80,7 @@ gulp.task('prepare', function (cb) {
         'foundation-css',
         'foundation-js',
         'css',
+        'move-views',
         'create-db',
         'browserify',
         'es6-to-es5',
@@ -87,10 +97,11 @@ gulp.task('develop', ['prepare'], function (done) {
     }).on('log', function (log) { console.log(log.colour); });
 
     gulp.watch('assets/styles/*.css', ['css']);
+    gulp.watch(view_path + '/**/*.html', ['move-views']);
     gulp.watch([src_path + '/**/*.js'], ['es6-to-es5']);
     gulp.watch(['tests/**/*.js'], ['tests-es6-to-es5']);
-    gulp.watch(['./.tmp/src/**/*.js'], ['run-tests']);
-    gulp.watch(['./.tmp/tests/**/*.js'], ['run-tests']);
+    gulp.watch(['./.tmp/src/**/*.js'], ['_run-tests']);
+    gulp.watch(['./.tmp/tests/**/*.js'], ['_run-tests']);
 });
 
 gulp.task('default', ['develop']);
@@ -105,16 +116,17 @@ gulp.task('tests-es6-to-es5', function() {
         .pipe(gulp.dest(tests_path));
 });
 
-gulp.task('run-tests', function (cb) {
+gulp.task('_run-tests', function (cb) {
     var tests = spawn('mocha', [tests_path, '--recursive','-R','spec'], {stdio: 'inherit'});
     tests.on('close', cb);
 });
 
-    // uglify = require('gulp-uglify'),
+gulp.task('run-tests', function (cb) {
+    runSequence('prepare', '_run-tests', cb);
+});
 
-
-// //-----------------------------------------------------------------------------
-// gulp.task('serve', ['prepare'], function () {
-//     require('./src/server');
-// });
+//-----------------------------------------------------------------------------
+gulp.task('start', ['prepare'], function () {
+    require('./' + server_path);
+});
 
