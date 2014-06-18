@@ -115,11 +115,16 @@ function adapt_logger(logger) {
 	      	let diff = process.hrtime(start),
 	      		request_time = (diff[0] * 1e3 + diff[1] * 1e-6).toFixed(3),
 	      		http = req.httpVersionMajor + '.' + req.httpVersionMinor,
-	      		url = req.originalUrl || req.url;
-	      	
-	      	let log = `${req.ip}, ${req.method} ${req.url} (HTTP/${http}), ` +
-	      			  `status: ${res.statusCode}, ${request_time} ms`;
-	      	logger.info(log);
+	      		url = req.originalUrl || req.url,
+	      		code = res.statusCode,
+	      		status = (code === 404) ? String(code).red : code;
+
+	      	logger.info([
+	      		req.ip,
+	      		`${req.method} ${req.url} (HTTP/${http})`,
+	      		`status: ${status}`,
+	      		`${request_time} ms`,
+	      	].join(', '));
 	    }
 	    res.on('finish', logRequest);
 		next();
