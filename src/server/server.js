@@ -46,6 +46,7 @@ class Server {
 		app.get('/', (req, res) => this.render_view(res, 'index', req.session));
 		app.get('/login', (req, res) => this.render_view(res, 'login', req.session));
 		app.get('/lobby', (req, res) => this.render_view(res, 'lobby', req.session));
+		app.get('/profile', (req, res) => this.render_view(res, 'profile', req.session));
 
 		app.post('/login', function (req, res) {
 			users_db.find({
