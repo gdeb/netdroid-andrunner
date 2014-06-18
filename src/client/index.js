@@ -1,4 +1,8 @@
 /*jslint node: true */
 'use strict';
 
-var test = 1; 
+let test = require('./test.js');
+
+window.addEventListener('DOMContentLoaded', function () {
+	console.log(test.get_message());
+});

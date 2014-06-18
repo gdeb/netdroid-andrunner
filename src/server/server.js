@@ -69,7 +69,6 @@ class Server {
 			req.session.destroy();
 			res.redirect('/');
 		});
-
 	}
 
 	render_view (res, view, session) {
