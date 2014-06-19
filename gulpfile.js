@@ -84,7 +84,7 @@ gulp.task('create-db', function () {
 gulp.task('browserify', ['es6-to-es5'], function () {
     browserify('./' + build.client + 'index.js')
         .bundle({debug: true})
-        .pipe(source('lobby.js'))
+        .pipe(source('client.js'))
         .pipe(gulp.dest(build.static + 'js/'));
 });
 
@@ -113,7 +113,7 @@ gulp.task('develop', ['prepare'], function (done) {
     gulp.watch(paths.views + '**/*.html', ['move-views']);
     gulp.watch([paths.src + '**/*.js'], ['es6-to-es5', 'lint']);
     gulp.watch([paths.tests + '**/*.js'], ['tests-es6-to-es5', 'tests-lint']);
-    gulp.watch(['./' + build.src + '**/*.js'], ['_run-tests']);
+    gulp.watch(['./' + build.src + '**/*.js'], ['_run-tests', 'browserify']);
     gulp.watch(['./' + build.tests + '**/*.js'], ['_run-tests']);
 });
 
