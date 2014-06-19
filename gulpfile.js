@@ -11,6 +11,7 @@ var gulp = require('gulp'),
     nodemon = require('nodemon'),
     spawn = require('child_process').spawn,
     jshint = require('gulp-jshint'),
+    stylus = require('gulp-stylus'),
     Datastore = require('nedb');
 
 //-----------------------------------------------------------------------------
@@ -48,11 +49,12 @@ gulp.task('foundation-js', function() {
         .pipe(gulp.dest(build.static));
 });
 
-gulp.task('css', function() {
-    return gulp.src(paths.assets + 'styles/*.css')
-        .pipe(newer(build.static + 'css/'))
+gulp.task('styles', function() {
+    return gulp.src(paths.assets + 'styles/**/*.styl')
+        .pipe(stylus())
         .pipe(gulp.dest(build.static + 'css/'));
 });
+
 
 gulp.task('es6-to-es5', function() {
     return gulp.src([paths.src + '**/*.js'])
@@ -90,7 +92,7 @@ gulp.task('prepare', function (cb) {
     var tasks = [
         'foundation-css',
         'foundation-js',
-        'css',
+        'styles',
         'move-views',
         'create-db',
         'browserify',
@@ -107,7 +109,7 @@ gulp.task('develop', ['prepare'], function (done) {
         watch: [build.src, '!' + build.client],
     }).on('log', function (log) { console.log(log.colour); });
 
-    gulp.watch(paths.assets + 'styles/*.css', ['css']);
+    gulp.watch(paths.assets + 'styles/**/*.styl', ['styles']);
     gulp.watch(paths.views + '**/*.html', ['move-views']);
     gulp.watch([paths.src + '**/*.js'], ['es6-to-es5', 'lint']);
     gulp.watch([paths.tests + '**/*.js'], ['tests-es6-to-es5', 'tests-lint']);
