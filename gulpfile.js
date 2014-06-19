@@ -54,7 +54,7 @@ gulp.task('css', function() {
         .pipe(gulp.dest(build.static + 'css/'));
 });
 
-gulp.task('es6-to-es5', ['lint'], function() {
+gulp.task('es6-to-es5', function() {
     return gulp.src([paths.src + '**/*.js'])
         .pipe(newer(build.src))
         .pipe(es6transpiler())
@@ -146,7 +146,7 @@ gulp.task('tests-es6-to-es5', function() {
 });
 
 gulp.task('_run-tests', function (cb) {
-    var options = [build.tests, '--recursive','-R','spec'];
+    var options = [build.tests, '--recursive','-R','dot'];
     spawn('mocha', options, {stdio: 'inherit'})
         .on('close', cb);
 });
