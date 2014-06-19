@@ -6,19 +6,21 @@
 
 {{^user}}
     <h3>Log in</h3>
-    <form action="/login" method="post">
-      <div>
-        <label>Username:</label>
-        <input type="text" name="username" />
-      </div>
-      <div>
-        <label>Password:</label>
-        <input type="password" name="password" />
-      </div>
-      <div>
-        <input type="submit" value="Login" />
-      </div>
-    </form>
+    <div class="panel">
+      <form action="/login" method="post">
+        <div>
+          <label>Username:</label>
+          <input type="text" name="username" />
+        </div>
+        <div>
+          <label>Password:</label>
+          <input type="password" name="password" />
+        </div>
+        <div>
+          <input type="submit" value="Login" />
+        </div>
+      </form>
+    </div>
 {{/user}}
 {{#user}}
     <h3>You are already logged in</h3>

@@ -5,7 +5,9 @@
 <div class="row welcome">
   <div class="medium-6 column small-centered">
     <h3>Netdroid:Andrunner.</h3>
-    <p>Welcome, human. This application is still a work in progress, but you can try to <a href="login">login</a>.  It might work if you are lucky. But, to be honest, it is actually very unlikely.</p>
+    <div class="panel">
+    	<p>Welcome, human. This application is still a work in progress, but you can try to <a href="login">login</a>.  It might work if you are lucky. But, to be honest, it is actually very unlikely.</p>
+	</div>
   </div>
 </div>
 {{/user}}
@@ -13,8 +15,10 @@
 {{#user}}
 <div class="row welcome">
   <div class="medium-6 column small-centered">
-    <h3>Netdroid:Andrunner.</h3>
-    <p>Welcome, {{user}}. This text is a short overview of what you can do...</p>
+	<h3>Netdroid:Andrunner.</h3>
+  	<div class="panel">
+	    <p>Welcome, {{user}}. This text is a short overview of what you can do...</p>
+    </div>
   </div>
 </div>
 {{/user}}
