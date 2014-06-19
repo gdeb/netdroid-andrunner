@@ -10,6 +10,7 @@ var gulp = require('gulp'),
     newer = require('gulp-newer'),
     nodemon = require('nodemon'),
     spawn = require('child_process').spawn,
+    jshint = require('gulp-jshint'),
     Datastore = require('nedb');
 
 //-----------------------------------------------------------------------------
@@ -53,7 +54,7 @@ gulp.task('css', function() {
         .pipe(gulp.dest(build.static + 'css/'));
 });
 
-gulp.task('es6-to-es5', function() {
+gulp.task('es6-to-es5', ['lint'], function() {
     return gulp.src([paths.src + '**/*.js'])
         .pipe(newer(build.src))
         .pipe(es6transpiler())
@@ -108,14 +109,29 @@ gulp.task('develop', ['prepare'], function (done) {
 
     gulp.watch(paths.assets + 'styles/*.css', ['css']);
     gulp.watch(paths.views + '**/*.html', ['move-views']);
-    gulp.watch([paths.src + '**/*.js'], ['es6-to-es5']);
-    gulp.watch([paths.tests + '**/*.js'], ['tests-es6-to-es5']);
+    gulp.watch([paths.src + '**/*.js'], ['es6-to-es5', 'lint']);
+    gulp.watch([paths.tests + '**/*.js'], ['tests-es6-to-es5', 'tests-lint']);
     gulp.watch(['./' + build.src + '**/*.js'], ['_run-tests']);
     gulp.watch(['./' + build.tests + '**/*.js'], ['_run-tests']);
 });
 
 gulp.task('default', ['develop']);
 
+
+//-----------------------------------------------------------------------------
+gulp.task('lint', function() {
+  return gulp.src(paths.src + '**/*.js')
+    .pipe(newer(build.src))
+    .pipe(jshint({esnext:true}))
+    .pipe(jshint.reporter('default'));
+});
+
+gulp.task('tests-lint', function() {
+  return gulp.src(paths.tests + '**/*.js')
+    .pipe(newer(build.tests))
+    .pipe(jshint({esnext:true, globals:{describe:false, it:false}}))
+    .pipe(jshint.reporter('default'));
+});
 
 //-----------------------------------------------------------------------------
 gulp.task('tests-es6-to-es5', function() {

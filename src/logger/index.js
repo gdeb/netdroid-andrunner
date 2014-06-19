@@ -26,10 +26,10 @@ function log(type, color, ...args) {
 }
 
 module.exports = {
-    info: (...args) => log('- info  -', 'green', ...args),
-    warn: (...args) => log('- warn  -', 'yellow', ...args),
-    error: (...args) => log('- error -', 'red', ...args),
-    debug: (...args) => log(' [DEBUG] ', 'cyan', ...args),
+    info: function (...args) { log('- info  -', 'green', ...args); },
+    warn: function (...args) { log('- warn  -', 'yellow', ...args); },
+    error: function (...args) { log('- error -', 'red', ...args); },
+    debug: function (...args) { log(' [DEBUG] ', 'cyan', ...args); },
 
     config: function (options) {
         if (options.hasOwnProperty('silent'))

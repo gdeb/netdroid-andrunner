@@ -1,4 +1,5 @@
 /*jslint node: true */
+/*global window:false */
 'use strict';
 
 let test = require('./test.js');
