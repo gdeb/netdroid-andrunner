@@ -33,5 +33,10 @@
 		"method": "get",
 		"controller": "profile",
 		"script": "index.js"
+	},
+	{
+		"path": "/change_password",
+		"method": "post",
+		"controller": "change_password"
 	}
 ]

@@ -5,6 +5,25 @@
   <div class="medium-6 column small-centered">
     <h3>Profile.</h3>
     <p>Welcome, {{user}}.</p>
+
+	<a href="#" data-dropdown="change-pw-form">Change your password.</a>
+
+    <div id="change-pw-form" class="f-dropdown content" data-dropdown-content>
+      <form action="/change_password" method="post">
+        <div>
+          <label>Old Password:</label>
+          <input type="password" name="old_password" autofocus="autofocus"/>
+        </div>
+        <div>
+          <label>New Password:</label>
+          <input type="password" name="new_password" />
+        </div>
+        <div>
+          <input type="submit" value="Change Password" />
+        </div>
+      </form>
+    </div>
+
   </div>
 </div>
 

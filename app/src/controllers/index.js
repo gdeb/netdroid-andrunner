@@ -44,10 +44,31 @@ module.exports.logout = function (req, res) {
 	res.redirect('/');
 };
 
+module.exports.change_password = function (req, res) {
+	let user_info = {
+		username: req.session.user,
+		password: req.body.old_password
+	};
+	users_db.find(user_info, function (err, users) {
+		if (users.length) {
+			users_db.update(user_info, {$set: {
+				password: req.body.new_password
+			}}, function (err) {
+				req.session.success = "Success.  Your password has been changed.";
+				res.redirect('/profile');
+			});
+		} else {
+			req.session.error = "Wrong password.  Try again.";
+			res.redirect('/profile');
+		}
+	});
+};
+
 //-----------------------------------------------------------------------------
 function render_view(req, res, view) {
 	res.render(view, {
 		error: req.session.error,
+		info: req.session.info,
 		success: req.session.success,
 		user: req.session.user,
 		script: req.matched_route.script,
