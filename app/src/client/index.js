@@ -3,11 +3,13 @@
 'use strict';
 
 
-window.addEventListener('DOMContentLoaded', function () {
-	switch (window.location.pathname) {
-		case '/login':
-			require('./login.js');
-			break;
-		default:
-	}
-});
+// window.addEventListener('DOMContentLoaded', function () {
+// 	switch (window.location.pathname) {
+// 		case '/login':
+// 			require('./login.js');
+// 			break;
+// 		default:
+// 	}
+// });
+
+console.log('main entry point');

@@ -46,10 +46,12 @@ module.exports.logout = function (req, res) {
 
 //-----------------------------------------------------------------------------
 function render_view(req, res, view) {
+	console.log(req.matched_route);
 	res.render(view, {
 		error: req.session.error,
 		success: req.session.success,
 		user: req.session.user,
+		script: req.matched_route.script,
 		partials: {
 			header: 'header',
 			navbar: 'navbar',

@@ -2,7 +2,8 @@
 'use strict';
 
 var gulp = require('gulp'),
-    browserify = require('browserify'),
+    // browserify = require('browserify'),
+    browserify = require('gulp-browserify'),
     source = require('vinyl-source-stream'),
     runSequence = require('run-sequence'),
     es6transpiler = require('gulp-es6-transpiler'),
@@ -73,11 +74,18 @@ gulp.task('create-db', function () {
 });
 
 gulp.task('browserify', ['es6-to-es5'], function () {
-    browserify('./' + paths.build.client + 'index.js')
-        .bundle({debug: true})
-        .pipe(source('client.js'))
+    return gulp.src(paths.build.client + '**/*.js')
+        .pipe(browserify({debug:true}))
         .pipe(gulp.dest(paths.build.static + 'js/'));
+
 });
+
+// gulp.task('browserify', ['es6-to-es5'], function () {
+//     browserify('./' + paths.build.client + 'index.js')
+//         .bundle({debug: true})
+//         .pipe(source('client.js'))
+//         .pipe(gulp.dest(paths.build.static + 'js/'));
+// });
 
 gulp.task('prepare', function (cb) {
     var tasks = [

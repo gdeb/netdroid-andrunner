@@ -9,7 +9,8 @@
 		"path": "/login",
 		"method": "get",
 		"controller": "login",
-		"unrestricted": true
+		"unrestricted": true,
+		"script": "login.js"
 	},
 	{
 		"path": "/login",
@@ -26,5 +27,11 @@
 		"path": "/lobby",
 		"method": "get",
 		"controller": "lobby"
+	},
+	{
+		"path": "/profile",
+		"method": "get",
+		"controller": "profile",
+		"script": "index.js"
 	}
 ]

@@ -13,17 +13,25 @@ function ignore_url (...urls) {
 	};
 }
 
-function restrict(routes, on_access_denied) {
-	let unrestricted = routes.filter(r => r.unrestricted);
+function annotate_route(routes, no_match) {
 	return function (req, res, next) {
-		if (req.session.user) 
-			return next();
-		for (let route of unrestricted) {
+		for (let route of routes) {
 			if (route.path === req.url && 
-				route.method === req.method.toLowerCase())
+				route.method === req.method.toLowerCase()) {
+				req.matched_route = route;
 				return next();
+			}
 		}
-		on_access_denied(req, res);
+		no_match(req, res);
+	}
+}
+
+function restrict(on_access_denied) {
+	return function (req, res, next) {
+		if (req.session.user || req.matched_route.unrestricted) 
+			return next();
+		else
+			on_access_denied(req, res);
 	};
 }
 
@@ -55,6 +63,7 @@ function http_logger(logger) {
 
 module.exports = {
 	ignore_url: ignore_url,
+	annotate_route: annotate_route,
 	restrict: restrict,
 	http_logger: http_logger,
 };

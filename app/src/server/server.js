@@ -33,9 +33,13 @@ class Server {
 		app.use(cookieParser(settings.cookie_secret));
 		app.use(bodyParser());
 		app.use(session());
-		app.use(middlewares.restrict(routes, function (req, res) {
+		app.use(middlewares.annotate_route(routes, function (req, res) {
+			req.session.error = "Invalid URL";
+			res.redirect('/');			
+		}));
+		app.use(middlewares.restrict(function (req, res) {
 			req.session.error = "Access denied";
-			res.redirect('login');
+			res.redirect('/login');
 		}));
 
 		// configure routes
