@@ -1,0 +1,19 @@
+{
+    "assets": "app/assets/",
+    "views": "app/views/",
+    "src": "app/src/",
+    "build_target": "_build/",
+    "tests": "test/",
+    "build" : {
+        "src": "_build/es5-src/",
+        "client": "_build/es5-src/client/",
+        "server": "_build/es5-src/server/",
+        "static": "_build/static/",
+        "views": "_build/views/",
+        "tests": "_build/es5-test/",
+        "db": "_build/db/"
+    },  
+    "vendor": {
+        "foundation": "node_modules/zurb-foundation-npm/"
+    }
+}
