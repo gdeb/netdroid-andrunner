@@ -56,7 +56,7 @@ class Server {
 			}, function (err, users) {
 				if (users.length) {
 					req.session.regenerate(function () {
-						req.session.user = 'gery';
+						req.session.user = req.body.username;
 						req.session.success = 'Success';
 						res.redirect('lobby');
 					});
