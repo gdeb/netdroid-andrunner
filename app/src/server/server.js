@@ -16,7 +16,8 @@ class Server {
 			logger = config.logger || require('../logger'),
 			paths = config.paths,
 			routes = config.routes,
-			controllers = config.controllers;
+			controllers = config.controllers,
+			settings = config.settings;
 
 		// configure express
 		let app = express();		
@@ -29,7 +30,7 @@ class Server {
 		app.use(middlewares.ignore_url('/favicon.ico'));
 		app.use(compression());
 		app.use(express.static(paths.static, { maxAge: '99999'})); 
-		app.use(cookieParser('TopSecret'));
+		app.use(cookieParser(settings.cookie_secret));
 		app.use(bodyParser());
 		app.use(session());
 		app.use(middlewares.restrict(routes, function (req, res) {

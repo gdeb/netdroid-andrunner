@@ -6,6 +6,7 @@ let Server = require('./server.js'),
 	logger = require('../logger'),
 	paths = require(config_folder + 'paths.json').build,
 	routes = require(config_folder + 'routes.json'),
+	settings = require(config_folder + 'settings.json'),
 	controllers = require('../controllers');
 
 //-----------------------------------------------------------------------------
@@ -15,5 +16,6 @@ new Server({
 	routes: routes,
 	logger: logger,
 	controllers: controllers,
+	settings: settings,
 });
 
