@@ -66,8 +66,10 @@ gulp.task('create-db', function () {
     var filename = paths.build.db + 'users.db',
         users_db = new Datastore({filename:filename, autoload:true});
 
-    users_db.insert({username: 'gery', password: 'gery'});
-    users_db.insert({username: 'test', password: 'test'});
+    var users = require('./' + paths.config + 'db.json').users;
+    users.forEach(function (user) {
+        users_db.insert(user);
+    });
 });
 
 gulp.task('browserify', ['es6-to-es5'], function () {
