@@ -2,17 +2,20 @@
 	{
 		"path": "/",
 		"method": "get",
-		"controller": "main"
+		"controller": "main",
+		"unrestricted": true
 	},
 	{
 		"path": "/login",
 		"method": "get",
-		"controller": "login"
+		"controller": "login",
+		"unrestricted": true
 	},
 	{
 		"path": "/login",
 		"method": "post",
-		"controller": "process_login"
+		"controller": "process_login",
+		"unrestricted": true
 	},	
 	{
 		"path": "/logout",

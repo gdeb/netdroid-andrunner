@@ -12,34 +12,39 @@ let express = require('express'),
 //-----------------------------------------------------------------------------
 class Server {
 	constructor (config)  {
-		this.port = config.port;
-		this.logger = config.logger || require('../logger');
-		this.paths = config.paths;
+		let port = config.port,
+			logger = config.logger || require('../logger'),
+			paths = config.paths,
+			routes = config.routes,
+			controllers = config.controllers;
 
 		// configure express
 		let app = express();		
 		app.engine('html', consolidate.mustache);
 		app.set('view engine', 'html');
-		app.set('views', this.paths.views);
+		app.set('views', paths.views);
 
 		// configure middlewares
-		app.use(middlewares.adapt_logger(this.logger));
+		app.use(middlewares.http_logger(logger));
 		app.use(middlewares.ignore_url('/favicon.ico'));
 		app.use(compression());
-		app.use(express.static(this.paths.static, { maxAge: '99999'})); 
+		app.use(express.static(paths.static, { maxAge: '99999'})); 
 		app.use(cookieParser('TopSecret'));
 		app.use(bodyParser());
 		app.use(session());
-		app.use(middlewares.restrictAccess);
+		app.use(middlewares.restrict(routes, function (req, res) {
+			req.session.error = "Access denied";
+			res.redirect('login');
+		}));
 
 		// configure routes
-		for (let route of config.routes) {
-			app[route.method](route.path, config.controllers[route.controller]);
+		for (let route of routes) {
+			app[route.method](route.path, controllers[route.controller]);
 		}
 
 		// start server
-		app.listen(this.port);
-		this.logger.info(`Server started on port ${this.port}.`);
+		app.listen(port);
+		logger.info(`Server started on port ${port}.`);
 	}
 }
 

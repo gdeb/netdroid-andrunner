@@ -13,14 +13,22 @@ function ignore_url (...urls) {
 	};
 }
 
-function restrictAccess(req, res, next) {
-	if (req.url === '/' || req.url === '/login' || req.session.user) 
-		return next();
-	req.session.error = "Access denied";
-	res.redirect('login');
+function restrict(routes, on_access_denied) {
+	let unrestricted = routes.filter(r => r.unrestricted);
+	return function (req, res, next) {
+		if (req.session.user) 
+			return next();
+		for (let route of unrestricted) {
+			if (route.path === req.url && 
+				route.method === req.method.toLowerCase())
+				return next();
+		}
+		on_access_denied(req, res);
+	};
 }
 
-function adapt_logger(logger) {
+
+function http_logger(logger) {
 	return function (req, res, next) {
 		const start = process.hrtime();
 
@@ -47,6 +55,6 @@ function adapt_logger(logger) {
 
 module.exports = {
 	ignore_url: ignore_url,
-	restrictAccess: restrictAccess,
-	adapt_logger: adapt_logger,
+	restrict: restrict,
+	http_logger: http_logger,
 };
