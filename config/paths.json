@@ -4,6 +4,7 @@
     "src": "app/src/",
     "build_target": "_build/",
     "tests": "test/",
+    "config": "config/",
     "build" : {
         "src": "_build/es5-src/",
         "client": "_build/es5-src/client/",
@@ -11,8 +12,9 @@
         "static": "_build/static/",
         "views": "_build/views/",
         "tests": "_build/es5-test/",
-        "db": "_build/db/"
-    },  
+        "db": "_build/db/",
+        "config": "_build/config/"
+    },
     "vendor": {
         "foundation": "node_modules/zurb-foundation-npm/"
     }

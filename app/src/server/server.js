@@ -12,8 +12,9 @@ let express = require('express'),
 
 //-----------------------------------------------------------------------------
 class Server {
-	constructor (port = 8080, options = {})  {
+	constructor (port, paths, options = {})  {
 		this.logger = options.logger || require('../logger');
+		this.paths = paths;
 
 		let app = express();
 		
@@ -28,14 +29,14 @@ class Server {
 	config_express (app) {
 		app.engine('html', consolidate.mustache);
 		app.set('view engine', 'html');
-		app.set('views', './_build/views');
+		app.set('views', this.paths.views);
 	}
 
 	config_middlewares (app) {
 		app.use(adapt_logger(this.logger));
 		app.use(ignoreFavicon);
 		app.use(compression());
-		app.use(express.static('_build/static/', { maxAge: '99999'})); 
+		app.use(express.static(this.paths.static, { maxAge: '99999'})); 
 		app.use(cookieParser('TopSecret'));
 		app.use(bodyParser());
 		app.use(session());
