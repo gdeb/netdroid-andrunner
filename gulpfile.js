@@ -16,21 +16,22 @@ var gulp = require('gulp'),
 
 //-----------------------------------------------------------------------------
 var paths = {
-    assets: 'assets/',
-    views: 'views/',
-    src: 'src/',
-    build: '.tmp/',
-    tests: 'tests/',
+    assets: 'app/assets/',
+    views: 'app/views/',
+    src: 'app/src/',
+    build: '_build/',
+    tests: 'test/',
     foundation: 'node_modules/zurb-foundation-npm/',
 };
 
 var build = {
-    src: paths.build + 'src/',
+    src: paths.build + 'es5-src/',
     static: paths.build + 'static/',
-    client: paths.build + 'src/client/',
-    server: paths.build + 'src/server/',
+    client: paths.build + 'es5-src/client/',
+    server: paths.build + 'es5-src/server/',
     views: paths.build + 'views/',
-    tests: paths.build + 'tests/',
+    tests: paths.build + 'es5-test/',
+    db: paths.build + 'db/',
 };
 
 //-----------------------------------------------------------------------------
@@ -50,6 +51,8 @@ gulp.task('foundation-js', function() {
 });
 
 gulp.task('styles', function() {
+    console.log(paths.assets + 'styles/**/*.styl');
+    console.log(build.static);
     return gulp.src(paths.assets + 'styles/**/*.styl')
         .pipe(stylus())
         .pipe(gulp.dest(build.static + 'css/'));
@@ -74,7 +77,7 @@ gulp.task('move-views', function() {
 });
 
 gulp.task('create-db', function () {
-    var filename = paths.build + 'users.db',
+    var filename = build.db + 'users.db',
         users_db = new Datastore({filename:filename, autoload:true});
 
     users_db.insert({username: 'gery', password: 'gery'});

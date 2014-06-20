@@ -3,7 +3,7 @@
 'use strict';
 
 var expect = require('expect.js'),
-	logger = require('../src/logger');
+	logger = require('../es5-src/logger');
 
 //-----------------------------------------------------------------------------
 describe('Logger', function () {

@@ -3,7 +3,7 @@ Example of folder structure
 
 app/
 	views/
-	public/
+	assets/
 		styles/
 		images/
 	src/
@@ -21,7 +21,7 @@ _build/
 		logger/
 		server/
 	es5-test/
-	public/
+	static/
 		js/
 		css/
 		images/
@@ -32,4 +32,4 @@ doc/
 config/
 	db.json  users, mots de passe, tables, files, ...
 	routes.json
-
+	paths.json // read by server and gulp

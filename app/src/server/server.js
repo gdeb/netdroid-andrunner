@@ -7,7 +7,7 @@ let express = require('express'),
     bodyParser = require('body-parser'),
     session = require('express-session'),
 	Datastore = require('nedb'),
-	users_db = new Datastore({filename:'.tmp/users.db', autoload:true}),
+	users_db = new Datastore({filename:'_build/db/users.db', autoload:true}),
     compression = require('compression');
 
 //-----------------------------------------------------------------------------
@@ -28,14 +28,14 @@ class Server {
 	config_express (app) {
 		app.engine('html', consolidate.mustache);
 		app.set('view engine', 'html');
-		app.set('views', './views');
+		app.set('views', './_build/views');
 	}
 
 	config_middlewares (app) {
 		app.use(adapt_logger(this.logger));
 		app.use(ignoreFavicon);
 		app.use(compression());
-		app.use(express.static('.tmp/static/', { maxAge: '99999'})); 
+		app.use(express.static('_build/static/', { maxAge: '99999'})); 
 		app.use(cookieParser('TopSecret'));
 		app.use(bodyParser());
 		app.use(session());
