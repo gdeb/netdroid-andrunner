@@ -2,11 +2,18 @@
 'use strict';
 
 let Server = require('./server.js'),
-	logger = require('../logger');
-
-let	port = process.env.PORT || 8080,
-	paths = require(process.env.CONFIG_FOLDER + 'paths.json').build;
+	config_folder = process.env.CONFIG_FOLDER,
+	logger = require('../logger'),
+	paths = require(config_folder + 'paths.json').build,
+	routes = require(config_folder + 'routes.json'),
+	controllers = require('../controllers');
 
 //-----------------------------------------------------------------------------
-new Server(port, paths, {logger:logger});
+new Server({
+	port: process.env.PORT || 8080, 
+	paths: paths,
+	routes: routes,
+	logger: logger,
+	controllers: controllers,
+});
 

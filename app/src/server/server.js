@@ -6,33 +6,22 @@ let express = require('express'),
     cookieParser = require('cookie-parser'),
     bodyParser = require('body-parser'),
     session = require('express-session'),
-	Datastore = require('nedb'),
-	users_db = new Datastore({filename:'_build/db/users.db', autoload:true}),
     compression = require('compression');
 
 //-----------------------------------------------------------------------------
 class Server {
-	constructor (port, paths, options = {})  {
-		this.logger = options.logger || require('../logger');
-		this.paths = paths;
+	constructor (config)  {
+		this.port = config.port;
+		this.logger = config.logger || require('../logger');
+		this.paths = config.paths;
 
-		let app = express();
-		
-		this.config_express(app);
-		this.config_middlewares(app);
-		this.config_routes(app);
-
-		app.listen(port);
-		this.logger.info(`Server started on port ${port}.`);
-	}
-
-	config_express (app) {
+		// configure express
+		let app = express();		
 		app.engine('html', consolidate.mustache);
 		app.set('view engine', 'html');
 		app.set('views', this.paths.views);
-	}
 
-	config_middlewares (app) {
+		// configure middlewares
 		app.use(adapt_logger(this.logger));
 		app.use(ignoreFavicon);
 		app.use(compression());
@@ -41,51 +30,15 @@ class Server {
 		app.use(bodyParser());
 		app.use(session());
 		app.use(restrictAccess);
-	}
 
-	config_routes (app) {
-		app.get('/', (req, res) => this.render_view(res, 'index', req.session));
-		app.get('/login', (req, res) => this.render_view(res, 'login', req.session));
-		app.get('/lobby', (req, res) => this.render_view(res, 'lobby', req.session));
-		app.get('/profile', (req, res) => this.render_view(res, 'profile', req.session));
+		// configure routes
+		for (let route of config.routes) {
+			app[route.method](route.path, config.controllers[route.controller]);
+		}
 
-		app.post('/login', function (req, res) {
-			users_db.find({
-				username: req.body.username, 
-				password: req.body.password
-			}, function (err, users) {
-				if (users.length) {
-					req.session.regenerate(function () {
-						req.session.user = req.body.username;
-						req.session.success = 'Success';
-						res.redirect('lobby');
-					});
-				} else {
-					req.session.error = "Login failed.  Try again.";
-					res.redirect('login');
-				}
-			});
-		});
-
-		app.get('/logout', function (req, res) {
-			req.session.destroy();
-			res.redirect('/');
-		});
-	}
-
-	render_view (res, view, session) {
-		res.render(view, {
-			error: session.error,
-			success: session.success,
-			user: session.user,
-			partials: {
-				header: 'header',
-				navbar: 'navbar',
-				footer: 'footer',
-			},
-		});
-		delete session.error;
-		delete session.success;
+		// start server
+		app.listen(this.port);
+		this.logger.info(`Server started on port ${this.port}.`);
 	}
 }
 

@@ -1,0 +1,27 @@
+[
+	{
+		"path": "/",
+		"method": "get",
+		"controller": "main"
+	},
+	{
+		"path": "/login",
+		"method": "get",
+		"controller": "login"
+	},
+	{
+		"path": "/login",
+		"method": "post",
+		"controller": "process_login"
+	},	
+	{
+		"path": "/logout",
+		"method": "get",
+		"controller": "logout"
+	},
+	{
+		"path": "/lobby",
+		"method": "get",
+		"controller": "lobby"
+	}
+]
