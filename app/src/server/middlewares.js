@@ -22,6 +22,7 @@ function annotate_route(routes, no_match) {
 				return next();
 			}
 		}
+		req.session.error = "Invalid URL";
 		no_match(req, res);
 	}
 }
@@ -30,8 +31,8 @@ function restrict(on_access_denied) {
 	return function (req, res, next) {
 		if (req.session.user || req.matched_route.unrestricted) 
 			return next();
-		else
-			on_access_denied(req, res);
+		req.session.error = "Access Denied";
+		on_access_denied(req, res);
 	};
 }
 

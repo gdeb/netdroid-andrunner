@@ -6,8 +6,13 @@ let express = require('express'),
     cookieParser = require('cookie-parser'),
     bodyParser = require('body-parser'),
     session = require('express-session'),
-    middlewares = require('./middlewares.js'),
     compression = require('compression');
+
+let middlewares = require('./middlewares.js'),
+    annotate_route = middlewares.annotate_route,
+    http_logger = middlewares.http_logger,
+    ignore_url = middlewares.ignore_url,
+    restrict = middlewares.restrict;
 
 //-----------------------------------------------------------------------------
 class Server {
@@ -26,21 +31,15 @@ class Server {
 		app.set('views', paths.views);
 
 		// configure middlewares
-		app.use(middlewares.http_logger(logger));
-		app.use(middlewares.ignore_url('/favicon.ico'));
+		app.use(http_logger(logger));
+		app.use(ignore_url('/favicon.ico'));
 		app.use(compression());
 		app.use(express.static(paths.static, { maxAge: '99999'})); 
 		app.use(cookieParser(settings.cookie_secret));
 		app.use(bodyParser());
 		app.use(session());
-		app.use(middlewares.annotate_route(routes, function (req, res) {
-			req.session.error = "Invalid URL";
-			res.redirect('/');			
-		}));
-		app.use(middlewares.restrict(function (req, res) {
-			req.session.error = "Access denied";
-			res.redirect('/login');
-		}));
+		app.use(annotate_route(routes, (req, res) => res.redirect('/')));
+		app.use(restrict((req, res) => res.redirect('/login')));
 
 		// configure routes
 		for (let route of routes) {
