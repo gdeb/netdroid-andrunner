@@ -10,7 +10,6 @@
   "author": "Géry Debongnie",
   "license": "BSD",
   "devDependencies": {
-    "browserify": "^4.1.11",
     "expect.js": "^0.3.1",
     "gulp": "^3.8.1",
     "gulp-browserify": "^0.5.0",
