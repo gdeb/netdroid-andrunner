@@ -26,7 +26,8 @@
 	{
 		"path": "/lobby",
 		"method": "get",
-		"controller": "lobby"
+		"controller": "lobby",
+		"script": "lobby.js"
 	},
 	{
 		"path": "/profile",

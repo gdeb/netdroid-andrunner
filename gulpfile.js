@@ -127,7 +127,7 @@ gulp.task('default', ['develop']);
 gulp.task('lint', function() {
   return gulp.src(paths.src + '**/*.js')
     .pipe(newer(paths.build.src))
-    .pipe(jshint({esnext:true}))
+    .pipe(jshint({esnext:true, globals:{WebSocket:false}}))
     .pipe(jshint.reporter('default'));
 });
 

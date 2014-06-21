@@ -32,6 +32,7 @@
     "gulp-stylus": "^1.0.2",
     "mustache": "^0.8.2",
     "nedb": "^0.10.5",
+    "ws": "^0.4.31",
     "zurb-foundation-npm": "0.0.1"
   }
 }
