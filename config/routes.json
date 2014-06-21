@@ -39,5 +39,11 @@
 		"path": "/change_password",
 		"method": "post",
 		"controller": "change_password"
+	},
+	{
+		"path": "/cards/:id",
+		"method": "get",
+		"controller": "get_card",
+		"unrestricted": true
 	}
 ]

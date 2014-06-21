@@ -1,8 +1,11 @@
 /*jslint node: true */
 'use strict';
 
-let Datastore = require('nedb'),
-	users_db = new Datastore({filename:'_build/db/users.db', autoload:true});
+let logger = require('../logger'),
+	http = require('http'),
+	Datastore = require('nedb'),
+	users_db = new Datastore({filename:'_build/db/users.db', autoload:true}),
+	request = require('request');
 
 //-----------------------------------------------------------------------------
 module.exports.main = function (req, res) {
@@ -61,6 +64,12 @@ module.exports.change_password = function (req, res) {
 			res.redirect('/profile');
 		}
 	});
+};
+
+module.exports.get_card = function (req, res, ...args) {
+	let image_url = 'http://netrunnerdb.com/web/bundles/netrunnerdbcards/images/cards/en-large/01' + 
+		req.params.id + '.png';
+	req.pipe(request(image_url)).pipe(res);
 };
 
 //-----------------------------------------------------------------------------

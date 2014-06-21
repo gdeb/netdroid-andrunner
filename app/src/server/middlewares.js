@@ -1,6 +1,7 @@
 /*jslint node: true */
 'use strict';
 
+let logger = require('../logger');
 //-----------------------------------------------------------------------------
 // Custom Middlewares
 //-----------------------------------------------------------------------------
@@ -13,10 +14,25 @@ function ignore_url (...urls) {
 	};
 }
 
+// return true if req_url matches the route_url.
+// /cards/001 and /cards/:id => ok
+// /cards/number/001 and /cards/:id => not ok
+function route_match(req_url, route_url) {
+	let req_pieces = req_url.split('/'),
+		route_pieces = route_url.split('/');
+	if (req_pieces.length !== route_pieces.length) 
+		return false;
+	for (let i = 0; i < req_pieces.length; i++) {
+		if (req_pieces[i] !== route_pieces[i] && route_pieces[i][0] !== ':')
+			return false;
+	}
+	return true;
+}
+
 function annotate_route(routes, no_match) {
 	return function (req, res, next) {
 		for (let route of routes) {
-			if (route.path === req.url && 
+			if (route_match(req.url, route.path) &&
 				route.method === req.method.toLowerCase()) {
 				req.matched_route = route;
 				return next();
@@ -68,3 +84,7 @@ module.exports = {
 	restrict: restrict,
 	http_logger: http_logger,
 };
+
+if (process.env.NETDROID_TEST) {
+	module.exports.route_match = route_match;
+}

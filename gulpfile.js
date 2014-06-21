@@ -117,7 +117,7 @@ gulp.task('develop', ['prepare'], function (done) {
     gulp.watch([paths.src + '**/*.js'], ['es6-to-es5', 'lint']);
     gulp.watch([paths.tests + '**/*.js'], ['tests-es6-to-es5', 'tests-lint']);
     gulp.watch(['./' + paths.build.src + '**/*.js'], ['_run-tests', 'browserify']);
-    gulp.watch(['./' + paths.build.tests + '**/*.js'], ['_run-tests']);
+    gulp.watch([paths.build.tests + '**/*.js'], ['_run-tests']);
 });
 
 gulp.task('default', ['develop']);
@@ -151,6 +151,7 @@ gulp.task('tests-es6-to-es5', function() {
 });
 
 gulp.task('_run-tests', function (cb) {
+    process.env.NETDROID_TEST = true;
     var options = [paths.build.tests, '--recursive','-R','dot'];
     spawn('mocha', options, {stdio: 'inherit'})
         .on('close', cb);
