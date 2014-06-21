@@ -48,9 +48,7 @@ module.exports = function make_server (config) {
 	app.use(restrict((req, res) => res.redirect('/login')));
 
 	// configure routes
-	for (let route of routes) {
-		app[route.method](route.path, controllers[route.controller]);
-	}
+	routes.map(r => app[r.method](r.path, controllers[r.controller]));
 
 	// start http server
 	app.listen(settings.http_port);
@@ -59,7 +57,6 @@ module.exports = function make_server (config) {
 	// start websocket server
     let websocket_server = new WebSocketServer({
     	port: settings.ws_port, 
-    	server:app, 
     });
     websocket_server.on('connection', s => handle_ws_connection(s));
 	logger.info(`WebSocket Server started on port ${settings.ws_port}.`);

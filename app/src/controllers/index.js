@@ -21,7 +21,6 @@ module.exports.process_login = function (req, res) {
 		if (users.length) {
 			req.session.regenerate(function () {
 				req.session.user = req.body.username;
-				req.session.success = 'Success';
 				res.redirect('lobby');
 			});
 		} else {
