@@ -80,13 +80,6 @@ gulp.task('browserify', ['es6-to-es5'], function () {
 
 });
 
-// gulp.task('browserify', ['es6-to-es5'], function () {
-//     browserify('./' + paths.build.client + 'index.js')
-//         .bundle({debug: true})
-//         .pipe(source('client.js'))
-//         .pipe(gulp.dest(paths.build.static + 'js/'));
-// });
-
 gulp.task('prepare', function (cb) {
     var tasks = [
         'foundation-css',
