@@ -73,7 +73,7 @@ gulp.task('create-db', function () {
     });
 });
 
-gulp.task('browserify', ['es6-to-es5'], function () {
+gulp.task('browserify', function () {
     return gulp.src(paths.build.client + '**/*.js')
         .pipe(browserify({debug:true}))
         .pipe(gulp.dest(paths.build.static + 'js/'));
@@ -88,11 +88,10 @@ gulp.task('prepare', function (cb) {
         'move-views',
         'move-config',
         'create-db',
-        'browserify',
         'es6-to-es5',
         'tests-es6-to-es5',
     ];
-    runSequence('clean', tasks, cb);
+    runSequence('clean', tasks, 'browserify', cb);
 });
 
 //-----------------------------------------------------------------------------
@@ -109,7 +108,8 @@ gulp.task('develop', ['prepare'], function (done) {
     gulp.watch(paths.config + '**/*.json', ['move-config']);
     gulp.watch([paths.src + '**/*.js'], ['es6-to-es5', 'lint']);
     gulp.watch([paths.tests + '**/*.js'], ['tests-es6-to-es5', 'tests-lint']);
-    gulp.watch(['./' + paths.build.src + '**/*.js'], ['_run-tests', 'browserify']);
+    gulp.watch([paths.build.src + '**/*.js', '!' + paths.build.server + '/**'], 
+        ['_run-tests', 'browserify']);
     gulp.watch([paths.build.tests + '**/*.js'], ['_run-tests']);
 });
 
