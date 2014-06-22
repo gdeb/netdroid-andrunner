@@ -2,9 +2,10 @@
 'use strict';
 
 require('colors');
+let utils = require('../utils');
 
 //-----------------------------------------------------------------------------
-let pad = (x) => String(x).length === 1 ? "0" + x : String(x);
+let pad = x => utils.pad_left(x, 0, 2);
 
 function getTimeStamp() {
     let now = new Date(),
