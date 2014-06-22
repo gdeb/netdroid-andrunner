@@ -65,6 +65,6 @@ module.exports = function make_server (config) {
 function handle_ws_connection (s) {
 	cookie_parser(s.upgradeReq, null, function (err) {
 		let session_id = s.upgradeReq.signedCookies['connect.sid'];
-		session_store.get(session_id, (err, session) => console.log(session));
+		// session_store.get(session_id, (err, session) => console.log(session));
 	});
 }
