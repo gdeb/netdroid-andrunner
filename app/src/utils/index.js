@@ -2,6 +2,7 @@
 'use strict';
 
 //-----------------------------------------------------------------------------
+
 // return true if two objects have the same keys and the same
 // values (values are compared with ===)
 module.exports.is_object_equal = function (obj1, obj2) {
@@ -12,6 +13,8 @@ module.exports.is_object_equal = function (obj1, obj2) {
     return true;
 };
 
+// convert x to a string a add as many characters char 
+// as needed to make sure the result length is equal to n
 module.exports.pad_left = function (x, char, n) {
 	let result = String(x);
 	while (result.length < n) {
