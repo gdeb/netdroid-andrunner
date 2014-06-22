@@ -162,7 +162,7 @@ describe('ListDictProperty', function () {
     it('should return a copy of an elem', function () {
         var player1 = {name:'stephane', faction: 'runner'};
         var player2 = {name:'xavier', faction: 'corp'};
-        var players = new ListDictProperty(function () {}, [player1]);
+        var players = new ListDictProperty('players', new EventEmitter(), [player1]);
         players.add(player2)
         expect(players.get(0)).not.to.be(player1);
         expect(players.get(1)).not.to.be(player2);

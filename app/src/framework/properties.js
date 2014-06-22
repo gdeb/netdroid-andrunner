@@ -2,7 +2,8 @@
 'use strict';
 
 // let EventEmitter = require('./event_emitter.js'),
-let is_object_equal = require('../utils').is_object_equal;
+let is_object_equal = require('../utils').is_object_equal,
+    extend = require('../utils').extend;
 
 //-----------------------------------------------------------------------------
 class Property {
@@ -135,7 +136,7 @@ class ListDictProperty extends ListProperty {
     constructor (name, model, initial) {
         super(name, model, initial);
         for (let i = 0; i < this._list.length; i++) {
-            this._list[i] = Object.assign({}, this._list[i]);
+            this._list[i] = extend({}, this._list[i]);
         }
         // let old_notify = this.notify;
         // this.notify = (event) => old_notify(this.sanitize_event(event));
@@ -147,57 +148,59 @@ class ListDictProperty extends ListProperty {
     //         return event;        
     // }
 
-    // add(...elements) {
-    //     super(...elements.map(elem => Object.assign({}, elem)));
-    // }
+    add(...elements) {
+        for (let el of elements) {
+            super.add(extend({}, el));
+        }
+    }
 
-    // get(index, attr) {
-    //     if (typeof index === 'number' && typeof attr === 'string') {
-    //         if (index < 0 || index >= this._list.length)
-    //             throw new Error('Index out of bounds');
-    //         return this._list[index][attr];
-    //     } else 
-    //         return super(index);
-    // }
+    get(index, attr) {
+        if (typeof index === 'number' && typeof attr === 'string') {
+            if (index < 0 || index >= this._list.length)
+                throw new Error('Index out of bounds');
+            return this._list[index][attr];
+        } else 
+            return super.get(index);
+    }
 
-    // set(index, obj, value) {
-    //     if (typeof obj === 'string') {
-    //         // obj = key, value = value
-    //         let old_value = this._list[index][obj];
-    //         if (old_value === value)
-    //             return;
-    //         this._list[index][obj] = value;
-    //         this.notify({
-    //             type: 'change:' + obj,
-    //             new_value: value,
-    //             old_value: old_value,
-    //             index: index,
-    //         });
-    //     } else {
-    //         // obj = obj to set, value = undefined
-    //         if (is_object_equal(obj, this._list[index]))
-    //             return;
-    //         super(index, Object.assign({}, obj));
-    //     }
-    // }
+    set(index, obj, value) {
+        if (typeof obj === 'string') {
+            // obj = key, value = value
+            let old_value = this._list[index][obj];
+            if (old_value === value)
+                return;
+            this._list[index][obj] = value;
+            this.notify({
+                type: 'change:' + obj,
+                new_value: value,
+                old_value: old_value,
+                index: index,
+            });
+        } else {
+            // obj = obj to set, value = undefined
+            if (is_object_equal(obj, this._list[index]))
+                return;
+            super.set(index, extend({}, obj));
+        }
+    }
 
     // reset(...elements) {
     //     super(...elements.map(elem => Object.assign({}, elem)));
     // }
 
-    // remove(object) {
-    //     if (typeof object !== 'object')
-    //         return super(object);
-    //     let keys = Object.keys(object);
+    remove(object) {
+        if (typeof object !== 'object')
+            return super.remove(object);
+        let keys = Object.keys(object);
 
-    //     let to_remove = function (elem) {
-    //         for (let key of keys) {
-    //             if (elem[key] !== object[key]) return false;
-    //         }
-    //         return true;
-    //     };
-    //     return super(to_remove);
-    // }
+        let to_remove = function (elem) {
+            for (let key of keys) {
+                if (elem[key] !== object[key]) return false;
+            }
+            return true;
+        };
+        return super.remove(to_remove);
+    }
 }
 
 //-----------------------------------------------------------------------------

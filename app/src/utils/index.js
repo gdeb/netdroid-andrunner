@@ -22,3 +22,10 @@ module.exports.pad_left = function (x, char, n) {
 	}
 	return result;
 };
+
+module.exports.extend = function (obj, prop) {
+	for (let p in prop) {
+		obj[p] = prop[p];
+	}
+	return obj;
+}

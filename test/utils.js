@@ -38,4 +38,22 @@ describe('utils', function () {
 			expect(pad_left('test', ' ', 2)).to.be('test');
 		});
 	});
+
+	describe('#extend', function () {
+		let extend = utils.extend;
+
+		it('should add properties', function () {
+			let obj = {};
+			extend(obj, {a:1});
+			expect(obj).to.eql({a:1});
+		});
+
+		it('should return the result', function () {
+			expect(extend({}, {a:1})).to.eql({a:1});
+		});
+
+		it('should overwrite values in first object', function () {
+			expect(extend({a:1}, {a:2})).to.eql({a:2});
+		});
+	});
 }); 
