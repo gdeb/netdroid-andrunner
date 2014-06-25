@@ -145,7 +145,7 @@ gulp.task('tests-es6-to-es5', function() {
 
 gulp.task('_run-tests', function (cb) {
     process.env.NETDROID_TEST = true;
-    var options = [paths.build.tests, '--recursive','-R','spec'];
+    var options = [paths.build.tests, '--recursive','-R','dot'];
     spawn('mocha', options, {stdio: 'inherit'})
         .on('close', cb);
 });
