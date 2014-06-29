@@ -66,12 +66,15 @@ function handle_ws_connection (s) {
 	cookie_parser(s.upgradeReq, null, function (err) {
 		let session_id = s.upgradeReq.signedCookies['connect.sid'];
 		session_store.get(session_id, function (err, session) {
-			s.on('message', msg => handle_ws_message(msg, session));
+			session.websocket = s;
+			s.on('message', msg => handle_ws_message(JSON.parse(msg), session));
 		});
 	});
 }
 
 function handle_ws_message (msg, session) {
-	// logger.info('Received message from ', session);
-	// logger.debug(msg);
+	if (session.user) {
+		logger.info('Received message from ', session.user);
+		controllers[msg.controller](session, msg.payload);
+	}
 }

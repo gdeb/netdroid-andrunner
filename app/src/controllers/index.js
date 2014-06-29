@@ -89,3 +89,7 @@ function render_view(req, res, view) {
 	delete req.session.error;
 	delete req.session.success;	
 }
+
+module.exports.register_chat = function (session, payload) {
+	console.log('yep', session.user, payload);
+};
