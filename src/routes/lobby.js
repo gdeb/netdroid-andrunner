@@ -12,17 +12,6 @@ module.exports.lobby = {
 };
 
 //-----------------------------------------------------------------------------
-function profile (req, res, options) {
-	res.render('profile', options);
-}
-
-module.exports.profile = {
-	urls: ['/profile'],
-	methods: ['get'],
-	controller: profile,
-};
-
-//-----------------------------------------------------------------------------
 function chat (msg, session) {
 	console.log('MSG', msg);
 	session.websocket.send('yopla');

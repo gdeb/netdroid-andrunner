@@ -4,19 +4,6 @@ let users_db = require('../schemas/users.js'),
 	logger = require('../framework/logger.js');
 
 //-----------------------------------------------------------------------------
-function home (req, res, options) {
-	res.render('index', options);
-}
-
-module.exports.home = {
-	urls: ['/', '/index.html'],
-	methods: ['get'],
-	// script: 'lobby.js',
-	controller: home,
-	access: 'public'
-};
-
-//-----------------------------------------------------------------------------
 function login (req, res, options) {
 	res.render('login', options);
 }
@@ -63,3 +50,4 @@ module.exports.logout = {
 	methods: ['get'],
 	controller: logout,
 };
+
