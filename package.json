@@ -1,8 +1,8 @@
 {
-  "name": "android-netrunner",
-  "version": "0.0.0",
-  "description": "Android Netrunne",
-  "main": "src/index.js",
+  "name": "netdroid-andrunner",
+  "version": "0.0.1",
+  "description": "Netdroid Andrunner",
+  "main": "_build/src/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "body-parser": "^1.3.1",
+    "bootstrap": "^3.2.0",
     "colors": "~0.6.2",
     "compression": "^1.0.7",
     "consolidate": "^0.10.0",
@@ -30,10 +31,10 @@
     "express": "^4.4.3",
     "express-session": "^1.4.0",
     "gulp-stylus": "^1.0.2",
+    "jquery": "^2.1.1",
     "mustache": "^0.8.2",
     "nedb": "^0.10.5",
     "request": "^2.36.0",
-    "ws": "^0.4.31",
-    "zurb-foundation-npm": "0.0.1"
+    "ws": "^0.4.31"
   }
 }

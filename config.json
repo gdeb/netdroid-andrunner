@@ -1,0 +1,12 @@
+{
+	"http_port": 8080,
+	"ws_port": 8081,
+	"paths": {
+		"build": "./_build",
+		"tests": "./test",
+		"src": "./src",
+		"public_files": "./_build/public",
+		"resources": "./resources",
+		"views": "./views"
+	}
+}

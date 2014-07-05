@@ -28,4 +28,4 @@ module.exports.extend = function (obj, prop) {
 		obj[p] = prop[p];
 	}
 	return obj;
-}
+};

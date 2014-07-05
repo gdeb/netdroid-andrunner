@@ -15,147 +15,117 @@ var gulp = require('gulp'),
     stylus = require('gulp-stylus'),
     Datastore = require('nedb');
 
-var paths = require("./config/paths.json");
+//-----------------------------------------------------------------------------
+// Settings
+
+var HTTP_PORT = require('./config.json').http_port,
+    WS_PORT = require('./config.json').ws_port,
+    BUILD = require('./config.json').paths.build,
+    TESTS = require('./config.json').paths.tests,
+    PUBLIC = require('./config.json').paths.public_files,
+    RESOURCES = require('./config.json').paths.resources,
+    VIEWS = require('./config.json').paths.views,
+    SRC = require('./config.json').paths.src;
 
 //-----------------------------------------------------------------------------
 gulp.task('clean', function () {  
-    return gulp.src(paths.build_target, {read: false})
+    return gulp.src(BUILD, {read: false})
         .pipe(clean());
 });
 
-gulp.task('foundation-css', function() {
-    return gulp.src(paths.vendor.foundation + 'css/*.css')
-        .pipe(gulp.dest(paths.build.static + 'css/'));
+gulp.task('bootstrap-css', function() {
+    var bootstrap_css = "node_modules/bootstrap/dist/css/*";
+    return gulp.src(bootstrap_css)
+        .pipe(gulp.dest(PUBLIC + '/css/'));
 });
 
-gulp.task('foundation-js', function() {
-    return gulp.src(paths.vendor.foundation + '**/*.js')
-        .pipe(gulp.dest(paths.build.static));
+gulp.task('bootstrap-js', function() {
+    var bootstrap_js = "node_modules/bootstrap/dist/js/*";
+    return gulp.src(bootstrap_js)
+        .pipe(gulp.dest(PUBLIC + '/js/'));
+});
+
+gulp.task('jquery', function() {
+    var jquery = "node_modules/jquery/dist/*";
+    return gulp.src(jquery)
+        .pipe(gulp.dest(PUBLIC + '/js/'));
 });
 
 gulp.task('styles', function() {
-    return gulp.src(paths.assets + 'styles/**/*.styl')
+    return gulp.src(RESOURCES + '/styles/**/*.styl')
         .pipe(stylus())
-        .pipe(gulp.dest(paths.build.static + 'css/'));
+        .pipe(gulp.dest(PUBLIC + '/css/'));
 });
 
-
 gulp.task('es6-to-es5', function() {
-    return gulp.src([paths.src + '**/*.js'])
-        .pipe(newer(paths.build.src))
+    return gulp.src([SRC + '/**/*.js'])
+        .pipe(newer(BUILD + '/src/'))
         .pipe(es6transpiler())
             .on('error', function (error) {
                 console.log(error.stack); 
                 this.emit('end'); 
             })
-        .pipe(gulp.dest(paths.build.src));
+        .pipe(gulp.dest(BUILD + '/src/'));
+});
+
+
+gulp.task('lint', function() {
+  return gulp.src(SRC + '/**/*.js')
+    .pipe(jshint({esnext:true, globals:{WebSocket:false}}))
+    .pipe(jshint.reporter('default'));
+});
+
+gulp.task('lint-newer-files', function() {
+  return gulp.src(SRC + '/**/*.js')
+    .pipe(newer(BUILD + '/src'))
+    .pipe(jshint({esnext:true, globals:{WebSocket:false}}))
+    .pipe(jshint.reporter('default'));
+});
+
+
+gulp.task('browserify', function () {
+    return gulp.src(BUILD + '/src/client/**/*.js')
+        .pipe(browserify({debug:true}))
+        .pipe(gulp.dest(PUBLIC + '/js/'));
 });
 
 gulp.task('move-views', function() {
-    return gulp.src(paths.views + '**/*.html')
-        .pipe(newer(paths.build.views))
-        .pipe(gulp.dest(paths.build.views));
+    return gulp.src(VIEWS + '/**/*.html')
+        .pipe(newer(BUILD + '/views'))
+        .pipe(gulp.dest(BUILD + '/views'));
 });
 
-gulp.task('move-config', function() {
-    return gulp.src(paths.config + '**/*.json')
-        .pipe(newer(paths.build.config))
-        .pipe(gulp.dest(paths.build.config));
-});
-
-gulp.task('create-db', function () {
-    var filename = paths.build.db + 'users.db',
-        users_db = new Datastore({filename:filename, autoload:true});
-
-    var users = require('./' + paths.config + 'db.json').users;
-    users.forEach(function (user) {
-        users_db.insert(user);
-    });
-});
-
-gulp.task('browserify', function () {
-    return gulp.src(paths.build.client + '**/*.js')
-        .pipe(browserify({debug:true}))
-        .pipe(gulp.dest(paths.build.static + 'js/'));
-
-});
 
 gulp.task('prepare', function (cb) {
     var tasks = [
-        'foundation-css',
-        'foundation-js',
+        'bootstrap-css',
+        'bootstrap-js',
+        'jquery',
         'styles',
-        'move-views',
-        'move-config',
-        'create-db',
         'es6-to-es5',
-        'tests-es6-to-es5',
+        'lint',
+        'move-views',
     ];
     runSequence('clean', tasks, 'browserify', cb);
 });
 
 //-----------------------------------------------------------------------------
-gulp.task('develop', ['prepare'], function (done) {
+gulp.task('serve', function () {
     nodemon({
-        script: paths.build.server + 'index.js',
-        env: {'CONFIG_FOLDER': __dirname + '/' + paths.build.config},
+        script: BUILD + '/src/server.js',
         ext: 'js json',
-        watch: [paths.build.src, paths.build.config, '!' + paths.build.client],
+        watch: [BUILD + '/src', '!' + BUILD + '/src/client/'],
+        args : [HTTP_PORT, WS_PORT],
     }).on('log', function (log) { console.log(log.colour); });
 
-    gulp.watch(paths.assets + 'styles/**/*.styl', ['styles']);
-    gulp.watch(paths.views + '**/*.html', ['move-views']);
-    gulp.watch(paths.config + '**/*.json', ['move-config']);
-    gulp.watch([paths.src + '**/*.js'], ['es6-to-es5', 'lint']);
-    gulp.watch([paths.tests + '**/*.js'], ['tests-es6-to-es5', 'tests-lint']);
-    gulp.watch([paths.build.src + '**/*.js', '!' + paths.build.server + '/**'], 
-        ['_run-tests', 'browserify']);
-    gulp.watch([paths.build.tests + '**/*.js'], ['_run-tests']);
+});
+
+//-----------------------------------------------------------------------------
+gulp.task('develop', ['prepare'], function (done) {
+    gulp.watch(RESOURCES + '/styles/**/*.styl', ['styles']);
+    gulp.watch([SRC + '/**/*.js'], ['es6-to-es5', 'lint-newer-files']);
+    gulp.watch(BUILD + '/src/**/*.js', ['browserify']);
+    gulp.watch(VIEWS + '/**/*.html', ['move-views']);
 });
 
 gulp.task('default', ['develop']);
-
-
-//-----------------------------------------------------------------------------
-gulp.task('lint', function() {
-  return gulp.src(paths.src + '**/*.js')
-    .pipe(newer(paths.build.src))
-    .pipe(jshint({esnext:true, globals:{WebSocket:false}}))
-    .pipe(jshint.reporter('default'));
-});
-
-gulp.task('tests-lint', function() {
-  return gulp.src(paths.tests + '**/*.js')
-    .pipe(newer(paths.build.tests))
-    .pipe(jshint({esnext:true, globals:{describe:false, it:false}}))
-    .pipe(jshint.reporter('default'));
-});
-
-//-----------------------------------------------------------------------------
-gulp.task('tests-es6-to-es5', function() {
-    return gulp.src([paths.tests + '**/*.js'])
-        .pipe(newer(paths.build.tests))
-        .pipe(es6transpiler({globals: {describe: false, it: false}}))
-            .on('error', function (err) { 
-                console.log(err.stack); 
-                this.emit('end');
-            })
-        .pipe(gulp.dest(paths.build.tests));
-});
-
-gulp.task('_run-tests', function (cb) {
-    process.env.NETDROID_TEST = true;
-    var options = [paths.build.tests, '--recursive','-R','dot'];
-    spawn('mocha', options, {stdio: 'inherit'})
-        .on('close', cb);
-});
-
-gulp.task('run-tests', function (cb) {
-    runSequence('prepare', '_run-tests', cb);
-});
-
-//-----------------------------------------------------------------------------
-gulp.task('start', ['prepare'], function () {
-    require('./' + paths.build.server);
-});
-
