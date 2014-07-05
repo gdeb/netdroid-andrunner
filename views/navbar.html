@@ -1,6 +1,6 @@
 <!-- Fixed navbar -->
-<div class="navbar navbar-default" role="navigation">
-  <div class="container">
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+  <div class="container-fluid">
     <div class="navbar-header">
       <a class="navbar-brand" href="/">Netdroid Andrunner</a>
     </div>
@@ -9,7 +9,15 @@
         <li><a href="login">Login</a></li>
 {{/user}}
 {{#user}}
-        <li><a href="#">{{user}}</a></li>
+        <li><a href="lobby">Lobby</a></li>
+        <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">{{user}} <span class="caret"></span></a>
+
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="profile">Profile</a></li>
+            <li><a href="logout">Logout</a></li>
+          </ul>
+
+        </li>
 {{/user}}
       </ul>
    </div>
