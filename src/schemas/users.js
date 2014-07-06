@@ -2,7 +2,8 @@
 'use strict';
 
 let Datastore = require('nedb'),
-	logger = require('../framework/logger.js');
+	logger = require('../framework/logger.js'),
+	fs = require('fs');
 
 //-----------------------------------------------------------------------------
 let db;
@@ -15,9 +16,12 @@ let	initial_users = [
 
 //-----------------------------------------------------------------------------
 function initialize(folder) {
+	let db_existed = fs.existsSync(folder + '/users.db');
 	db = new Datastore({filename: folder + '/users.db', autoload: true});
-	for (let user of initial_users) {
-		add_user(user);
+	if (!db_existed) {
+		for (let user of initial_users) {
+			add_user(user);
+		}		
 	}
 }
 
