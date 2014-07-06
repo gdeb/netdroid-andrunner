@@ -51,6 +51,12 @@ gulp.task('jquery', function() {
         .pipe(gulp.dest(PUBLIC + '/js/'));
 });
 
+gulp.task('angular', function() {
+    var angular = "node_modules/angular/lib/*";
+    return gulp.src(angular)
+        .pipe(gulp.dest(PUBLIC + '/js/'));
+});
+
 gulp.task('styles', function() {
     return gulp.src(RESOURCES + '/styles/**/*.styl')
         .pipe(stylus())
@@ -60,7 +66,7 @@ gulp.task('styles', function() {
 gulp.task('es6-to-es5', function() {
     return gulp.src([SRC + '/**/*.js'])
         .pipe(newer(BUILD + '/src/'))
-        .pipe(es6transpiler())
+        .pipe(es6transpiler({globals:{netdroid:false}}))
             .on('error', function (error) {
                 console.log(error.stack); 
                 this.emit('end'); 
@@ -101,6 +107,7 @@ gulp.task('prepare', function (cb) {
         'bootstrap-css',
         'bootstrap-js',
         'jquery',
+        'angular',
         'styles',
         'es6-to-es5',
         'lint',

@@ -51,3 +51,38 @@ module.exports.logout = {
 	controller: logout,
 };
 
+//-----------------------------------------------------------------------------
+function profile (req, res, options) {
+	res.render('profile', options);
+}
+
+module.exports.profile = {
+	urls: ['/profile'],
+	methods: ['get'],
+	script: 'profile.js',
+	controller: profile,
+};
+
+//-----------------------------------------------------------------------------
+function change_password (req, res) {
+	let user = req.session.user,
+		old_pw = req.body.old_password,
+		new_pw = req.body.new_password;
+
+	logger.debug('change_password');
+	users_db.update_password(user, old_pw, new_pw, function (err, success) {
+		if (err) {
+			req.session.error = "Wrong password.  Try again.";
+			res.redirect('/profile');			
+		} else {
+			req.session.success = "Success.  Your password has been changed.";
+			res.redirect('/profile');			
+		}
+	});
+}
+
+module.exports.change_password = {
+	urls: ['/change_password'],
+	methods: ['post'],
+	controller: change_password,
+};

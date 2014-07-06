@@ -13,13 +13,3 @@ module.exports.home = {
 	access: 'public'
 };
 
-//-----------------------------------------------------------------------------
-function profile (req, res, options) {
-	res.render('profile', options);
-}
-
-module.exports.profile = {
-	urls: ['/profile'],
-	methods: ['get'],
-	controller: profile,
-};
