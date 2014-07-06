@@ -9,6 +9,7 @@ module.exports.lobby = {
 	urls: ['/lobby'],
 	methods: ['get'],
 	controller: lobby,
+	script: 'lobby.js',
 };
 
 //-----------------------------------------------------------------------------

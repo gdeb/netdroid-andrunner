@@ -69,7 +69,6 @@ function change_password (req, res) {
 		old_pw = req.body.old_password,
 		new_pw = req.body.new_password;
 
-	logger.debug('change_password');
 	users_db.update_password(user, old_pw, new_pw, function (err, success) {
 		if (err) {
 			req.session.error = "Wrong password.  Try again.";

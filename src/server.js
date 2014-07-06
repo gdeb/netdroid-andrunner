@@ -13,10 +13,11 @@ let WebSocketServer = require('ws').Server,
 	logger = require('./framework/logger.js');
 
 const VIEWS = "./views/",
+	  SECRET = 'Go NetDroid!',
 	  HTTP_PORT = process.argv[2] || 8080,
 	  WS_PORT = process.argv[3] || 8081,
 	  session_store = new session.MemoryStore(),
-	  cookie_parser = cookieParser('GO NetDroid!'),
+	  cookie_parser = cookieParser(SECRET),
 	  ws_routes = [];
 
 //-----------------------------------------------------------------------------
@@ -32,8 +33,16 @@ app.use(http_logger(logger));
 app.use(compression());
 app.use(express.static('./_build/public', { maxAge: '99999'})); 
 app.use(cookie_parser);
-app.use(bodyParser());
-app.use(session({store:session_store}));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
+app.use(session({
+	store:session_store,
+	resave: true,
+	saveUninitialized: true,
+	secret: SECRET,
+}));
 
 // load all schemas
 fs

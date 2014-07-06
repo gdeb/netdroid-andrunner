@@ -44,13 +44,11 @@ function find_user (name, password, callback) {
 }
 
 function update_password (name, old_pw, new_pw, cb) {
-	logger.debug('update_password');
 	let user_info = {
 		username: name,
 		password: old_pw,
 	};
 	db.find(user_info, function (err, users) {
-		logger.debug('dbfind', users);
 		if (users.length) {
 			db.update(user_info, {$set: {password: new_pw}}, function (err) {
 				return cb(null, "success");
