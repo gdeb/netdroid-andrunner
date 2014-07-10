@@ -6,7 +6,6 @@ let logger = require('../framework/logger.js'),
 
 //-----------------------------------------------------------------------------
 function home (req, res, options) {
-	logger.debug(home_view.home(options));
 	res.render('index', options);
 }
 

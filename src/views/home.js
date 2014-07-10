@@ -8,8 +8,8 @@ let Mustache = require('mustache'),
 let TEMPLATES = './_build/templates/';
 
 module.exports.home = function (options) {
-	fs.readFile(TEMPLATES + 'index.html', function (err, file) {
-		logger.debug(file.toString());
-	});
+	// fs.readFile(TEMPLATES + 'index.html', function (err, file) {
+	// 	logger.debug(file.toString());
+	// });
 	return Mustache.render('index.html');
 };

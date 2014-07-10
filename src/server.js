@@ -12,7 +12,7 @@ let fs = require('fs'),
 let WebSocketServer = require('ws').Server,
 	logger = require('./framework/logger.js');
 
-const VIEWS = "./_build/templates/",
+const VIEWS = "./resources/templates/",
 	  SECRET = 'Go NetDroid!',
 	  HTTP_PORT = process.argv[2] || 8080,
 	  WS_PORT = process.argv[3] || 8081,
@@ -31,6 +31,9 @@ app.set('views', VIEWS);
 app.use(ignore_url('/favicon.ico'));
 app.use(http_logger(logger));
 app.use(compression());
+app.use('/vendor', express.static('./node_modules/angular/lib/', { maxAge: '99999'})); 
+app.use('/vendor', express.static('./node_modules/bootstrap/dist/', { maxAge: '99999'})); 
+app.use('/vendor', express.static('./node_modules/jquery/dist/', { maxAge: '99999'})); 
 app.use(express.static('./_build/public', { maxAge: '99999'})); 
 app.use(cookie_parser);
 app.use(bodyParser.json());
