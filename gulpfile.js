@@ -24,7 +24,7 @@ var HTTP_PORT = require('./config.json').http_port,
     TESTS = require('./config.json').paths.tests,
     PUBLIC = require('./config.json').paths.public_files,
     RESOURCES = require('./config.json').paths.resources,
-    VIEWS = require('./config.json').paths.views,
+    TEMPLATES = require('./config.json').paths.templates,
     SRC = require('./config.json').paths.src;
 
 //-----------------------------------------------------------------------------
@@ -95,10 +95,10 @@ gulp.task('browserify', function () {
         .pipe(gulp.dest(PUBLIC + '/js/'));
 });
 
-gulp.task('move-views', function() {
-    return gulp.src(VIEWS + '/**/*.html')
-        .pipe(newer(BUILD + '/views'))
-        .pipe(gulp.dest(BUILD + '/views'));
+gulp.task('move-templates', function() {
+    return gulp.src(TEMPLATES + '/**/*.html')
+        .pipe(newer(BUILD + '/templates'))
+        .pipe(gulp.dest(BUILD + '/templates'));
 });
 
 
@@ -111,7 +111,7 @@ gulp.task('prepare', function (cb) {
         'styles',
         'es6-to-es5',
         'lint',
-        'move-views',
+        'move-templates',
     ];
     runSequence('clean', tasks, 'browserify', cb);
 });
@@ -132,7 +132,7 @@ gulp.task('develop', ['prepare'], function (done) {
     gulp.watch(RESOURCES + '/styles/**/*.styl', ['styles']);
     gulp.watch([SRC + '/**/*.js'], ['es6-to-es5', 'lint-newer-files']);
     gulp.watch(BUILD + '/src/**/*.js', ['browserify']);
-    gulp.watch(VIEWS + '/**/*.html', ['move-views']);
+    gulp.watch(TEMPLATES + '/**/*.html', ['move-templates']);
 });
 
 gulp.task('default', ['develop']);

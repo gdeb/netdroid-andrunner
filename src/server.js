@@ -12,7 +12,7 @@ let fs = require('fs'),
 let WebSocketServer = require('ws').Server,
 	logger = require('./framework/logger.js');
 
-const VIEWS = "./views/",
+const VIEWS = "./_build/templates/",
 	  SECRET = 'Go NetDroid!',
 	  HTTP_PORT = process.argv[2] || 8080,
 	  WS_PORT = process.argv[3] || 8081,

@@ -1,8 +1,12 @@
 /*jslint node: true */
 'use strict';
 
+let logger = require('../framework/logger.js'),
+	home_view = require('../views/home.js');
+
 //-----------------------------------------------------------------------------
 function home (req, res, options) {
+	logger.debug(home_view.home(options));
 	res.render('index', options);
 }
 

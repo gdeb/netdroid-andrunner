@@ -7,6 +7,6 @@
 		"src": "./src",
 		"public_files": "./_build/public",
 		"resources": "./resources",
-		"views": "./views"
+		"templates": "./resources/templates"
 	}
 }
