@@ -3,7 +3,7 @@
 
 let Mustache = require('mustache'),
 	fs = require('fs'),
-	logger = require('../framework/logger.js');
+	logger = require('../misc/logger.js');
 
 let TEMPLATES = './_build/templates/';
 

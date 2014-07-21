@@ -39,7 +39,7 @@ gulp.task('styles', function() {
 gulp.task('es6-to-es5', function() {
     return gulp.src([SRC + '/**/*.js'])
         .pipe(newer(BUILD + '/src/'))
-        .pipe(es6transpiler({globals:{netdroid:false}}))
+        .pipe(es6transpiler({globals:{netdroid:false, angular:false}}))
             .on('error', function (error) {
                 console.log(error.stack); 
                 this.emit('end'); 

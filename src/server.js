@@ -10,7 +10,7 @@ let fs = require('fs'),
     compression = require('compression');
 
 let WebSocketServer = require('ws').Server,
-	logger = require('./framework/logger.js');
+	logger = require('./misc/logger.js');
 
 const VIEWS = "./resources/templates/",
 	  SECRET = 'Go NetDroid!',
@@ -32,8 +32,10 @@ app.use(ignore_url('/favicon.ico'));
 app.use(http_logger(logger));
 app.use(compression());
 app.use('/vendor', express.static('./node_modules/angular/lib/', { maxAge: '99999'})); 
+app.use('/vendor', express.static('./node_modules/angular-route/', { maxAge: '99999'})); 
 app.use('/vendor', express.static('./node_modules/bootstrap/dist/', { maxAge: '99999'})); 
 app.use('/vendor', express.static('./node_modules/jquery/dist/', { maxAge: '99999'})); 
+app.use('/partials', express.static('./resources/templates/', { maxAge: '99999'})); 
 app.use(express.static('./_build/public', { maxAge: '99999'})); 
 app.use(cookie_parser);
 app.use(bodyParser.json());
