@@ -1,0 +1,16 @@
+html, body {
+	height: 100%;
+}
+
+div.container-fluid {
+	height: 100%;
+}
+
+div.container-fluid > div.row {
+	height: 100%;
+}
+
+.netdroid-chat {
+	height: 100%;
+	background-color: #EEE;
+}

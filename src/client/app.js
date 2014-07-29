@@ -12,6 +12,7 @@ require('./homeScreen');
 require('./cardsScreen');
 require('./decksScreen');
 require('./lobbyScreen');
+require('./profileScreen');
 
 
 

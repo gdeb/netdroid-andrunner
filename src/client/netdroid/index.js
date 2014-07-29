@@ -9,6 +9,7 @@ angular.module('netdroid', [
 	'cardsScreen', 
 	'decksScreen',
     'lobbyScreen',
+    'profileScreen',
 ]);
 
 require('./sessionService.js');

@@ -10,12 +10,12 @@
 <body ng-controller="main">
   <anr-navbar></anr-navbar>
 
-  <div class="container">
+  <div class="container-fluid">
     <div class="row">
-      <div ng-class="session.chat ? 'col-md-9' : col-md-12">
+      <div ng-class="session.chat ? 'col-sm-9' : col-sm-12">
         <div ng-view></div>
       </div>
-      <div class="col-md-3 netdroid-chat" ng-show="session.chat">
+      <div class="col-sm-3 netdroid-chat" ng-show="session.chat">
         <h3>Chat</h3>
         blip blip
       </div>
