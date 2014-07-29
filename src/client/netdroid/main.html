@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en" ng-app="netdroid">
+<head>
+  <title>Netdroid:Andrunner</title>
+  <link rel="stylesheet" href="vendor/css/bootstrap.css">
+  <link rel="stylesheet" href="netdroid.css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css">
+</head>
+
+<body ng-controller="main">
+  <anr-navbar></anr-navbar>
+
+  <div class="container">
+    <div class="row">
+      <div ng-class="session.chat ? 'col-md-9' : col-md-12">
+        <div ng-view></div>
+      </div>
+      <div class="col-md-3 netdroid-chat" ng-show="session.chat">
+        <h3>Chat</h3>
+        blip blip
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script src="vendor/jquery.min.js"></script>
+  <script src="vendor/js/bootstrap.min.js"></script>
+</body>
+</html>
+

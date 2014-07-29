@@ -2,96 +2,92 @@
 'use strict';
 
 var gulp = require('gulp'),
-    browserify = require('gulp-browserify'),
-    source = require('vinyl-source-stream'),
-    runSequence = require('run-sequence'),
-    es6transpiler = require('gulp-es6-transpiler'),
-    clean = require('gulp-clean'),
     newer = require('gulp-newer'),
+    es6transpiler = require('gulp-es6-transpiler'),
+    runSequence = require('run-sequence'),
     nodemon = require('nodemon'),
+    concat = require('gulp-concat'),
+    flatten = require('gulp-flatten'),
+    // source = require('vinyl-source-stream'),
     jshint = require('gulp-jshint'),
-    stylus = require('gulp-stylus');
+    browserify = require('gulp-browserify'),
+    uglify = require('gulp-uglify'),
+    rimraf = require('rimraf');
 
 //-----------------------------------------------------------------------------
 // Settings
 
 var HTTP_PORT = require('./config.json').http_port,
     WS_PORT = require('./config.json').ws_port,
-    BUILD = require('./config.json').paths.build,
-    TESTS = require('./config.json').paths.tests,
-    PUBLIC = require('./config.json').paths.public_files,
-    RESOURCES = require('./config.json').paths.resources,
-    TEMPLATES = require('./config.json').paths.templates,
-    SRC = require('./config.json').paths.src;
+    BUILD = './_build/';
 
 //-----------------------------------------------------------------------------
-gulp.task('clean', function () {  
-    return gulp.src(BUILD, {read: false})
-        .pipe(clean());
+gulp.task('clean', function (cb) {  
+    rimraf(BUILD, cb);
 });
 
-gulp.task('styles', function() {
-    return gulp.src(RESOURCES + '/styles/**/*.styl')
-        .pipe(stylus())
-        .pipe(gulp.dest(PUBLIC + '/css/'));
-});
-
-gulp.task('es6-to-es5', function() {
-    return gulp.src([SRC + '/**/*.js'])
-        .pipe(newer(BUILD + '/src/'))
+gulp.task('transpile-es6-to-es5', function() {
+    return gulp.src(['src/**/*.js'])
+        .pipe(newer(BUILD))
         .pipe(es6transpiler({globals:{netdroid:false, angular:false}}))
             .on('error', function (error) {
                 console.log(error.stack); 
                 this.emit('end'); 
             })
-        .pipe(gulp.dest(BUILD + '/src/'));
+        .pipe(gulp.dest(BUILD));
 });
-
-gulp.task('lint', function() {
-  return gulp.src(SRC + '/**/*.js')
-    .pipe(jshint({esnext:true, globals:{WebSocket:false}}))
-    .pipe(jshint.reporter('default'));
-});
-
-gulp.task('lint-newer-files', function() {
-  return gulp.src(SRC + '/**/*.js')
-    .pipe(newer(BUILD + '/src'))
-    .pipe(jshint({esnext:true, globals:{WebSocket:false}}))
-    .pipe(jshint.reporter('default'));
-});
-
 
 gulp.task('browserify', function () {
-    return gulp.src(BUILD + '/src/client/**/*.js')
-        .pipe(browserify({debug:true}))
-        .pipe(gulp.dest(PUBLIC + '/js/'));
+    gulp.src(BUILD + '/client/app.js', {read: false})
+        .pipe(browserify())
+        // .pipe(uglify({mangle:false}))
+        // .pipe(rename('app.js'))
+        .pipe(gulp.dest(BUILD));
+});
+
+gulp.task('prepare-html', function () {
+    return gulp.src(['src/client/**/*.html'])
+        .pipe(flatten())
+        .pipe(gulp.dest(BUILD + '/html/'));
+});
+
+gulp.task('prepare-css', function () {
+    return gulp.src(['src/client/**/*.css'])
+        .pipe(concat('netdroid.css'))
+        .pipe(gulp.dest(BUILD));
 });
 
 gulp.task('prepare', function (cb) {
     var tasks = [
-        'styles',
-        'es6-to-es5',
-        'lint',
+        'transpile-es6-to-es5',
+        'prepare-html',
+        'prepare-css',
     ];
     runSequence('clean', tasks, 'browserify', cb);
+});
+
+gulp.task('watch', ['prepare'], function (cb) {
+    gulp.watch(['src/**/*.js'], ['transpile-es6-to-es5']);
+    gulp.watch([BUILD + '/client/**/*.js'], ['browserify']);
+    gulp.watch(['src/client/**/*.html'], ['prepare-html']);
+    gulp.watch(['src/client/**/*.css'], ['prepare-css']);
+});
+
+gulp.task('lint', function() {
+  return gulp.src('src/**/*.js')
+    .pipe(jshint({esnext:true, globals:{WebSocket:false, angular: false}}))
+    .pipe(jshint.reporter('default'));
 });
 
 //-----------------------------------------------------------------------------
 gulp.task('serve', function () {
     nodemon({
-        script: BUILD + '/src/server.js',
+        script: '_build/server/server.js',
         ext: 'js json',
-        watch: [BUILD + '/src', '!' + BUILD + '/src/client/'],
+        watch: ['_build/server'],
         args : [HTTP_PORT, WS_PORT],
     }).on('log', function (log) { console.log(log.colour); });
 
 });
 
-//-----------------------------------------------------------------------------
-gulp.task('develop', ['prepare'], function (done) {
-    gulp.watch(RESOURCES + '/styles/**/*.styl', ['styles']);
-    gulp.watch([SRC + '/**/*.js'], ['es6-to-es5', 'lint-newer-files']);
-    gulp.watch(BUILD + '/src/**/*.js', ['browserify']);
-});
-
-gulp.task('default', ['develop']);
+gulp.task('default', ['watch']);

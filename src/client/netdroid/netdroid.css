@@ -1,0 +1,8 @@
+body {
+	display: none;
+	padding-top: 50px;
+}
+
+.netdroid-chat {
+	border-left: 1px solid black;
+}

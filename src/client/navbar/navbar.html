@@ -1,0 +1,18 @@
+
+  <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="/">Netdroid Andrunner</a>
+
+      </div>
+      <ul class="nav navbar-nav" access-level="6">
+        <li ng-class="location.path() === '/lobby' ? 'active' : ''"><a href="lobby">Lobby</a></li>
+        <li ng-class="location.path() === '/decks' ? 'active' : ''"><a href="decks">Decks</a></li>
+        <li ng-class="location.path() === '/cards' ? 'active' : ''"><a href="cards">Cards</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right" access-level="6">
+        <li><a ng-click="session.chat = !session.chat"><i class="fa fa-comment"></i></a></li>
+        <li><a href="login">{{user.name}}</a></li>
+      </ul>
+     </div>
+  </div>
