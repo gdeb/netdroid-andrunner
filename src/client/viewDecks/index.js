@@ -1,11 +1,11 @@
 /*jslint node: true */
 'use strict';
 
-angular.module('decksScreen', []);
+angular.module('viewDecks', []);
 
 require('./decksCtrl.js');
 
-angular.module('decksScreen').config(['$routeProvider', 'user_roles', 'access_levels', function($routeProvider, roles, access) {
+angular.module('viewDecks').config(['$routeProvider', 'user_roles', 'access_levels', function($routeProvider, roles, access) {
 
     $routeProvider.
         when('/decks', {

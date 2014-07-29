@@ -1,11 +1,11 @@
 /*jslint node: true */
 'use strict';
 
-angular.module('profileScreen', []);
+angular.module('viewProfile', []);
 
 require('./profileCtrl.js');
 
-angular.module('profileScreen').config(['$routeProvider', 'access_levels', function($routeProvider, access) {
+angular.module('viewProfile').config(['$routeProvider', 'access_levels', function($routeProvider, access) {
 
     $routeProvider.
         when('/profile', {

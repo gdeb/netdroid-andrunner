@@ -1,11 +1,11 @@
 /*jslint node: true */
 'use strict';
 
-angular.module('lobbyScreen', []);
+angular.module('viewLobby', []);
 
 require('./lobbyCtrl.js');
 
-angular.module('lobbyScreen').config(['$routeProvider', 'user_roles', 'access_levels', function($routeProvider, roles, access) {
+angular.module('viewLobby').config(['$routeProvider', 'user_roles', 'access_levels', function($routeProvider, roles, access) {
 
     $routeProvider.
         when('/lobby', {

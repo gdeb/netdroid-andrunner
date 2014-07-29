@@ -8,11 +8,11 @@ require('angular-cookies');
 require('./netdroid');
 require('./authentication');
 require('./navbar');
-require('./homeScreen');
-require('./cardsScreen');
-require('./decksScreen');
-require('./lobbyScreen');
-require('./profileScreen');
+require('./viewHome');
+require('./viewCards');
+require('./viewDecks');
+require('./viewLobby');
+require('./viewProfile');
 
 
 

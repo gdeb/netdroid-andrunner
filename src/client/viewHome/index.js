@@ -1,11 +1,11 @@
 /*jslint node: true */
 'use strict';
 
-angular.module('homeScreen', []);
+angular.module('viewHome', []);
 
 require('./homeCtrl.js');
 
-angular.module('homeScreen').config(['$routeProvider', 'access_levels', function($routeProvider, access) {
+angular.module('viewHome').config(['$routeProvider', 'access_levels', function($routeProvider, access) {
 
     $routeProvider.
         when('/', {

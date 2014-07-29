@@ -5,11 +5,11 @@ angular.module('netdroid', [
 	'ngRoute', 
 	'authentication', 
     'navbar',
-	'homeScreen', 
-	'cardsScreen', 
-	'decksScreen',
-    'lobbyScreen',
-    'profileScreen',
+	'viewHome', 
+	'viewCards', 
+	'viewDecks',
+    'viewLobby',
+    'viewProfile',
 ]);
 
 require('./sessionService.js');
