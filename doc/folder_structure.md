@@ -1,6 +1,8 @@
 Folder structure
 ============================
 
+OUTDATED...
+
 Here is what the folder structure looks like:
 
 <pre>
