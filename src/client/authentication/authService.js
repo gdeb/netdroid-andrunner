@@ -1,6 +1,7 @@
 
 angular.module('authentication').factory('authService', function ($http, $rootScope, $cookieStore, user_roles, access_levels) {
     let user_cookie = $cookieStore.get('user') || {role: 1};
+    $cookieStore.remove('user');
 
     $rootScope.user = {
         name: user_cookie.username,
@@ -21,6 +22,15 @@ angular.module('authentication').factory('authService', function ($http, $rootSc
                 }
             });
 	};
+
+    authentication.logout = function () {
+        return $http.post('/logout', {})
+            .success(function (data) {
+                console.log(data);
+                $rootScope.user.role = 1;
+                $rootScope.user.name = null;
+            });
+    }
 
     authentication.authorize = function (access, role) {
         return access & (role ? role : $rootScope.user.role);

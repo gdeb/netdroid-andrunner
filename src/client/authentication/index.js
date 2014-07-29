@@ -32,6 +32,12 @@ angular.module('authentication').config(['$routeProvider', 'access_levels', func
             controller: 'LoginController',
             access: access.public,
         }).
+        when('/logout', {
+            resolve: {
+                logout: authService => authService.logout()
+            },
+            redirectTo: '/',
+        }).
         when('/register', {
             templateUrl: 'templates/partial-register.html',
             access: access.public,

@@ -27,6 +27,19 @@ module.exports.process_login = {
 };
 
 //-----------------------------------------------------------------------------
+function log_out (req, res) {
+	req.session.destroy();
+	res.send({logout: 'success'});
+}
+
+module.exports.log_out = {
+	urls: ['/logout'],
+	methods: ['post'],
+	controller: log_out,
+	access: 'public',
+};
+
+//-----------------------------------------------------------------------------
 function check_status (req, res) {
 	res.send({
 		is_logged: !!req.session.is_logged,

@@ -12,7 +12,15 @@
       </ul>
       <ul class="nav navbar-nav navbar-right" access-level="6">
         <li><a ng-click="session.chat = !session.chat"><i class="fa fa-comment"></i></a></li>
-        <li><a href="profile">{{user.name}}</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{user.name}} <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="profile">Profile</a></li>
+            <li><a href="logout">Logout</a></li>
+          </ul>
+        </li>
       </ul>
      </div>
   </div>
+
+
