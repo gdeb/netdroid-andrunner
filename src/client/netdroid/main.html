@@ -12,10 +12,10 @@
 
   <div class="container-fluid">
     <div class="row">
-      <div ng-class="session.chat ? 'col-sm-9' : col-sm-12">
+      <div ng-class="chat.is_visible ? 'col-sm-9' : col-sm-12">
         <div ng-view></div>
       </div>
-      <div class="col-sm-3 netdroid-chat" ng-show="session.chat">
+      <div class="col-sm-3 netdroid-chat" ng-show="chat.is_visible">
         <h3>Chat</h3>
         blip blip
       </div>

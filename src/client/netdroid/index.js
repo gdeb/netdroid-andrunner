@@ -5,6 +5,7 @@ angular.module('netdroid', [
 	'ngRoute', 
 	'authentication', 
     'navbar',
+    'chat',
 	'viewHome', 
 	'viewCards', 
 	'viewDecks',

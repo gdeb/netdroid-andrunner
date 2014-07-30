@@ -8,6 +8,7 @@ require('angular-cookies');
 require('./netdroid');
 require('./authentication');
 require('./navbar');
+require('./chat');
 require('./viewHome');
 require('./viewCards');
 require('./viewDecks');
