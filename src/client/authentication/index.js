@@ -16,6 +16,13 @@ angular.module('authentication')
 angular.module('authentication')
     .constant('access_levels', common_auth.access_levels);
 
+angular.module('authentication')
+    .constant('AUTH_EVENTS', {
+    loginSuccess: 'auth-login-success',
+    loginFailed: 'auth-login-failed',
+    logoutSuccess: 'auth-logout-success',
+});
+
 angular.module('authentication').run(['$rootScope', '$location', 'authService', function ($rootScope, $location, auth) {
     $rootScope.$on("$routeChangeStart", function (event, next) {
         if (!auth.authorize(next.access)) {
