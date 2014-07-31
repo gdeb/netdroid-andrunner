@@ -7,6 +7,7 @@ angular.module('authentication').factory('authService', function ($http, $rootSc
         name: user_cookie.username,
         role: user_cookie.role,
     };
+    $rootScope.access = access_levels;
 
 	let authentication = {
         access_levels: access_levels,
