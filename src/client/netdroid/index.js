@@ -13,7 +13,6 @@ angular.module('netdroid', [
     'viewProfile',
 ]);
 
-require('./sessionService.js');
 require('./mainCtrl.js');
 
 angular.module('netdroid').config(['$locationProvider', function($locationProvider) {
