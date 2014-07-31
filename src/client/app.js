@@ -5,7 +5,19 @@ require('angular');
 require('angular-route');
 require('angular-cookies');
 
-require('./netdroid');
+angular.module('netdroid', [
+	'ngRoute', 
+	'authentication', 
+    'navbar',
+    'chat',
+	'viewHome', 
+	'viewCards', 
+	'viewDecks',
+    'viewLobby',
+    'viewProfile',
+]);
+
+require('./mainCtrl.js');
 require('./authentication');
 require('./navbar');
 require('./chat');
@@ -15,5 +27,11 @@ require('./viewDecks');
 require('./viewLobby');
 require('./viewProfile');
 
+angular.module('netdroid').config(['$locationProvider', function($locationProvider) {
+    $locationProvider.html5Mode(true);
+}]);
 
+angular.module('netdroid').run(function () {
+	document.getElementsByTagName('body')[0].style.display = 'block';
+});
 
