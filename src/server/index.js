@@ -3,6 +3,7 @@
 
 var server = require('./http_server.js'),
     session = require('express-session'),
+    cookieParser = require('cookie-parser'),
 	logger = require('./logger.js');
 
 let settings = {
@@ -11,6 +12,8 @@ let settings = {
 	  SECRET: 'Go NetDroid!',
 };
 
-let session_store = new session.MemoryStore();
 
-server(settings, session_store, logger);
+let session_store = new session.MemoryStore(),
+	cookie_parser = cookieParser(settings.SECRET);
+
+server(settings, session_store, cookie_parser, logger);

@@ -3,7 +3,6 @@
 
 let fs = require('fs'),
 	express = require('express'),
-    cookieParser = require('cookie-parser'),
     bodyParser = require('body-parser'),
     session = require('express-session'),
     compression = require('compression');
@@ -11,9 +10,8 @@ let fs = require('fs'),
 let WebSocketServer = require('ws').Server;
 
 
-module.exports = function (settings, session_store, logger) {
-	let ws_routes = [],
-	  	cookie_parser = cookieParser(settings.SECRET);
+module.exports = function (settings, session_store, cookie_parser, logger) {
+	let ws_routes = [];
 	var app = express();
 
 	// configure middlewares
