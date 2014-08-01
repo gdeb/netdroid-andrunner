@@ -2,6 +2,7 @@
 'use strict';
 
 var server = require('./http_server.js'),
+    session = require('express-session'),
 	logger = require('./logger.js');
 
 let settings = {
@@ -10,4 +11,6 @@ let settings = {
 	  SECRET: 'Go NetDroid!',
 };
 
-server(settings, logger);
+let session_store = new session.MemoryStore();
+
+server(settings, session_store, logger);

@@ -11,9 +11,8 @@ let fs = require('fs'),
 let WebSocketServer = require('ws').Server;
 
 
-module.exports = function (settings, logger) {
+module.exports = function (settings, session_store, logger) {
 	let ws_routes = [],
-	  	session_store = new session.MemoryStore(),
 	  	cookie_parser = cookieParser(settings.SECRET);
 	var app = express();
 
