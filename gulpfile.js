@@ -82,7 +82,7 @@ gulp.task('lint', function() {
 //-----------------------------------------------------------------------------
 gulp.task('serve', function () {
     nodemon({
-        script: '_build/server/server.js',
+        script: '_build/server/index.js',
         ext: 'js json',
         watch: ['_build/server'],
         args : [HTTP_PORT, WS_PORT],

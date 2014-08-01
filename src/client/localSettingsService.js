@@ -6,5 +6,6 @@
 
 // example: chat visible
 //
-// settings.get('visible_chat', default_value)
+// settings.register('name', default_value)
+// settings.get('visible_chat')
 // settings.set('visible_chat', value)
