@@ -8,11 +8,11 @@ let fs = require('fs'),
     session = require('express-session'),
     compression = require('compression');
 
-// let WebSocketServer = require('ws').Server,
-let logger = require('./misc/logger.js');
+let WebSocketServer = require('ws').Server,
+	logger = require('./misc/logger.js');
 
 const HTTP_PORT = process.argv[2] || 8080,
-// 	  WS_PORT = process.argv[3] || 8081,
+	  WS_PORT = process.argv[3] || 8081,
 	  session_store = new session.MemoryStore(),
 	  SECRET = 'Go NetDroid!',
 	  cookie_parser = cookieParser(SECRET),
@@ -84,32 +84,35 @@ app.get('*', function (req, res){
 app.listen(HTTP_PORT);
 logger.info("http server started on port " + HTTP_PORT + ".");
 
-// // start websocket server
-// let websocket_server = new WebSocketServer({port: WS_PORT});
-// websocket_server.on('connection', socket => handle_ws_connection(socket));
-// logger.info("WebSocket Server started on port " + WS_PORT + ".");
+// start websocket server
+let websocket_server = new WebSocketServer({port: WS_PORT});
+websocket_server.on('connection', socket => handle_ws_connection(socket));
+logger.info("WebSocket Server started on port " + WS_PORT + ".");
 
-// //-----------------------------------------------------------------------------
-// // Helpers
-// //-----------------------------------------------------------------------------
-// function handle_ws_connection (socket) {
-// 	cookie_parser(socket.upgradeReq, null, function (err) {
-// 		var session_id = socket.upgradeReq.signedCookies['connect.sid'];
-// 		session_store.get(session_id, function (err, session) {
-// 			session.websocket = socket;
-// 			socket.on('message', msg => handle_ws_message(msg, session));
-// 		});
-// 	});
-// }
+//-----------------------------------------------------------------------------
+// Helpers
+//-----------------------------------------------------------------------------
+function handle_ws_connection (socket) {
+	cookie_parser(socket.upgradeReq, null, function (err) {
+		var session_id = socket.upgradeReq.signedCookies['connect.sid'];
+		session_store.get(session_id, function (err, session) {
+			session.websocket = socket;
+			socket.on('message', msg => handle_ws_message(msg, session));
+		});
+	});
+}
 
-// function handle_ws_message (msg, session) {
-// 	let json_msg = JSON.parse(msg);
-// 	logger.info('Received message on ws');
-// 	for (let route of ws_routes) {
-// 		if (route.dispatch(json_msg))
-// 			route.controller(json_msg, session);
-// 	}
-// }
+function handle_ws_message (msg, session) {
+	logger.debug(msg);
+	logger.debug(msg.route);
+	let json_msg = JSON.parse(msg);
+	logger.info('Received message on ws');
+	for (let route of ws_routes) {
+		if (json_msg.route === route.url) {
+			route.controller(json_msg, session);
+		}
+	}
+}
 
 function load_routes(routes) {
 	for (let name of Object.keys(routes)) {
