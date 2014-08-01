@@ -1,7 +1,7 @@
 /*jslint node: true */
 'use strict';
 let users_db = require('../schemas/users.js'),
-	logger = require('../misc/logger.js');
+	logger = require('../logger.js');
 
 //-----------------------------------------------------------------------------
 function process_login (req, res) {

@@ -2,7 +2,7 @@
 'use strict';
 
 let Datastore = require('nedb'),
-	logger = require('../misc/logger.js'),
+	logger = require('../logger.js'),
 	fs = require('fs');
 
 //-----------------------------------------------------------------------------

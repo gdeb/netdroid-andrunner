@@ -2,7 +2,7 @@
 'use strict';
 
 require('colors');
-let utils = require('./utils.js');
+let utils = require('../common/utils.js');
 
 //-----------------------------------------------------------------------------
 let pad = x => utils.pad_left(x, 0, 2);

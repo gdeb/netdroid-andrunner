@@ -1,7 +1,7 @@
 /*jslint node: true */
 'use strict';
 
-let logger = require('../misc/logger.js');
+let logger = require('../logger.js');
 
 function chat_test (msg, session) {
 	logger.debug('MSG', msg);
