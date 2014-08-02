@@ -1,4 +1,7 @@
 /*jslint node: true */
 'use strict';
 
-module.exports = require('./nedb.js');
+let logger = require('../logger')('normal'),
+	folder = './_build/db';
+
+module.exports = require('./nedb.js')(folder, logger);

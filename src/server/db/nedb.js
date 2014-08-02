@@ -8,6 +8,14 @@ module.exports = function (folder, logger) {
 	let db = {},
 		collections = {};
 
+	function in_collection(name, method, ...args) {
+		if (name in collections) {
+			collections[name][method](...args);
+		} else {
+			throw new Error(`Collection ${name} does not exist.`);			
+		}		
+	}
+
 	db.load = function (name) {
 		let filename = `${folder}/${name}.db`,
 			created = !fs.existsSync(filename);
@@ -19,27 +27,15 @@ module.exports = function (folder, logger) {
 	};
 
 	db.insert = function (name, document) {
-		if (name in collections) {
-			collections[name].insert(document);
-		} else {
-			throw new Error(`Collection ${name} does not exist.`);			
-		}
+		in_collection(name, 'insert', document);
 	};
 
 	db.find = function (name, info, callback) {
-		if (name in collections) {
-			collections[name].find(info, callback);
-		} else {
-			throw new Error(`Collection ${name} does not exist.`);			
-		}
+		in_collection(name, 'find', info, callback);
 	};
 
-	db.update = function (name, update, callback) {
-		if (name in collections) {
-			collections[name].update(update, callback);
-		} else {
-			throw new Error(`Collection ${name} does not exist.`);			
-		}
+	db.update = function (name, info, callback) {
+		in_collection(name, 'update', info, callback);
 	};
 
 	return db;

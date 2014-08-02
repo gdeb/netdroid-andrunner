@@ -1,12 +1,8 @@
 /*jslint node: true */
 'use strict';
 
-let Datastore = require('nedb'),
-	logger = require('../logger.js'),
-	fs = require('fs');
+let db = require('../db');
 
-//-----------------------------------------------------------------------------
-let db;
 
 let	initial_users = [
 	{username: "gery", password: "gery"},
@@ -16,12 +12,11 @@ let	initial_users = [
 
 //-----------------------------------------------------------------------------
 function initialize(folder) {
-	let db_existed = fs.existsSync(folder + '/users.db');
-	db = new Datastore({filename: folder + '/users.db', autoload: true});
-	if (!db_existed) {
+	let created = db.load('users');
+	if (created) {
 		for (let user of initial_users) {
 			add_user(user);
-		}		
+		}				
 	}
 }
 
@@ -31,13 +26,13 @@ function validate_user (user) {
 
 function add_user (user) {
 	if (validate_user(user)) 
-		db.insert(user);
+		db.insert('users', user);
 	else
 		throw new Error('Invalid user');
 }
 
 function find_user (name, password, callback) {
-	db.find({
+	db.find('users', {
 		username: name, 
 		password: password
 	}, callback);
@@ -48,9 +43,9 @@ function update_password (name, old_pw, new_pw, cb) {
 		username: name,
 		password: old_pw,
 	};
-	db.find(user_info, function (err, users) {
+	db.find('users', user_info, function (err, users) {
 		if (users.length) {
-			db.update(user_info, {$set: {password: new_pw}}, function (err) {
+			db.update('users', user_info, {$set: {password: new_pw}}, function (err) {
 				return cb(null, "success");
 			});
 		} else {
