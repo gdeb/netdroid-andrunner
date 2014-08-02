@@ -42,9 +42,7 @@ module.exports = function (settings, session_store, cookie_parser, logger) {
 		.forEach(file => require('./schemas/' + file).init('./_build/db'));
 
 	// load all routes
-	fs
-		.readdirSync("./_build/server/routes/")
-		.forEach(file => load_routes(require('./routes/' + file)));
+	load_routes(require('./routes/auth.js'));
 
 	app.get('/app.js', function (req, res) {
 		res.sendfile('_build/app.js');

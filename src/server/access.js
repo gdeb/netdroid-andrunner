@@ -2,5 +2,5 @@
 'use strict';
 
 module.exports = function (route, session) {
-	
-}
+
+};
