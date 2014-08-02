@@ -1,10 +1,11 @@
 /*jslint node: true */
 'use strict';
 
-let logger = require('../logger.js');
+// let logger = require('../logger.js');
 
 function chat_test (msg, session) {
-	logger.debug('MSG', msg);
+	console.log('chat_test');
+	// logger.debug('MSG', msg);
 	// res.send({logout: 'success'});
 }
 

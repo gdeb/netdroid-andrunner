@@ -5,7 +5,7 @@ let http_server = require('./http_server'),
 	ws_server = require('./websocket_server'),
     session = require('express-session'),
     cookieParser = require('cookie-parser'),
-	logger = require('./logger.js')('normal');
+	logger = require('./logger')('normal');
 
 let SECRET = "Go Netdroid";
 
