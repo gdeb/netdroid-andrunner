@@ -39,7 +39,7 @@ gulp.task('transpile-es6-to-es5', function() {
 
 gulp.task('prepare-json', function (cb) {
     return gulp.src(['src/**/*.json'])
-        // .pipe(newer(BUILD))
+        .pipe(newer(BUILD))
         .pipe(gulp.dest(BUILD));
 });
 
@@ -73,11 +73,12 @@ gulp.task('prepare', function (cb) {
     runSequence('clean', tasks, 'browserify', cb);
 });
 
-gulp.task('watch', ['prepare'], function (cb) {
+gulp.task('watch', function (cb) {
     gulp.watch(['src/**/*.js'], ['transpile-es6-to-es5']);
     gulp.watch([BUILD + '/client/**/*.js'], ['browserify']);
     gulp.watch(['src/client/**/*.html'], ['prepare-html']);
     gulp.watch(['src/client/**/*.css'], ['prepare-css']);
+    gulp.watch(['src/**/*.json'], ['prepare-json']);
 });
 
 gulp.task('lint', function() {
@@ -87,7 +88,7 @@ gulp.task('lint', function() {
 });
 
 //-----------------------------------------------------------------------------
-gulp.task('serve', function () {
+gulp.task('serve', ['prepare'], function () {
     nodemon({
         script: '_build/server/index.js',
         ext: 'js json',
@@ -97,4 +98,4 @@ gulp.task('serve', function () {
 
 });
 
-gulp.task('default', ['watch']);
+gulp.task('default', ['serve']);
