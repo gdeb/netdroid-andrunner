@@ -5,37 +5,28 @@ require('colors');
 let utils = require('../common/utils.js');
 
 //-----------------------------------------------------------------------------
-let pad = x => utils.pad_left(x, 0, 2);
-
-function getTimeStamp() {
-    let now = new Date(),
-        hours = pad(now.getHours()),
-        minutes = pad(now.getMinutes()),
-        seconds = pad(now.getSeconds());
-    return `${hours}:${minutes}:${seconds}`;
-}
-
-//-----------------------------------------------------------------------------
-let silent = false,
-    colored = true;
-
 function log(type, color, ...args) {
-    if (silent) return;
-    let logged_type = (colored) ? type[color] : type;
-    args.unshift(getTimeStamp(), logged_type);
+    args.unshift(utils.getTimeStamp(), type[color]);
     console.log(...args);
 }
 
-module.exports = {
+let normal_logger = {
     info: function (...args) { log('- info  -', 'green', ...args); },
     warn: function (...args) { log('- warn  -', 'yellow', ...args); },
     error: function (...args) { log('- error -', 'red', ...args); },
     debug: function (...args) { log(' [DEBUG] ', 'cyan', ...args); },
+};
 
-    config: function (options) {
-        if (options.hasOwnProperty('silent'))
-            silent =  options.silent;
-        if (options.hasOwnProperty('color'))
-            colored = options.color;
-    }
+let trivial_logger = {
+    info: function () {},
+    warn: function () {},
+    error: function () {},
+    debug: function () {},
+};
+
+module.exports = function (type) {
+    if (type === 'trivial')
+        return trivial_logger;
+    if (type === 'normal')
+        return normal_logger;
 };
