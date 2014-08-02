@@ -37,6 +37,12 @@ gulp.task('transpile-es6-to-es5', function() {
         .pipe(gulp.dest(BUILD));
 });
 
+gulp.task('prepare-json', function (cb) {
+    return gulp.src(['src/**/*.json'])
+        // .pipe(newer(BUILD))
+        .pipe(gulp.dest(BUILD));
+});
+
 gulp.task('browserify', function () {
     gulp.src(BUILD + '/client/app.js', {read: false})
         .pipe(browserify())
@@ -62,6 +68,7 @@ gulp.task('prepare', function (cb) {
         'transpile-es6-to-es5',
         'prepare-html',
         'prepare-css',
+        'prepare-json',
     ];
     runSequence('clean', tasks, 'browserify', cb);
 });

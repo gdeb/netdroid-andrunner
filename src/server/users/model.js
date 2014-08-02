@@ -1,11 +1,11 @@
 /*jslint node: true */
 'use strict';
 
-let	initial_users = [
-	{username: "gery", password: "gery"},
-	{username: "g", password: "g"},
-	{username: "demo", password: "pw"},
-];
+// let	initial_users = [
+// 	{username: "gery", password: "gery"},
+// 	{username: "g", password: "g"},
+// 	{username: "demo", password: "pw"},
+// ];
 
 module.exports = function (db) {
 	var Users = {};
@@ -13,7 +13,7 @@ module.exports = function (db) {
 	Users.init = function () {
 		let created = db.load('users');
 		if (created) {
-			for (let user of initial_users) {
+			for (let user of require('./data.json')) {
 				Users.add(user);
 			}				
 		}

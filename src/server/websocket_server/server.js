@@ -10,7 +10,7 @@ module.exports = function (WS_PORT, session_store, cookie_parser, logger) {
 	websocket_server.on('connection', socket => handle_ws_connection(socket));
 	logger.info("WebSocket Server started on port " + WS_PORT + ".");
 
-	load_routes(require('../routes/chat.js'));
+	// load_routes(require('../routes/chat.js'));
 
 
 	function load_routes(routes) {

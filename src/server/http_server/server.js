@@ -1,8 +1,7 @@
 /*jslint node: true */
 'use strict';
 
-let fs = require('fs'),
-	express = require('express'),
+let express = require('express'),
     bodyParser = require('body-parser'),
     session = require('express-session'),
     compression = require('compression');
@@ -40,14 +39,6 @@ module.exports = function (
 		secret: settings.SECRET,
 	}));
 
-		// load all schemas
-	fs
-		.readdirSync("./_build/server/schemas/")
-		.forEach(file => require('../schemas/' + file).init('./_build/db'));
-
-	// load all routes
-	load_routes(require('../routes/auth.js'));
-
 	app.get('/app.js', function (req, res) {
 		res.sendfile('_build/app.js');
 	});
@@ -60,7 +51,7 @@ module.exports = function (
 		res.sendfile('_build/netdroid.css');
 	});
 
-	app.get('*', function (req, res){
+	app.get('/', function (req, res){
 		let role = req.session.user ? 2 : 1;
 		let username = req.session.user ? req.session.user : '';
 	    res.cookie('user', JSON.stringify({
@@ -69,30 +60,6 @@ module.exports = function (
 	    }));
 		res.sendfile('_build/html/main.html');
 	});
-
-
-	//-----------------------------------------------------------------------------
-	// Helpers
-	//-----------------------------------------------------------------------------
-
-	function load_routes(routes) {
-		for (let name of Object.keys(routes)) {
-			let route = routes[name];
-			if (!route.websocket)
-				add_http_route(route);
-		}
-	}
-
-	function add_http_route (route) {
-		if (!('urls' in route) || 
-			!('methods' in route) || 
-			!('controller' in route))
-			throw new Error('Invalid route:');
-		let controller = make_controller(route);
-		for (let method of route.methods) {
-			app[method](route.urls, controller);
-		}
-	}
 
 	function make_controller(route) {
 		return function (req, res) {
@@ -115,8 +82,8 @@ module.exports = function (
 				!('controller' in route))
 				throw new Error('Invalid route:');
 			for (let method of route.methods) {
-				app[method](route.urls, route.controller);
+				app[method](route.urls, make_controller(route));
 			}			
-		}
+		},
 	}
 };
