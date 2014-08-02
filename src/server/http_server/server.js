@@ -107,4 +107,19 @@ module.exports = function (
 			route.controller(req, res);
 		};		
 	}
+
+	return {
+		start () {
+
+		},
+		add_route (route) {
+			if (!('urls' in route) || 
+				!('methods' in route) || 
+				!('controller' in route))
+				throw new Error('Invalid route:');
+			for (let method of route.methods) {
+				app[method](route.urls, route.controller);
+			}			
+		}
+	}
 };
