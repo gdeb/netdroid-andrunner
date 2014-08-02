@@ -7,15 +7,19 @@ let fs = require('fs'),
     session = require('express-session'),
     compression = require('compression');
 
-let WebSocketServer = require('ws').Server;
-
-
-module.exports = function (settings, session_store, cookie_parser, logger) {
+module.exports = function (
+	settings, 
+	session_store, 
+	cookie_parser, 
+	logger,
+	middlewares,
+	routes
+) {
 	var app = express();
 
 	// configure middlewares
-	app.use(ignore_url('/favicon.ico'));
-	app.use(http_logger(logger));
+	app.use(middlewares.ignore_url('/favicon.ico'));
+	app.use(middlewares.http_logger(logger));
 	app.use(compression());
 	app.use('/vendor', express.static('./node_modules/angular/lib/', { maxAge: '99999'})); 
 	app.use('/vendor', express.static('./node_modules/angular-route/', { maxAge: '99999'})); 
@@ -39,10 +43,10 @@ module.exports = function (settings, session_store, cookie_parser, logger) {
 		// load all schemas
 	fs
 		.readdirSync("./_build/server/schemas/")
-		.forEach(file => require('./schemas/' + file).init('./_build/db'));
+		.forEach(file => require('../schemas/' + file).init('./_build/db'));
 
 	// load all routes
-	load_routes(require('./routes/auth.js'));
+	load_routes(require('../routes/auth.js'));
 
 	app.get('/app.js', function (req, res) {
 		res.sendfile('_build/app.js');
@@ -104,35 +108,3 @@ module.exports = function (settings, session_store, cookie_parser, logger) {
 		};		
 	}
 };
-
-//-----------------------------------------------------------------------------
-// Custom Middlewares
-//-----------------------------------------------------------------------------
-function ignore_url (...urls) {
-	return (req,res,next) => urls.indexOf(req.url)>-1 ? res.send(404) : next();
-}
-
-function http_logger(logger) {
-	return function (req, res, next) {
-		const start = process.hrtime();
-
-	   	function logRequest(){
-	      	let diff = process.hrtime(start),
-	      		request_time = (diff[0] * 1e3 + diff[1] * 1e-6).toFixed(3),
-	      		http = req.httpVersionMajor + '.' + req.httpVersionMinor,
-	      		url = req.originalUrl || req.url,
-	      		code = res.statusCode,
-	      		status = (code === 404) ? String(code).red : code;
-
-	      	logger.info([
-	      		req.ip,
-	      		`${req.method} ${req.url} (HTTP/${http})`,
-	      		`status: ${status}`,
-	      		`${request_time} ms`,
-	      	].join(', '));
-	    }
-	    res.once('finish', logRequest);
-		next();
-	};
-}
-

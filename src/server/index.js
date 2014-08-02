@@ -1,7 +1,7 @@
 /*jslint node: true */
 'use strict';
 
-let http_server = require('./http_server.js'),
+let http_server = require('./http_server'),
 	ws_server = require('./ws_server.js'),
     session = require('express-session'),
     cookieParser = require('cookie-parser'),
