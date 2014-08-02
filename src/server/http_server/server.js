@@ -6,14 +6,9 @@ let express = require('express'),
     session = require('express-session'),
     compression = require('compression');
 
-module.exports = function (
-	settings, 
-	session_store, 
-	cookie_parser, 
-	logger,
-	middlewares,
-	routes
-) {
+let middlewares = require('./middlewares.js');
+
+module.exports = function (settings, session_store, cookie_parser, logger) {
 	var app = express();
 
 	// configure middlewares
