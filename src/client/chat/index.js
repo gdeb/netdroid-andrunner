@@ -10,7 +10,7 @@ angular.module('authentication').run(['$rootScope', 'AUTH_EVENTS', 'chatFactory'
     $rootScope.$on(AUTH_EVENTS.logoutSuccess, function () {
         chat.hide();
     });
-    $rootScope.$on(AUTH_EVENTS.loginSuccess, function () {
-        chat.show();
-    });
+    // $rootScope.$on(AUTH_EVENTS.loginSuccess, function () {
+    //     chat.hide();
+    // });
 }]);
