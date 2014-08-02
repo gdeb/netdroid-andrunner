@@ -70,10 +70,6 @@ module.exports = function (
 		res.sendfile('_build/html/main.html');
 	});
 
-	// start http server
-	app.listen(settings.HTTP_PORT);
-	logger.info("http server started on port " + settings.HTTP_PORT + ".");
-
 
 	//-----------------------------------------------------------------------------
 	// Helpers
@@ -110,7 +106,8 @@ module.exports = function (
 
 	return {
 		start () {
-
+			app.listen(settings.HTTP_PORT);
+			logger.info(`http server started on port ${settings.HTTP_PORT}.`);
 		},
 		add_route (route) {
 			if (!('urls' in route) || 

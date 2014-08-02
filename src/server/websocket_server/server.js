@@ -1,8 +1,7 @@
 /*jslint node: true */
 'use strict';
 
-let WebSocketServer = require('ws').Server,
-	fs = require('fs');
+let WebSocketServer = require('ws').Server;
 
 module.exports = function (WS_PORT, session_store, cookie_parser, logger) {
 	let ws_routes = [];
@@ -11,7 +10,7 @@ module.exports = function (WS_PORT, session_store, cookie_parser, logger) {
 	websocket_server.on('connection', socket => handle_ws_connection(socket));
 	logger.info("WebSocket Server started on port " + WS_PORT + ".");
 
-	load_routes(require('./routes/chat.js'));
+	load_routes(require('../routes/chat.js'));
 
 
 	function load_routes(routes) {

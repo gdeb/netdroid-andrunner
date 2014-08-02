@@ -2,7 +2,7 @@
 'use strict';
 
 let http_server = require('./http_server'),
-	ws_server = require('./ws_server.js'),
+	ws_server = require('./websocket_server'),
     session = require('express-session'),
     cookieParser = require('cookie-parser'),
 	logger = require('./logger.js')('normal');
@@ -18,5 +18,6 @@ let settings = {
 let	session_store = new session.MemoryStore(),
 	cookie_parser = cookieParser(SECRET);
 
-http_server(settings, session_store, cookie_parser, logger);
+let server = http_server(settings, session_store, cookie_parser, logger);
+server.start();
 ws_server(settings.WS_PORT, session_store, cookie_parser, logger);
