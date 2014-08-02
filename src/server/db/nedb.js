@@ -9,7 +9,6 @@ module.exports = function (folder, logger) {
 
 	function in_collection(name, method, ...args) {
 		if (name in collections) {
-			logger.info(`${name}.${method}: ${args}`)
 			collections[name][method](...args);
 		} else {
 			logger.error(`No collection (${name},${method},${args})`);
@@ -19,6 +18,7 @@ module.exports = function (folder, logger) {
 
 	return {
 		load (name) {
+			logger.info(`loading ${name}`);
 			let filename = `${folder}/${name}.db`,
 				created = !fs.existsSync(filename);
 			collections[name] = new Datastore({
@@ -28,12 +28,14 @@ module.exports = function (folder, logger) {
 			return created;			
 		},
 		insert (name, doc) {
+			logger.info(`inserting ${doc} in ${name}`);
 			in_collection(name, 'insert', doc);
 		},
 		find (name, info, callback) {
 			in_collection(name, 'find', info, callback);
 		},
 		update (name, info, callback) {
+			logger.info(`updating ${name}`);
 			in_collection(name, 'update', info, callback);
 		},
 	};
