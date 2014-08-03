@@ -1,8 +1,7 @@
 /*jslint node: true */
 'use strict';
 
-let fs = require('fs'),
-    session = require('express-session'),
+let session = require('express-session'),
     cookieParser = require('cookie-parser');
 
 let http_server = require('./http_server'),
@@ -30,4 +29,6 @@ let server = http_server(settings, session_store, cookie_parser, logger);
 require('./authentication')(Users, server);
 
 server.start();
-ws_server(settings.WS_PORT, session_store, cookie_parser, logger);
+let ws = ws_server(settings.WS_PORT, session_store, cookie_parser, logger);
+
+ws.start();
