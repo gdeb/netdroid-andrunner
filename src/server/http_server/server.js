@@ -9,7 +9,8 @@ let express = require('express'),
 let middlewares = require('./middlewares.js');
 
 module.exports = function (settings, session_store, cookie_parser, logger) {
-	var app = express();
+	let app = express(),
+		server;
 
 	// configure middlewares
 	app.use(middlewares.ignore_url('/favicon.ico'));
@@ -46,7 +47,7 @@ module.exports = function (settings, session_store, cookie_parser, logger) {
 		res.sendfile('_build/netdroid.css');
 	});
 
-	app.get('/', function (req, res){
+	function fallback (req, res) {
 		let role = req.session.user ? 2 : 1;
 		let username = req.session.user ? req.session.user : '';
 	    res.cookie('user', JSON.stringify({
@@ -54,7 +55,7 @@ module.exports = function (settings, session_store, cookie_parser, logger) {
 	        'role': role
 	    }));
 		res.sendfile('_build/html/main.html');
-	});
+	}
 
 	function make_controller(route) {
 		return function (req, res) {
@@ -68,7 +69,8 @@ module.exports = function (settings, session_store, cookie_parser, logger) {
 
 	return {
 		start () {
-			app.listen(settings.HTTP_PORT);
+			app.get('*', fallback);
+			server = app.listen(settings.HTTP_PORT);
 			logger.info(`http server started on port ${settings.HTTP_PORT}.`);
 		},
 		add_route (route) {
@@ -80,5 +82,9 @@ module.exports = function (settings, session_store, cookie_parser, logger) {
 				app[method](route.urls, make_controller(route));
 			}			
 		},
-	}
+		stop () {
+			server.close();
+			logger.info('http server stopped.');
+		}
+	};
 };
