@@ -16,13 +16,9 @@ module.exports = function (settings, session_store, cookie_parser, logger) {
 	app.use(middlewares.ignore_url('/favicon.ico'));
 	app.use(middlewares.http_logger(logger));
 	app.use(compression());
-	app.use('/vendor', express.static('./node_modules/angular/lib/', { maxAge: '99999'})); 
-	app.use('/vendor', express.static('./node_modules/angular-route/', { maxAge: '99999'})); 
-	app.use('/vendor', express.static('./node_modules/angular-cookies/src/', { maxAge: '99999'})); 
-	app.use('/vendor', express.static('./node_modules/bootstrap/dist/', { maxAge: '99999'})); 
-	app.use('/vendor', express.static('./node_modules/jquery/dist/', { maxAge: '99999'})); 
-	app.use('/templates', express.static('./_build/html/', { maxAge: '99999'})); 
-	app.use('/fonts', express.static('./node_modules/font-awesome/fonts', {maxAge: '99999'}));
+	for (let route of require('./static.json')) {
+		app.use(route.url, express.static(route.path, { maxAge: '99999'}));
+	}
 	app.use(cookie_parser);
 	app.use(bodyParser.json());
 	app.use(bodyParser.urlencoded({
@@ -37,10 +33,6 @@ module.exports = function (settings, session_store, cookie_parser, logger) {
 
 	app.get('/app.js', function (req, res) {
 		res.sendfile('_build/app.js');
-	});
-
-	app.get('/css/font-awesome.min.css', function (req, res) {
-		res.sendfile('node_modules/font-awesome/css/font-awesome.min.css');
 	});
 
 	app.get('/netdroid.css', function (req, res) {
