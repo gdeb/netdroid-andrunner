@@ -4,6 +4,8 @@
 let Datastore = require('nedb'),
 	fs = require('fs');
 
+let str = JSON.stringify;
+
 module.exports = function (folder, logger) {
 	let collections = {};
 
@@ -28,14 +30,14 @@ module.exports = function (folder, logger) {
 			return created;			
 		},
 		insert (name, doc) {
-			logger.info(`inserting ${doc} in ${name}`);
+			logger.info(`inserting ${str(doc)} in ${name}`);
 			in_collection(name, 'insert', doc);
 		},
 		find (name, info, callback) {
 			in_collection(name, 'find', info, callback);
 		},
 		update (name, info, callback) {
-			logger.info(`updating ${name}`);
+			logger.info(`updating ${name} with ${str(info)}`);
 			in_collection(name, 'update', info, callback);
 		},
 	};
