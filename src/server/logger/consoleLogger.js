@@ -11,9 +11,9 @@ function log(type, color, ...args) {
 }
 
 module.exports = {
+    debug: function (...args) { log('- debug -', 'cyan', ...args); },
     info: function (...args) { log('- info  -', 'green', ...args); },
     warn: function (...args) { log('- warn  -', 'yellow', ...args); },
     error: function (...args) { log('- error -', 'red', ...args); },
-    debug: function (...args) { log(' [DEBUG] ', 'cyan', ...args); },
 };
 

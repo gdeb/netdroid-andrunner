@@ -1,34 +1,53 @@
 /*jslint node: true */
 'use strict';
 
-let session = require('express-session'),
-    cookieParser = require('cookie-parser');
+// modules
+let logger = require('./logger');
+	// config = require('./config'),
+	// db = require('./db'),
+	// users = require('./users'),
+	// security = require('./security'),
+	// http_server = require('./http_server'),
+	// ws_server = require('./websocket_server');
 
-let http_server = require('./http_server'),
-	ws_server = require('./websocket_server'),
-	logger = require('./logger')('normal'),
-	db = require('./db'),
-	Users = require('./users')(db);
+// init phase
+logger.init('console', 'warn');
+// config.init(logger);
+// db.init(config);
+// users.init(db, logger);
+// security.init(config, users, logger)
+// http_server.init(config, security, logger);
+// ws_server.init(config, logger);
 
-let SECRET = "Go Netdroid";
+// prepare phase
+// security.prepare(http_server);
 
-let settings = {
-	HTTP_PORT: process.argv[2] || 8080,
-	WS_PORT: process.argv[3] || 8081,
-	SECRET: SECRET,
-};
-
-let	session_store = new session.MemoryStore(),
-	cookie_parser = cookieParser(SECRET);
-
-Users.init();
+// start phase
+// http_server.start();
+// ws_server.start();
 
 
-let server = http_server(settings, session_store, cookie_parser, logger);
+// let session = require('express-session'),
+//     cookieParser = require('cookie-parser');
+	// roles = require('../common/authentication.js').user_roles,
+	// access_levels = require('../common/authentication.js').access_levels,
+	// access_control = require('./security').access_control,
+	// authentication = require('./security').authentication;
 
-require('./authentication')(Users, server);
 
-server.start();
-let ws = ws_server(settings.WS_PORT, session_store, cookie_parser, logger);
+// let settings = {
+// 	HTTP_PORT: process.argv[2] || 8080,
+// 	WS_PORT: process.argv[3] || 8081,
+// 	SECRET: "Go Netdroid",
+// };
 
-ws.start();
+// let	session_store = new session.MemoryStore(),
+// 	cookie_parser = cookieParser(SECRET);
+
+
+
+// require('./authentication')(Users, server);
+
+
+// http_server.start();
+// ws.start();

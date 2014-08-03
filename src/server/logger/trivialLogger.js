@@ -2,8 +2,8 @@
 'use strict';
 
 module.exports = {
+    debug: function () {},
     info: function () {},
     warn: function () {},
     error: function () {},
-    debug: function () {},
 };
