@@ -10,7 +10,6 @@ module.exports = function (logger, config) {
 	let folder = config.get('build_folder') + '/db';
 	let collections = {};
 
-	return;
 	function in_collection(name, method, ...args) {
 		if (name in collections) {
 			collections[name][method](...args);

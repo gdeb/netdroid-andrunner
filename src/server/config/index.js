@@ -22,9 +22,8 @@ module.exports = function (logger) {
 	};
 
 	return {
-		dependencies: [],
 		init () {
-			logger.info('initialization complete');
+		    logger.info('initialization complete');			
 		},
 		get (key) {
 			if (key in settings)

@@ -11,11 +11,7 @@ module.exports = function (options) {
 
 	return class {
 		constructor (module_name, log_level = default_log_level) {
-			let logger;
-			if (type === 'console') 
-				logger = require('./consoleLogger.js');
-		    if (type === 'trivial')
-		        logger = require('./trivialLogger.js');
+			let logger = require('./' + type + 'Logger.js');
 		    extend(this, with_log_level(logger, log_level, module_name));
 		}
 	};

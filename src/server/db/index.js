@@ -5,15 +5,14 @@
 
 let extend = require('node.extend');
 
-module.exports = function (logger) {
+module.exports = function (logger, options) {
 	return {
 		dependencies: ['config'],
-
 		init (...deps) {
-			logger.debug('initializing');
-		    extend(this, require('./nedb.js')(logger, ...deps));
+			let adapter = require('./' + options.adapter + '.js');
+		    extend(this, adapter(logger, ...deps));
 		    logger.info('initialization complete');
-		}
+		},
 	};
 };
 
