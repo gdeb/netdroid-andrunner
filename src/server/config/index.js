@@ -22,9 +22,7 @@ module.exports = function (logger) {
 	};
 
 	return {
-		init () {
-		    logger.info('initialization complete');			
-		},
+		init () {},
 		get (key) {
 			if (key in settings)
 				return settings[key];

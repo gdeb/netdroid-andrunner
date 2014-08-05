@@ -9,7 +9,7 @@ let modules = [
 	'db',
 	'users',
 	'security',
-	// 'http_server',
+	'http_server',
 	// 'websocket_server',
 ];
 

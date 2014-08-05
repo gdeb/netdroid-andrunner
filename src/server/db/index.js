@@ -11,7 +11,6 @@ module.exports = function (logger, options) {
 		init (...deps) {
 			let adapter = require('./' + options.adapter + '.js');
 		    extend(this, adapter(logger, ...deps));
-		    logger.info('initialization complete');
 		},
 	};
 };

@@ -20,7 +20,6 @@ module.exports = function (logger) {
 					this.add(user);
 				}				
 			}
-		    logger.info('initialization complete');
 		}
 	};
 };
