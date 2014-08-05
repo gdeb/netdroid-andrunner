@@ -2,7 +2,9 @@
 'use strict';
 
 module.exports.ignore_url = function (...urls) {
-	return (req,res,next) => urls.indexOf(req.url)>-1 ? res.send(404) : next();
+	return function (req,res,next) {
+		return urls.indexOf(req.url)>-1 ? res.status(404).end() : next();
+	};
 };
 
 module.exports.http_logger = function (logger) {

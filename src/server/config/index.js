@@ -26,7 +26,7 @@ module.exports = function (logger) {
 		get (key) {
 			if (key in settings)
 				return settings[key];
-			logger.error(`(config) Key ${key} not in config store.`);
+			logger.error(`Key ${key} not in config store.`);
 		}
 	};
 };

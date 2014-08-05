@@ -8,7 +8,7 @@ module.exports = function (logger) {
 	return {
 		dependencies: ['config', 'security.access_control'],
 		init(...deps) {
-			// extend(this, require('./server.js')(...deps));
+			extend(this, require('./server.js')(logger, ...deps));
 		},
 	}
 };

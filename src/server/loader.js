@@ -8,7 +8,7 @@ module.exports = function (module_names, config) {
 	let Logger = require('./logger')(config.logger),
 		logger = new Logger('loader', config.logger.log_level);
 
-	logger.debug('loading modules');
+	logger.debug('requiring modules...');
 	let modules = {};
 	for (let name of module_names) {
 		let logger = new Logger(name, config.logger[name]),
@@ -25,12 +25,12 @@ module.exports = function (module_names, config) {
 		}
 	}
 
-	logger.debug('initializing modules');
 	let init_list = Object.keys(modules).sort(compare_modules);
 
 	for (let name of init_list) {
 		let mod = modules[name],
 			deps = mod.dependencies.map(m => modules[m]);
+		logger.debug(`loading ${name}...`);
 		mod.init(...deps);
 		logger.info(name, 'loaded');
 	}

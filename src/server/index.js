@@ -24,7 +24,7 @@ let netdroid = loader(modules, {
 	},
 });
 
-// netdroid.http_server.start();
+netdroid.http_server.start();
 // netdroid.websocket_server.start();
 
 

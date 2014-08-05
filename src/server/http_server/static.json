@@ -6,5 +6,6 @@
 	{"url": "/vendor", "path": "./node_modules/jquery/dist/"},
 	{"url": "/templates", "path": "./_build/html/"},
 	{"url": "/fonts", "path": "./node_modules/font-awesome/fonts"},
-	{"url": "/css", "path":"./node_modules/font-awesome/css/"}
+	{"url": "/css", "path":"./node_modules/font-awesome/css/"},
+	{"url": "/static", "path":"./_build/static/"}
 ]	

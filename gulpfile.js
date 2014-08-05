@@ -48,19 +48,19 @@ gulp.task('browserify', function () {
         .pipe(browserify())
         // .pipe(uglify({mangle:false}))
         // .pipe(rename('app.js'))
-        .pipe(gulp.dest(BUILD));
+        .pipe(gulp.dest(BUILD + '/static'));
 });
 
 gulp.task('prepare-html', function () {
     return gulp.src(['src/client/**/*.html'])
         .pipe(flatten())
-        .pipe(gulp.dest(BUILD + '/html/'));
+        .pipe(gulp.dest(BUILD + '/html'));
 });
 
 gulp.task('prepare-css', function () {
     return gulp.src(['src/client/**/*.css'])
         .pipe(concat('netdroid.css'))
-        .pipe(gulp.dest(BUILD));
+        .pipe(gulp.dest(BUILD + '/static'));
 });
 
 gulp.task('prepare', function (cb) {

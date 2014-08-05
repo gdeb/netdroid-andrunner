@@ -1,13 +1,15 @@
 /*jslint node: true */
 'use strict';
 
+let extend = require('node.extend');
+
 module.exports = function (logger) {
 
 	let access_control = {
 		name: 'access_control',
 		dependencies: ['users', 'config'],
-		init (users, config) {
-			// to do
+		init (...deps) {
+			extend(this, require('./access_control.js')(logger, ...deps));
 		},
 	};
 
@@ -18,6 +20,6 @@ module.exports = function (logger) {
 			// to do
 		}
 	};
-
 	return [access_control, authentication];
 };
+
