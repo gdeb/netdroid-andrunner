@@ -1,5 +1,4 @@
 [
-	{"username": "gery", "password": "gery"},
-	{"username": "g", "password": "g"},
-	{"username": "demo", "password": "pw"}
+	{"username": "admin", "password": "admin", "role": "admin"},
+	{"username": "test", "password": "test", "role": "user"}
 ]

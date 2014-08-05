@@ -5,8 +5,8 @@ require('colors');
 let utils = require('../../common/utils.js');
 
 //-----------------------------------------------------------------------------
-function log(type, color, ...args) {
-    args.unshift(utils.getTimeStamp(), type[color]);
+function log(type, color, module_name, ...args) {
+    args.unshift(utils.getTimeStamp(), type[color], `[${module_name}]`);
     console.log(...args);
 }
 

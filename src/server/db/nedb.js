@@ -6,9 +6,11 @@ let Datastore = require('nedb'),
 
 let str = JSON.stringify;
 
-module.exports = function (folder, logger) {
+module.exports = function (logger, config) {
+	let folder = config.get('build_folder') + '/db';
 	let collections = {};
 
+	return;
 	function in_collection(name, method, ...args) {
 		if (name in collections) {
 			collections[name][method](...args);
@@ -20,7 +22,7 @@ module.exports = function (folder, logger) {
 
 	return {
 		load (name) {
-			logger.info(`loading ${name}`);
+			logger.debug(`loading/creating collection ${name}`);
 			let filename = `${folder}/${name}.db`,
 				created = !fs.existsSync(filename);
 			collections[name] = new Datastore({
@@ -30,14 +32,14 @@ module.exports = function (folder, logger) {
 			return created;			
 		},
 		insert (name, doc) {
-			logger.info(`inserting ${str(doc)} in ${name}`);
+			logger.debug(`inserting ${str(doc)} in ${name}`);
 			in_collection(name, 'insert', doc);
 		},
 		find (name, info, callback) {
 			in_collection(name, 'find', info, callback);
 		},
 		update (name, info, callback) {
-			logger.info(`updating ${name} with ${str(info)}`);
+			logger.debug(`updating ${name} with ${str(info)}`);
 			in_collection(name, 'update', info, callback);
 		},
 	};

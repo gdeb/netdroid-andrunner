@@ -1,26 +1,53 @@
 /*jslint node: true */
 'use strict';
 
+
+let loader = require('./loader.js');
+
+let modules = [
+	'config',
+	'db',
+	// 'users',
+	// 'security',
+	// 'http_server',
+	// 'websocket_server',
+];
+
+let config = {
+	db: { log_level: 'debug'},
+	logger: { type: 'console', log_level: 'debug' },
+}; 
+
+let netdroid = loader(modules, config);
+
+// netdroid.http_server.start();
+// netdroid.websocket_server.start();
+
+
+
+
 // modules
-let logger = require('./logger');
-	// config = require('./config'),
-	// db = require('./db'),
-	// users = require('./users'),
-	// security = require('./security'),
+// let config = require('./config'),
+// 	db = require('./db'),
+// 	users = require('./users'),
+// 	security = require('./security');
 	// http_server = require('./http_server'),
 	// ws_server = require('./websocket_server');
 
-// init phase
-logger.init('console', 'warn');
-// config.init(logger);
-// db.init(config);
-// users.init(db, logger);
-// security.init(config, users, logger)
-// http_server.init(config, security, logger);
-// ws_server.init(config, logger);
+// logger
+// let Logger = require('./logger')({
+// 	type: 'console',
+// 	log_level: 'debug',
+// });
 
-// prepare phase
-// security.prepare(http_server);
+// init phase
+// config.init(new Logger('config'));
+// db.init(new Logger('db'), config);
+// users.init(new Logger('users'), db, config);
+// security.init(0, Logger({module: 'Security'}), config, users)
+// http_server.init(config, security, Logger);
+// ws_server.init(config, Logger);
+// security.init(1,http_server);
 
 // start phase
 // http_server.start();
@@ -51,3 +78,14 @@ logger.init('console', 'warn');
 
 // http_server.start();
 // ws.start();
+
+
+// {
+// 	config: [],
+// 	// db: ['config'],
+// 	// users: ['config', 'db'],
+// 	// security: [['config', 'users'], ['http_server']],
+// 	// http_server: ['config', 'security'],
+// 	// websocket_server: ['config'], 
+// };
+

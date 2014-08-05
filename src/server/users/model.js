@@ -1,17 +1,12 @@
 /*jslint node: true */
 'use strict';
 
-module.exports = function (db) {
+let str = JSON.stringify;
+
+module.exports = function (logger, db) {
 	return {
-		init () {
-			let created = db.load('users');
-			if (created) {
-				for (let user of require('./data.json')) {
-					this.add(user);
-				}				
-			}
-		},
 		add (user) {
+			logger.debug(`adding ${str(user)} to users`);
 			db.insert('users', user);
 		},
 		find (name, password, callback) {
