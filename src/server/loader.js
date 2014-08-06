@@ -9,19 +9,24 @@ module.exports = function (module_names, config) {
 		logger = new Logger('loader', config.logger.log_level);
 
 	logger.debug('requiring modules...');
-	let modules = {};
+	let modules = {},
+		app = {};
+
 	for (let name of module_names) {
 		let logger = new Logger(name, config.logger[name]),
 			module_config = config[name],
 			loaded_module = require('./' + name)(logger, module_config);
 
 		if (util.isArray(loaded_module)) {
+			app[name] = {};
 			for (let submodule of loaded_module) {
 				modules[name + '.' + submodule.name] = submodule;
+				app[name][submodule.name] = submodule;
 			}
 		} else {
 			let default_module = { dependencies: [] };
 			modules[name] = extend(default_module, load_module(name));
+			app[name] = modules[name];
 		}
 	}
 
@@ -35,7 +40,7 @@ module.exports = function (module_names, config) {
 		logger.info(name, 'loaded');
 	}
 
-	return modules;
+	return app;
 
 	function load_module (name) {
 		let logger = new Logger(name, config.logger[name]),

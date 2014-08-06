@@ -16,8 +16,8 @@ module.exports = function (logger) {
 	let authentication = {
 		name: 'authentication',
 		dependencies: ['users', 'http_server'],
-		init (users, http_server) {
-			// to do
+		init (...deps) {
+			extend(this, require('./authentication.js')(logger, ...deps));
 		}
 	};
 	return [access_control, authentication];

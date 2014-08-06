@@ -63,33 +63,6 @@ module.exports = function (logger, config, access_control) {
 };
 
 
-// 	// routes
-// 	let routes = {
-// 		'get': {
-// 			'/app.js': (req, res) => res.sendfile('_build/app.js'),
-// 			'/netdroid.css': (req, res) => res.sendfile('_build/netdroid.css'),
-// 		},
-// 		'post': {}
-// 	};
-
-// 	function add_routes () {
-// 		for (let route in routes.get) {
-// 			logger.debug(route);
-// 			app.get(route, routes.get[route]);
-// 		}
-// 		for (let route in routes.post) {
-// 			logger.debug(route);
-// 			app.get(route, routes.post[route]);
-// 		}
-// 	}
-// 	// app.get('/app.js', function (req, res) {
-// 	// 	res.sendfile('_build/app.js');
-// 	// });
-
-// 	// app.get('/netdroid.css', function (req, res) {
-// 	// 	res.sendfile('_build/netdroid.css');
-// 	// });
-
 // 	// function fallback (req, res) {
 // 	// 	let role = req.session.user ? 2 : 1;
 // 	// 	let username = req.session.user ? req.session.user : '';
@@ -110,28 +83,3 @@ module.exports = function (logger, config, access_control) {
 // 	// 	};		
 // 	// }
 
-// 	return {
-// 		start () {
-// 			add_routes();
-// 			// app.get('*', fallback);
-// 			this.server = app.listen(settings.HTTP_PORT);
-// 			logger.info(`http server started on port ${settings.HTTP_PORT}.`);
-// 		},
-// 		add_middleware (...middleware) {
-// 			app.use(...middleware);
-// 		},
-// 		add_route (route) {
-// 			if (!('url' in route) || 
-// 				!('method' in route) || 
-// 				!('controller' in route))
-// 				throw new Error('Invalid route:');
-// 			for (let method of route.methods) {
-// 				app[method](route.urls, make_controller(route));
-// 			}			
-// 		},
-// 		stop () {
-// 			this.server.close();
-// 			logger.info('http server stopped.');
-// 		}
-// 	};
-// };
