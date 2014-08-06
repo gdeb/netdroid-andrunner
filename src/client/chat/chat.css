@@ -28,8 +28,14 @@ div.container-fluid > div.row {
 	width: 100%;
 }
 
+#chat-input > div {
+	display: inline;
+	float: left;
+}
+
 #chat-input input {
-	width: 100%;
+	width: calc(100% - 15px);
+	float: right;
 }
 
 .netdroid-chat {
