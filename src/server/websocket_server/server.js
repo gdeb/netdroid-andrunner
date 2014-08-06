@@ -3,8 +3,24 @@
 
 let WebSocketServer = require('ws').Server;
 
-module.exports = function (WS_PORT, session_store, cookie_parser, logger) {
-	let routes = {};
+module.exports = function (logger, config) {
+	let routes = {},
+		session_store = config.get('session_store'),
+		cookie_parser = config.get('cookie_parser'),
+		port = config.get('ws_port');
+
+	return {
+		start() {
+			let websocket_server = new WebSocketServer({port: port});
+			websocket_server.on('connection', socket => handle_connection(socket));
+			logger.info("WebSocket Server started on port " + port + ".");
+		},
+		add_route (route) {
+			if (!('url' in route) || !('controller' in route))
+				throw new Error('Invalid route:');
+			routes[route.url] = route.controller;
+		},
+	};
 
 	function handle_connection (socket) {
 		cookie_parser(socket.upgradeReq, null, function (err) {
@@ -28,16 +44,4 @@ module.exports = function (WS_PORT, session_store, cookie_parser, logger) {
 		}
 	}
 
-	return {
-		start() {
-			let websocket_server = new WebSocketServer({port: WS_PORT});
-			websocket_server.on('connection', socket => handle_connection(socket));
-			logger.info("WebSocket Server started on port " + WS_PORT + ".");
-		},
-		add_route (route) {
-			if (!('url' in route) || !('controller' in route))
-				throw new Error('Invalid route:');
-			routes[route.url] = route.controller;
-		},
-	};
 };

@@ -9,5 +9,5 @@ module.exports = function (logger) {
 		init(...deps) {
 			extend(this, require('./server.js')(logger, ...deps));
 		},
-	}
+	};
 };

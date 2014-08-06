@@ -9,7 +9,7 @@ let modules = [
 	'users',
 	'security',
 	'http_server',
-	// 'websocket_server',
+	'websocket_server',
 ];
 
 let netdroid = loader(modules, {
@@ -24,7 +24,7 @@ let netdroid = loader(modules, {
 });
 
 netdroid.http_server.start();
-// netdroid.websocket_server.start();
+netdroid.websocket_server.start();
 
 
 

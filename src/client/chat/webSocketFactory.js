@@ -6,6 +6,6 @@ angular.module('chat').factory('websocket', function () {
 
 	return {
 		send: msg => socket.send(JSON.stringify(msg))
-	}
+	};
 });
 

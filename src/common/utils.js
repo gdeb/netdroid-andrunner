@@ -9,7 +9,7 @@ function pad_left (x, char, n) {
 		result = char + result;
 	}
 	return result;
-};
+}
 
 function extend (obj, prop) {
 	for (let p in prop) {

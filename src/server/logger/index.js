@@ -15,7 +15,7 @@ module.exports = function (options) {
 		    extend(this, with_log_level(logger, log_level, module_name));
 		}
 	};
-}
+};
 
 function with_log_level (logger, log_level, module_name) {
 	return {

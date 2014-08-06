@@ -1,4 +1,13 @@
 /*jslint node: true */
 'use strict';
 
-module.exports = require('./server.js');
+let extend = require('node.extend');
+
+module.exports = function (logger) {
+	return {
+		dependencies: ['config'],
+		init(...deps) {
+			extend(this, require('./server.js')(logger, ...deps));
+		},
+	};
+};
