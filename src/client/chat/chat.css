@@ -31,3 +31,7 @@ div.container-fluid > div.row {
 #chat-input input {
 	width: 100%;
 }
+
+.netdroid-chat {
+	border-left: 1px solid rgb(151,151,151);
+}

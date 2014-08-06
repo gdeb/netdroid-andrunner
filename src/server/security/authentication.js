@@ -10,7 +10,12 @@ module.exports = function (logger, users, http_server) {
 					req.session.user = req.body.username;
 					req.session.is_logged = true;
 					req.session.role = users[0].role;
-					res.send({result: 'success', role: users[0].role, username: req.session.user});
+					res.send({
+						result: 'success', 
+						role: users[0].role, 
+						username: req.session.user,
+						fullname: users[0].fullname,
+					});
 				});
 			} else {
 				res.send({result: 'failed'});

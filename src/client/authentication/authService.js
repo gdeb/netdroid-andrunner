@@ -22,6 +22,7 @@ angular.module('authentication').factory('authService', function ($http, $rootSc
                 if (data.result === 'success') {
                 	$rootScope.user.role = data.role;
                 	$rootScope.user.name = data.username;
+                    $rootScope.user.fullname = data.fullname;
                     $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
                 } else {
                     $rootScope.$broadcast(AUTH_EVENTS.loginFailed);                    
