@@ -10,6 +10,7 @@ let modules = [
 	'security',
 	'http_server',
 	'websocket_server',
+	'chat',
 ];
 
 let netdroid = loader(modules, {
