@@ -56,6 +56,7 @@ module.exports = function (logger, config, access_control) {
 	for (let route of require('./entry_points.json')) {
 		route.controller = (req, res) => res.sendfile('_build/html/main.html');
 		route.method = "get";
+		route.entry_point = true;
 		server.add_route(route);
 	}
 

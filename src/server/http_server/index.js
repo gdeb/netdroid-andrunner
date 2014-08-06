@@ -3,7 +3,6 @@
 
 let extend = require('node.extend');
 
-// module.e
 module.exports = function (logger) {
 	return {
 		dependencies: ['config', 'security.access_control'],

@@ -9,10 +9,10 @@ module.exports = function (logger, users, http_server) {
 				req.session.regenerate(function () {
 					req.session.user = req.body.username;
 					req.session.is_logged = true;
+					req.session.role = users[0].role;
 					res.send({result: 'success', role: users[0].role, username: req.session.user});
 				});
 			} else {
-				req.session.error = "Login failed.  Try again.";
 				res.send({result: 'failed'});
 			}
 		});
