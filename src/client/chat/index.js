@@ -4,6 +4,7 @@
 angular.module('chat', []);
 
 require('./chatFactory.js');
+require('./chatDirective.js');
 require('./webSocketFactory.js');
 
 angular.module('authentication').run(['$rootScope', 'AUTH_EVENTS', 'chatFactory', function ($rootScope, AUTH_EVENTS, chat) {
