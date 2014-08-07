@@ -1,8 +1,6 @@
 /*jslint node: true */
 'use strict';
 
-let loader = require('./loader.js');
-
 let modules = [
 	'config',
 	'db',
@@ -13,7 +11,7 @@ let modules = [
 	'chat',
 ];
 
-let netdroid = loader(modules, {
+let config = {
 	db: { 
 		adapter: 'nedb',
 	},
@@ -22,10 +20,23 @@ let netdroid = loader(modules, {
 		log_level: 'debug',
 		db: 'debug',
 	},
-});
+};
 
-netdroid.http_server.start();
-netdroid.websocket_server.start();
+if (require.main === module) {
+	// running standalone
+	let loader = require('./loader.js'),
+		netdroid = loader(modules, config);
+
+	netdroid.http_server.start();
+	netdroid.websocket_server.start();
+
+} else {
+	// is required by another script (most likely repl)
+	module.exports = {
+		config: config,
+		modules: modules
+	};
+}
 
 
 

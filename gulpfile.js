@@ -99,3 +99,7 @@ gulp.task('serve', ['prepare'], function () {
 });
 
 gulp.task('default', ['serve']);
+
+gulp.task('repl', function (cb) {
+    require(BUILD + '/server/repl.js');
+});
