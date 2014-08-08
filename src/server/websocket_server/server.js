@@ -6,14 +6,13 @@ let WebSocketServer = require('ws').Server;
 module.exports = function (logger, config) {
 	let routes = {},
 		session_store = config.get('session_store'),
-		cookie_parser = config.get('cookie_parser'),
-		port = config.get('ws_port');
+		cookie_parser = config.get('cookie_parser');
 
 	return {
 		start() {
-			let websocket_server = new WebSocketServer({port: port});
+			let websocket_server = new WebSocketServer({port: this.port});
 			websocket_server.on('connection', socket => handle_connection(socket));
-			logger.info("WebSocket Server started on port " + port + ".");
+			logger.info("WebSocket Server started on port " + this.port + ".");
 		},
 		add_route (route) {
 			if (!('url' in route) || !('controller' in route))

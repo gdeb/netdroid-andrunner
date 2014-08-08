@@ -3,11 +3,12 @@
 
 let extend = require('node.extend');
 
-module.exports = function (logger) {
+module.exports = function (logger, options) {
 	return {
 		dependencies: ['config', 'security.access_control'],
 		init(...deps) {
 			extend(this, require('./server.js')(logger, ...deps));
 		},
+		port: options.port
 	};
 };

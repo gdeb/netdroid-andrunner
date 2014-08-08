@@ -13,9 +13,8 @@ module.exports = function (logger, config, access_control) {
 
 	let server = {
 		start () {
-			let port = config.get('http_port');
-			this.server = app.listen(port);
-			logger.info(`Server started on port ${port}.`);
+			this.server = app.listen(this.port);
+			logger.info(`Server started on port ${this.port}.`);
 		},
 		add_route (route) {
 			if (!('url' in route) || 
