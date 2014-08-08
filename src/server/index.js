@@ -11,16 +11,10 @@ let modules = [
 	'chat',
 ];
 
-let config = {
-	db: { 
-		adapter: 'nedb',
-	},
-	logger: { 
-		type: 'console', 
-		log_level: 'debug',
-		db: 'debug',
-	},
-};
+let config = (process.env.NODE_ENV === 'production') 
+		? require('./production.json')
+		: require('./development.json');
+
 
 if (require.main === module) {
 	// running standalone

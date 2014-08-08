@@ -1,0 +1,17 @@
+{
+	"config": {
+		"http_port": 8021,
+		"ws_port": 8022,
+		"build_folder": "./_build",
+		"secret": "Go Netdroid Dev"
+	},
+	"db": {
+		"adapter": "nedb"
+	},
+	"logger": {
+		"type": "console",
+		"log_level": "info",
+		"chat": "debug",
+		"ws_server": "debug"
+	}
+}

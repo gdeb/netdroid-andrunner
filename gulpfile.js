@@ -17,9 +17,7 @@ var gulp = require('gulp'),
 //-----------------------------------------------------------------------------
 // Settings
 
-var HTTP_PORT = require('./config.json').http_port,
-    WS_PORT = require('./config.json').ws_port,
-    BUILD = './_build/';
+var BUILD = './_build/';
 
 //-----------------------------------------------------------------------------
 gulp.task('clean', function (cb) {  
@@ -68,6 +66,11 @@ gulp.task('prepare-html', function () {
         .pipe(gulp.dest(BUILD + '/html'));
 });
 
+gulp.task('prepare-config', function () {
+    return gulp.src(['config/**/*.json'])
+        .pipe(gulp.dest(BUILD + '/server/'));
+});
+
 gulp.task('prepare-css', function () {
     return gulp.src(['src/client/**/*.css'])
         .pipe(concat('netdroid.css'))
@@ -80,6 +83,7 @@ gulp.task('prepare', function (cb) {
         'prepare-html',
         'prepare-css',
         'prepare-json',
+        'prepare-config',
     ];
     runSequence('clean', tasks, 'browserify', cb);
 });
@@ -101,11 +105,12 @@ gulp.task('lint', function() {
 
 //-----------------------------------------------------------------------------
 gulp.task('serve', ['prepare'], function () {
+    process.env.NODE_ENV = 'development';
+
     nodemon({
         script: '_build/server/index.js',
         ext: 'js json',
         watch: ['_build/server'],
-        args : [HTTP_PORT, WS_PORT],
     }).on('log', function (log) { console.log(log.colour); });
 
 });

@@ -7,18 +7,16 @@ let session = require('express-session'),
     cookieParser = require('cookie-parser'),
 	auth = require('../../common/authentication.js');
 
-module.exports = function (logger) {
-	let secret_key = 'Go Netdroid';
-
+module.exports = function (logger, options) {
 	let settings = {
-		http_port: process.argv[2] || 8080,
-		ws_port: process.argv[3] || 8081,
+		http_port: options.http_port,
+		ws_port: options.ws_port,
 		user_roles: auth.user_roles,
 		access_levels: auth.access_levels,
-		secret_key: secret_key,
+		secret_key: options.secret,
 		session_store: new session.MemoryStore(),
-		cookie_parser: cookieParser(secret_key),
-		build_folder: './_build',
+		cookie_parser: cookieParser(options.secret),
+		build_folder: options.build_folder,
 	};
 
 	return {

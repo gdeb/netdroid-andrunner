@@ -1,0 +1,15 @@
+{
+	"config": {
+		"http_port": 8030,
+		"ws_port": 8031,
+		"build_folder": "./_build",
+		"secret": "Go Netdroid PROD"
+	},
+	"db": {
+		"adapter": "nedb"
+	},
+	"logger": {
+		"type": "console",
+		"log_level": "info"
+	}
+}
