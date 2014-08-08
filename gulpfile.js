@@ -37,6 +37,17 @@ gulp.task('transpile-es6-to-es5', function() {
         .pipe(gulp.dest(BUILD));
 });
 
+gulp.task('transpile-tests', function (cb) {
+    return gulp.src(['./tests/*.js'])
+        // .pipe(newer(BUILD + '/tests'))
+        .pipe(es6transpiler({globals:{describe:false, it: false}}))
+            .on('error', function (error) {
+                console.log(error.stack); 
+                this.emit('end'); 
+            })
+        .pipe(gulp.dest(BUILD + '/tests'));        
+});
+
 gulp.task('prepare-json', function (cb) {
     return gulp.src(['src/**/*.json'])
         .pipe(newer(BUILD))
@@ -75,6 +86,7 @@ gulp.task('prepare', function (cb) {
 
 gulp.task('watch', function (cb) {
     gulp.watch(['src/**/*.js'], ['transpile-es6-to-es5']);
+    gulp.watch(['tests/**/*.js'], ['transpile-tests']);
     gulp.watch([BUILD + '/client/**/*.js'], ['browserify']);
     gulp.watch(['src/client/**/*.html'], ['prepare-html']);
     gulp.watch(['src/client/**/*.css'], ['prepare-css']);
@@ -102,4 +114,8 @@ gulp.task('default', ['serve']);
 
 gulp.task('repl', function (cb) {
     require(BUILD + '/server/repl.js');
+});
+
+gulp.task('run-tests', function () {
+    require(BUILD + '/tests/');
 });
