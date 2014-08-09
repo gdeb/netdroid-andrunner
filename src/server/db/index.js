@@ -4,13 +4,13 @@
 // Module db
 
 module.exports = function (logger, options) {
-	let adapter = require(`./${options.adapter}.js`);
+	let adapter = require(`./${options.adapter}.js`),
+		folder = options.folder;
 
 	return {
-		dependencies: ['config'],
-		load (...deps) {
-			return adapter(logger, ...deps);
-		}
+		link () {
+			return adapter(logger, folder);
+		},
 	};
 };
 

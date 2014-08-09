@@ -4,7 +4,8 @@
 		"secret": "Go Netdroid Dev"
 	},
 	"db": {
-		"adapter": "nedb"
+		"adapter": "nedb",
+		"folder": "./_build/db"
 	},
 	"logger": {
 		"type": "console",

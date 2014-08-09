@@ -1,14 +1,14 @@
 /*jslint node: true */
 'use strict';
 
-let extend = require('node.extend');
-
 module.exports = function (logger, options) {
 	return {
-		dependencies: ['config', 'security.access_control'],
+		dependencies: ['http_server.session', 'http_server.access_control'],
+		submodules: ['access_control', 'session'],
 		init(...deps) {
-			extend(this, require('./server.js')(logger, ...deps));
+			return {};
+			// extend(this, require('./server.js')(logger, ...deps));
 		},
-		port: options.port
+		// port: options.port
 	};
 };

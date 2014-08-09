@@ -3,23 +3,17 @@
 
 // Module users
 
-let extend = require('node.extend');
-
 module.exports = function (logger) {
-
 	return {
-		dependencies: ['db', 'config'],
-		init (db, config) {
-		    extend(this, require('./model.js')(logger, db));
+		dependencies: ['db', 'users.permission'],
+		submodules: ['permission'],
 
-			let created = db.load('users');
-			if (created) {
-				let roles = config.get('user_roles');
-				for (let user of require('./data.json')) {
-					user.role = roles[user.role];
-					this.add(user);
-				}				
-			}
+		link (...deps) {
+			return require('./model.js')(logger, ...deps);
+		},
+
+		run (users) {
+			users.add_initial_users();
 		}
 	};
 };

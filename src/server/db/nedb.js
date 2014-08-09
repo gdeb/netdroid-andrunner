@@ -6,8 +6,7 @@ let Datastore = require('nedb'),
 
 let str = JSON.stringify;
 
-module.exports = function (logger, config) {
-	let folder = config.get('build_folder') + '/db';
+module.exports = function (logger, folder) {
 	let collections = {};
 
 	function in_collection(name, method, ...args) {
