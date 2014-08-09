@@ -8,7 +8,7 @@
 	},
 	"logger": {
 		"type": "console",
-		"log_level": "info",
+		"log_level": "debug",
 		"chat": "debug",
 		"ws_server": "debug"
 	},

@@ -8,9 +8,16 @@ let session = require('express-session'),
 	auth = require('../../common/authentication.js');
 
 module.exports = function (logger, options) {
+	return {
+		dependencies: [],
+		load () {
+			return config(logger, options)
+		}
+	};
+};
+
+function config (logger, options) {
 	let settings = {
-		http_port: options.http_port,
-		ws_port: options.ws_port,
 		user_roles: auth.user_roles,
 		access_levels: auth.access_levels,
 		secret_key: options.secret,
@@ -20,11 +27,10 @@ module.exports = function (logger, options) {
 	};
 
 	return {
-		init () {},
 		get (key) {
 			if (key in settings)
 				return settings[key];
 			logger.error(`Key ${key} not in config store.`);
 		}
-	};
-};
+	}
+}

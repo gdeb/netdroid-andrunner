@@ -4,11 +4,11 @@
 let modules = [
 	'config',
 	'db',
-	'users',
-	'security',
-	'http_server',
-	'websocket_server',
-	'chat',
+	// 'users',
+	// 'security',
+	// 'http_server',
+	// 'websocket_server',
+	// 'chat',
 ];
 
 let config = (process.env.NODE_ENV === 'production') 
@@ -21,8 +21,8 @@ if (require.main === module) {
 	let loader = require('./loader.js'),
 		netdroid = loader(modules, config);
 
-	netdroid.http_server.start();
-	netdroid.websocket_server.start();
+	// netdroid.http_server.start();
+	// netdroid.websocket_server.start();
 
 } else {
 	// is required by another script (most likely repl)
