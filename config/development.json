@@ -1,16 +1,13 @@
 {
-	"config": {
-		"build_folder": "./_build",
-		"secret": "Go Netdroid Dev"
-	},
 	"db": {
 		"adapter": "nedb",
 		"folder": "./_build/db"
 	},
 	"logger": {
 		"type": "console",
-		"log_level": "debug",
+		"log_level": "info",
 		"chat": "debug",
+		"loader": "debug",
 		"ws_server": "debug"
 	},
 	"http_server": {
