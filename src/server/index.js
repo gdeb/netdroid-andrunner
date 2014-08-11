@@ -7,7 +7,8 @@ let modules = [
 	'db',
 	'users',
 	'http_server',
-	// 'websocket_server',
+	'authentication',
+	'websocket_server',
 	// 'chat',
 ];
 
