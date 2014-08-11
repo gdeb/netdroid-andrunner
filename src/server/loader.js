@@ -18,7 +18,7 @@ module.exports = function (module_list, config) {
 			logger.info('Linking modules');
 			let dependencies = [];
 			for (let m of modules) {
-				for (let d of m.dependencies) {
+				for (let d of m.depends) {
 					let dep = get_module(d);
 					dependencies.push({from:dep, to: m});
 				}
@@ -34,7 +34,7 @@ module.exports = function (module_list, config) {
 
 			for (let mod of modules) {
 				logger.debug('linking', mod.fullname);
-				let deps = mod.dependencies.map(name => get_module(name).module);
+				let deps = mod.depends.map(name => get_module(name).module);
 				mod.module = mod.link(...deps);
 			}
 			return this;
@@ -60,7 +60,7 @@ module.exports = function (module_list, config) {
 		mod.fullname = fullname;
 		mod.name = fullname.split('.').pop();
 		mod.submodules = (mod.submodules || []).map(n => `${fullname}.${n}`);
-		mod.dependencies = mod.dependencies || [];
+		mod.depends = mod.depends || [];
 		mod.link = mod.link || function () { return {};};
 
 		return mod;
@@ -71,7 +71,7 @@ module.exports = function (module_list, config) {
 			return loaded;
 
 		let new_module = load_module(to_load[0]),
-			rest = to_load.slice(1).concat(new_module.submodules);
+			rest = new_module.submodules.concat(to_load.slice(1));
 
 		loaded.push(new_module);
 		return load_modules(loaded, rest);

@@ -3,18 +3,17 @@
 
 let express = require('express'),
     bodyParser = require('body-parser'),
-    session = require('express-session'),
     compression = require('compression');
 
 let middlewares = require('./middlewares.js');
 
-module.exports = function (logger, config, access_control) {
+module.exports = function (logger, session, access_control) {
 	let app = express();
 
 	let server = {
-		start () {
-			this.server = app.listen(this.port);
-			logger.info(`Server started on port ${this.port}.`);
+		start (port) {
+			this.server = app.listen(port);
+			logger.info(`Server started on port ${port}.`);
 		},
 		add_route (route) {
 			if (!('url' in route) || 
@@ -40,15 +39,10 @@ module.exports = function (logger, config, access_control) {
 		app.use(route.url, express.static(route.path, { maxAge: '99999'}));
 	}
 
-	app.use(config.get('cookie_parser'));
+	app.use(session.cookie_parser);
 	app.use(bodyParser.json());
 	app.use(bodyParser.urlencoded({extended: true}));
-	app.use(session({
-		store: config.get('session_store'),
-		resave: true,
-		saveUninitialized: true,
-		secret: config.get('secret_key'),
-	}));
+	app.use(session.user_session);
 	app.use(access_control.check_credentials);
 
 	// add default routes
@@ -61,25 +55,3 @@ module.exports = function (logger, config, access_control) {
 
 	return server;
 };
-
-
-// 	// function fallback (req, res) {
-// 	// 	let role = req.session.user ? 2 : 1;
-// 	// 	let username = req.session.user ? req.session.user : '';
-// 	//     res.cookie('user', JSON.stringify({
-// 	//         'username': username,
-// 	//         'role': role
-// 	//     }));
-// 	// 	res.sendfile('_build/html/main.html');
-// 	// }
-
-// 	// function make_controller(route) {
-// 	// 	return function (req, res) {
-// 	// 		if (route.access !== 'public' && !req.session.user) {
-// 	// 			req.session.error = 'Access denied.  Please log in.';
-// 	// 			return res.redirect('/');
-// 	// 		}
-// 	// 		route.controller(req, res);
-// 	// 	};		
-// 	// }
-

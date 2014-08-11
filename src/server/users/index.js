@@ -5,7 +5,7 @@
 
 module.exports = function (logger) {
 	return {
-		dependencies: ['db', 'users.permission'],
+		depends: ['db', 'users.permission'],
 		submodules: ['permission'],
 
 		link (...deps) {

@@ -1,13 +1,13 @@
 /*jslint node: true */
 'use strict';
 
-module.exports = function (logger, users, config) {
+module.exports = function (logger, users, permission) {
 	let routes = {
 		get: {},
 		post: {},
 	};
-	let access_levels = config.get('access_levels'),
-		user_roles = config.get('user_roles');
+	let access_levels = permission.access_levels,
+		user_roles = permission.user_roles;
 
 	return {
 		secure_route (route) {
