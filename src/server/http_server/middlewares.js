@@ -26,6 +26,6 @@ function format_log(req, res, start){
   		code = res.statusCode,
   		status = (code === 404) ? String(code).red : code;
 
-  	return `${req.ip}, ${req.method} ${req.url} (HTTP/${http})` +
+  	return `${req.ip}, ${req.method} ${req.url} (HTTP/${http}), ` +
   		   `status: ${status}, ${request_time} ms`;
 }
