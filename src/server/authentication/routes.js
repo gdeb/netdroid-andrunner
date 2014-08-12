@@ -9,6 +9,7 @@ module.exports = function (logger, users, http_server) {
 				logger.info(`User ${req.body.username} successfully logged in`);
 				req.session.regenerate(function () {
 					req.session.user = req.body.username;
+					req.session.fullname = users[0].fullname;
 					req.session.is_logged = true;
 					req.session.role = users[0].role;
 					res.send({

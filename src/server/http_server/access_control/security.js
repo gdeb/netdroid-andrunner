@@ -40,10 +40,12 @@ module.exports = function (logger, users, permission) {
 		let old_controller = route.controller;
 		route.controller = function (req, res) {
 			let role = req.session.role ? req.session.role : user_roles.public,
-				username = req.session.user ? req.session.user : '';
+				username = req.session.user ? req.session.user : '',
+				fullname = req.session.fullname ? req.session.fullname: '';
 		    res.cookie('user', JSON.stringify({
 		        'username': username,
-		        'role': role
+		        'role': role,
+		        'fullname': fullname,
 		    }));
 		    old_controller (req, res);
 		};
