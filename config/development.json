@@ -1,4 +1,6 @@
+// Netdroid Andrunner Configuration
 {
+	// will be used by gulp to setup the build process
 	"project": {
 		"compression": false,
 		"uglify": false,
@@ -9,13 +11,15 @@
 	"logger": {
 		"type": "console",
 		"log_level": "info",
-		"loader": "debug"
+		"loader": "debug",
+		"websocket_server": "debug"
 	},
 	"modules": [
 		"db",
 		"users",
-		"http_server",
 		"authentication",
+		// "chat",
+		"http_server",
 		"websocket_server"
 	],
 	"config": {

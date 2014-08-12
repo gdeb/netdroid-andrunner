@@ -1,29 +1,18 @@
 /*jslint node: true */
 'use strict';
 
-let loader = require('./loader.js');
+require('autostrip-json-comments');
 
-let modules = [
-	'db',
-	'users',
-	'http_server',
-	'authentication',
-	'websocket_server',
-	// 'chat',
-];
+let loader = require('./loader.js'),
+	env = process.env.NODE_ENV,
+	config_file = `./${env==='production' ? 'production' : 'development'}.json`,
+	project_config = require(config_file),
+	netdroid = loader(project_config);
 
-let settings = (process.env.NODE_ENV === 'production') 
-		? require('./production.json')
-		: require('./development.json');
-
-let netdroid = loader(settings);
-
-if (require.main === module) {
-	// running standalone
+if (require.main === module) { // standalone
 	netdroid.load();
 	netdroid.link();
 	netdroid.run();
-
 } else {
 	module.exports = netdroid;
 }
