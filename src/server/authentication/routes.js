@@ -6,6 +6,7 @@ module.exports = function (logger, users, http_server) {
 	function process_login (req, res) {
 		users.find(req.body.username, req.body.password, function (err, users) {
 			if (users.length) {
+				logger.info(`User ${req.body.username} successfully logged in`);
 				req.session.regenerate(function () {
 					req.session.user = req.body.username;
 					req.session.is_logged = true;
@@ -18,6 +19,7 @@ module.exports = function (logger, users, http_server) {
 					});
 				});
 			} else {
+				logger.info(`Unsuccessful login attempt (${req.body.username})`);
 				res.send({result: 'failed'});
 			}
 		});
@@ -31,6 +33,7 @@ module.exports = function (logger, users, http_server) {
 	});
 
 	function log_out (req, res) {
+		logger.info(`User ${req.session.user} logged out`);
 		req.session.destroy();
 		res.send({logout: 'success'});
 	}
