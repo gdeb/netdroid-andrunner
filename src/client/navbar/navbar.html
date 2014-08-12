@@ -11,7 +11,7 @@
         <li ng-class="location.path() === '/cards' ? 'active' : ''"><a href="cards">Cards</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right" access-level="{{access.user}}">
-        <li><a ng-click="chat.is_visible = !chat.is_visible"><i class="fa fa-comment"></i></a></li>
+        <li><a ng-click="chat.toggle()"><i class="fa fa-comment"></i></a></li>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{user.name}} <span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
