@@ -104,18 +104,18 @@ gulp.task('lint', function() {
 });
 
 //-----------------------------------------------------------------------------
-gulp.task('serve', ['prepare'], function () {
+gulp.task('serve', function () {
     process.env.NODE_ENV = 'development';
 
     nodemon({
         script: '_build/server/index.js',
         ext: 'js json',
-        watch: ['_build/server'],
+        watch: ['_build/server', 'config/'],
     }).on('log', function (log) { console.log(log.colour); });
 
 });
 
-gulp.task('default', ['serve']);
+gulp.task('default', ['develop']);
 
 gulp.task('repl', function (cb) {
     require(BUILD + '/server/repl.js');
@@ -123,4 +123,8 @@ gulp.task('repl', function (cb) {
 
 gulp.task('run-tests', function () {
     require(BUILD + '/tests/');
+});
+
+gulp.task('develop', function (cb) {
+    runSequence('prepare', ['serve', 'watch']);
 });
