@@ -18,3 +18,9 @@ angular.module('viewHome').config(['$routeProvider', 'access_levels', function($
         });
 }]);
 
+angular.module('viewHome').run(['$rootScope', '$location', 'AUTH_EVENTS', function ($rootScope, $location, AUTH_EVENTS) {
+
+	$rootScope.$on(AUTH_EVENTS.loginSuccess, function () {
+        $location.path('/lobby');
+	});
+}]);

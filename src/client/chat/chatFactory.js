@@ -6,8 +6,6 @@ angular.module('chat').factory('chatFactory', function (authService) {
 
 	return {
 		is_displayed () {
-			console.log('chatFactory', is_visible, authService.is_logged_in());
- // return is_visible;
 			return is_visible && authService.is_logged_in();
 		},
 		toggle () {
