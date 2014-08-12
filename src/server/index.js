@@ -12,11 +12,11 @@ let modules = [
 	// 'chat',
 ];
 
-let config = (process.env.NODE_ENV === 'production') 
+let settings = (process.env.NODE_ENV === 'production') 
 		? require('./production.json')
 		: require('./development.json');
 
-let netdroid = loader(modules, config);
+let netdroid = loader(settings);
 
 if (require.main === module) {
 	// running standalone

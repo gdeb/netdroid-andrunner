@@ -3,15 +3,15 @@
 
 let utils = require('../common/utils.js');
 
-module.exports = function (module_list, config) {
-	let LoggerFactory = require('./logger')(config.logger),
+module.exports = function (settings) {
+	let LoggerFactory = require('./logger')(settings.logger),
 		logger = LoggerFactory.make('loader'),
 		modules = [];
 
 	return {
 		load () {
 			logger.info('Loading modules');
-			modules = load_modules([], module_list);
+			modules = load_modules([], settings.modules);
 		},
 		link () {
 			logger.info('Linking modules');
@@ -53,7 +53,7 @@ module.exports = function (module_list, config) {
 		let module_logger = LoggerFactory.make(fullname);
 
 		let folder = './' + fullname.split('.').join('/');
-		let mod = require(folder)(module_logger, config[fullname]);
+		let mod = require(folder)(module_logger, settings.config[fullname]);
 		mod.fullname = fullname;
 		mod.name = fullname.split('.').pop();
 		mod.submodules = (mod.submodules || []).map(n => `${fullname}.${n}`);

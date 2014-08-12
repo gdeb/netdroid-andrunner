@@ -1,22 +1,36 @@
 {
-	"db": {
-		"adapter": "nedb",
-		"folder": "./_build/db"
+	"project": {
+		"compression": false,
+		"uglify": false,
+		"path": "_build/development",
+		"bundle_assets": false,
+		"watch_changes": true
 	},
 	"logger": {
 		"type": "console",
 		"log_level": "info",
-		"chat": "debug",
-		"loader": "debug",
-		"ws_server": "debug"
+		"loader": "debug"
 	},
-	"http_server": {
-		"port": 8023
-	},
-	"http_server.session": {
-		"secret": "go netdroid"
-	},
-	"websocket_server": {
-		"port": 8024
+	"modules": [
+		"db",
+		"users",
+		"http_server",
+		"authentication",
+		"websocket_server"
+	],
+	"config": {
+		"db": {
+			"adapter": "nedb",
+			"folder": "./_build/db"
+		},
+		"http_server": {
+			"port": 8023
+		},
+		"http_server.session": {
+			"secret": "go netdroid"
+		},
+		"websocket_server": {
+			"port": 8024
+		}
 	}
 }
