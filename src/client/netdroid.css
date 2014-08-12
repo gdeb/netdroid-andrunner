@@ -3,3 +3,15 @@ body {
 	padding-top: 50px;
 }
 
+html, body {
+	height: 100%;
+}
+
+div.container-fluid {
+	height: 100%;
+}
+
+div.container-fluid > div.row {
+	height: 100%;
+}
+
