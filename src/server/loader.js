@@ -12,7 +12,6 @@ module.exports = function (module_list, config) {
 		load () {
 			logger.info('Loading modules');
 			modules = load_modules([], module_list);
-			return this;
 		},
 		link () {
 			logger.info('Linking modules');
@@ -37,7 +36,6 @@ module.exports = function (module_list, config) {
 				let deps = mod.depends.map(name => get_module(name).module);
 				mod.module = mod.link(...deps);
 			}
-			return this;
 		},
 		run () {
 			logger.info('Running modules');
@@ -47,7 +45,6 @@ module.exports = function (module_list, config) {
 					mod.run(mod.module);
 				}
 			}
-			return this;
 		} 
 	};
 

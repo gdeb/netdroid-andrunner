@@ -20,10 +20,9 @@ let netdroid = loader(modules, config);
 
 if (require.main === module) {
 	// running standalone
-	netdroid
-		.load()
-		.link()
-		.run();
+	netdroid.load();
+	netdroid.link();
+	netdroid.run();
 
 } else {
 	module.exports = netdroid;
