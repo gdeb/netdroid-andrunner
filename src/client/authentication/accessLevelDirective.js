@@ -1,10 +1,10 @@
 
-angular.module('authentication').directive('accessLevel', ['$rootScope', 'authService', function($rootScope, auth) {
+angular.module('authentication').directive('accessLevel', ['authService', function(auth) {
     return {
         restrict: 'A',
-        link: function(scope, element, attrs) {
+        link: function($scope, element, attrs) {
             var prevDisp = element.css('display');
-            $rootScope.$watch('user.role', function(role) {
+            $scope.$watch('main.user.role', function(role) {
                 if(!auth.authorize(attrs.accessLevel))
                     element.css('display', 'none');
                 else

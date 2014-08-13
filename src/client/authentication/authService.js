@@ -5,26 +5,26 @@ angular.module('authentication').factory('authService', function ($http, $rootSc
     let user_cookie = $cookieStore.get('user') || {role: 1};
     $cookieStore.remove('user');
 
-    $rootScope.user = {
+    let user = {
         name: user_cookie.username,
         role: user_cookie.role,
         fullname: user_cookie.fullname,
     };
-    $rootScope.access = access_levels;
 
 	let authentication = {
         access_levels: access_levels,
         user_roles: user_roles,
+        user: user
     };
 
 	authentication.login = function (credentials) {
         return $http.post('/login', credentials)
             .success(function (data) {
                 if (data.result === 'success') {
-                	$rootScope.user.role = data.role;
-                	$rootScope.user.name = data.username;
-                    $rootScope.user.fullname = data.fullname;
-                    $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
+                	user.role = data.role;
+                	user.name = data.username;
+                    user.fullname = data.fullname;
+                    $rootScope.$broadcast(AUTH_EVENTS.loginSuccess, user);
                 } else {
                     $rootScope.$broadcast(AUTH_EVENTS.loginFailed);                    
                 }
@@ -34,18 +34,19 @@ angular.module('authentication').factory('authService', function ($http, $rootSc
     authentication.logout = function () {
         return $http.post('/logout', {})
             .success(function () {
-                $rootScope.user.role = 1;
-                $rootScope.user.name = null;
-                $rootScope.$broadcast(AUTH_EVENTS.logoutSuccess);
+                user.role = 1;
+                user.name = null;
+                $rootScope.$broadcast(AUTH_EVENTS.logoutSuccess, user);
             });
     };
 
     authentication.authorize = function (access, role) {
-        return access & (role ? role : $rootScope.user.role);
+        console.log(access, role, user.role);
+        return access & (role ? role : user.role);
     };
 
     authentication.is_logged_in = function () {
-        return $rootScope.user.role > 1;
+        return user.role > 1;
     };
 
 	return authentication;

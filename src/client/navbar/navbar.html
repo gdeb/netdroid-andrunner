@@ -5,15 +5,15 @@
         <a class="navbar-brand" href="/">Netdroid Andrunner</a>
 
       </div>
-      <ul class="nav navbar-nav" access-level="{{access.user}}">
-        <li ng-class="location.path() === '/lobby' ? 'active' : ''"><a href="lobby">Lobby</a></li>
-        <li ng-class="location.path() === '/decks' ? 'active' : ''"><a href="decks">Decks</a></li>
-        <li ng-class="location.path() === '/cards' ? 'active' : ''"><a href="cards">Cards</a></li>
+      <ul class="nav navbar-nav" access-level="{{main.access.user}}">
+        <li ng-class="main.location.path() === '/lobby' ? 'active' : ''"><a href="lobby">Lobby</a></li>
+        <li ng-class="main.location.path() === '/decks' ? 'active' : ''"><a href="decks">Decks</a></li>
+        <li ng-class="main.location.path() === '/cards' ? 'active' : ''"><a href="cards">Cards</a></li>
       </ul>
-      <ul class="nav navbar-nav navbar-right" access-level="{{access.user}}">
-        <li><a ng-click="chat.toggle()"><i class="fa fa-comment"></i></a></li>
+      <ul class="nav navbar-nav navbar-right" access-level="{{main.access.user}}">
+        <li><a ng-click="main.chat.toggle()"><i class="fa fa-comment"></i></a></li>
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{user.name}} <span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{main.user.name}} <span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
             <li><a href="profile">Profile</a></li>
             <li><a href="logout">Logout</a></li>

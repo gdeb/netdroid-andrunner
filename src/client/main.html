@@ -7,15 +7,15 @@
   <link rel="stylesheet" href="/css/font-awesome.min.css">
 </head>
 
-<body ng-controller="main">
+<body ng-controller="MainCtrl as main">
   <anr-navbar></anr-navbar>
 
   <div class="container-fluid">
     <div class="row">
-      <div ng-class="chat.is_displayed() ? 'col-sm-9' : 'col-sm-12'">
+      <div ng-class="main.chat.is_displayed() ? 'col-sm-9' : 'col-sm-12'">
         <div ng-view></div>
       </div>
-      <div class="col-sm-3 netdroid-chat" ng-show="chat.is_displayed()" access-level="{{access.user}}">
+      <div class="col-sm-3 netdroid-chat" ng-show="main.chat.is_displayed()" access-level="{{main.access.user}}">
         <anr-chat></anr-chat>
       </div>
     </div>
