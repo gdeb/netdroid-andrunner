@@ -41,7 +41,6 @@ angular.module('authentication').factory('authService', function ($http, $rootSc
     };
 
     authentication.authorize = function (access, role) {
-        console.log(access, role, user.role);
         return access & (role ? role : user.role);
     };
 
