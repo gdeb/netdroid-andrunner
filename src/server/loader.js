@@ -4,7 +4,7 @@
 let utils = require('../common/utils.js');
 
 module.exports = function (settings) {
-	let LoggerFactory = require('./logger')(settings.logger),
+	let LoggerFactory = require('../logger')(settings.logger),
 		logger = LoggerFactory.make('loader'),
 		modules = [];
 
