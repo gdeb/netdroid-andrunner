@@ -10,15 +10,15 @@
 	},
 	"logger": {
 		"type": "console",
-		"log_level": "info",
-		"loader": "debug",
-		"websocket_server": "debug"
+		"log_level": "debug",
+		// "loader": "debug",
+		// "websocket_server": "debug"
 	},
 	"modules": [
 		"db",
 		"users",
 		"authentication",
-		// "chat",
+		"chat",
 		"http_server",
 		"websocket_server"
 	],
