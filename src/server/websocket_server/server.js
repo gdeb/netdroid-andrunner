@@ -6,11 +6,12 @@ let WebSocketServer = require('ws').Server;
 module.exports = function (logger, session) {
 	let routes = {},
 		session_store = session.session_store,
-		cookie_parser = session.cookie_parser;
+		cookie_parser = session.cookie_parser,
+		websocket_server;
 
 	return {
 		start(port) {
-			let websocket_server = new WebSocketServer({port: port});
+			websocket_server = new WebSocketServer({port: port});
 			websocket_server.on('connection', socket => handle_connection(socket));
 			logger.info("Server started on port " + port + ".");
 		},
@@ -22,6 +23,12 @@ module.exports = function (logger, session) {
 				logger.debug('adding route', route.url);
 			}
 		},
+		broadcast (msg) {
+			logger.debug(`Broadcasting message ${JSON.stringify(msg)}`);
+			for (let client of websocket_server.clients) {
+				client.send(msg);
+			}
+		}
 	};
 
 	function handle_connection (socket) {
@@ -50,7 +57,7 @@ module.exports = function (logger, session) {
 			logger.error('Invalid message (should be a JSON parsable string)');
 			return;
 		}
-		if (json_msg.route in routes) {
+		if (json_msg.url in routes) {
 			routes[json_msg.route](json_msg, session);
 		} else {
 			logger.warn(`No valid route for message ${msg}`);

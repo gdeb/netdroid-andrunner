@@ -7,7 +7,11 @@ module.exports = function (logger, ws_server) {
 	return {};
 
 	function send_chat(msg, session) {
-		logger.debug(msg, session.user);
+		logger.info(`Chat message from ${session.user}: ${JSON.stringify(msg)}`);
+		ws_server.broadcast({
+			url: '/new_msg',
+			from: session.user
+		});
 	}
 };
 
