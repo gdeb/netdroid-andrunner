@@ -2,4 +2,10 @@
 <div id="chat-window">
   <div>Welcome to Netdroid.</div>
 </div>
-<div id="chat-input"><div>></div><input type="text"/></div>
+<div id="chat-input"><div>></div>
+	<form ng-submit="testf()">
+		<input type="text" name="msg" ng-model="chatmsg"/>
+    	<input type="submit" value="Send" class="btn btn-default btn-sm"/>
+    </form>
+</div>
+

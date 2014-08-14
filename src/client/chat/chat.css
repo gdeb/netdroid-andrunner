@@ -21,7 +21,7 @@
 	float: left;
 }
 
-#chat-input input {
+#chat-input form {
 	width: calc(100% - 15px);
 	float: right;
 }
