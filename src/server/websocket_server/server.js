@@ -12,14 +12,15 @@ module.exports = function (logger, session) {
 		start(port) {
 			let websocket_server = new WebSocketServer({port: port});
 			websocket_server.on('connection', socket => handle_connection(socket));
-			logger.info("WebSocket Server started on port " + port + ".");
+			logger.info("Server started on port " + port + ".");
 		},
 		add_route (route) {
 			if (!('url' in route) || !('controller' in route)) {
 				logger.error('Attempt to add invalid route:', JSON.stringify(route));
-				throw new Error('Invalid route:');
+			} else {
+				routes[route.url] = route.controller;
+				logger.debug('adding route', route.url);
 			}
-			routes[route.url] = route.controller;
 		},
 	};
 
