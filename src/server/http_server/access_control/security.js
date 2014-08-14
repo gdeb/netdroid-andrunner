@@ -11,6 +11,7 @@ module.exports = function (logger, users, permission) {
 
 	return {
 		secure_route (route) {
+			logger.debug(`securing route ${route.url}.`);
 			if (!('access_level' in route)) {
 				route.access_level = access_levels.admin;
 				logger.warn(`Missing access_level key in route ${route.url}. Set to admin.`);
@@ -23,7 +24,6 @@ module.exports = function (logger, users, permission) {
 			}
 
 			routes[route.method][route.url] = route.access_level;
-			logger.debug(`route ${route.url} secured.`);
 		},
 		check_credentials(req, res, next) {
 			if (is_authorized(req.url, req.method, req.session.role)) {

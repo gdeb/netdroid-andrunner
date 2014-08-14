@@ -20,9 +20,9 @@ module.exports = function (logger, session, access_control) {
 				!('method' in route) || 
 				!('controller' in route))
 				throw new Error('Invalid route:');
+			logger.debug(`adding ${route.method.toUpperCase()} route: ${route.url}`);
 			access_control.secure_route(route);
 			app[route.method](route.url, route.controller);
-			logger.debug(`route added: ${route.method.toUpperCase()} ${route.url}`);
 		},
 		stop () {
 			this.server.close();
