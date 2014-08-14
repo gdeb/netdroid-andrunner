@@ -15,11 +15,13 @@ angular.module('netdroid', [
 	'viewDecks',
     'viewLobby',
     'viewProfile',
+    'websocket'
 ]);
 
 require('./mainCtrl.js');
 require('./authentication');
 require('./navbar');
+require('./websocket');
 require('./chat');
 require('./viewHome');
 require('./viewCards');
