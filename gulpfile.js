@@ -68,6 +68,7 @@ gulp.task('prepare-html', function () {
 
 gulp.task('prepare-config', function () {
     return gulp.src(['config/**/*.json'])
+        .pipe(newer(BUILD + '/server/'))
         .pipe(gulp.dest(BUILD + '/server/'));
 });
 
@@ -95,6 +96,7 @@ gulp.task('watch', function (cb) {
     gulp.watch(['src/client/**/*.html'], ['prepare-html']);
     gulp.watch(['src/client/**/*.css'], ['prepare-css']);
     gulp.watch(['src/**/*.json'], ['prepare-json']);
+    gulp.watch(['config/**/*.json'], ['prepare-config']);
 });
 
 gulp.task('lint', function() {
@@ -110,7 +112,7 @@ gulp.task('serve', function () {
     nodemon({
         script: '_build/server/index.js',
         ext: 'js json',
-        watch: ['_build/server', 'config/'],
+        watch: ['_build/server'],
     }).on('log', function (log) { console.log(log.colour); });
 
 });
