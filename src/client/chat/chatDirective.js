@@ -1,5 +1,5 @@
 
-angular.module('chat').directive('anrChat', function () {
+angular.module('chat').directive('anrChat', function (wsService) {
     return {
         restrict: 'E',
         scope: {},
@@ -10,6 +10,7 @@ angular.module('chat').directive('anrChat', function () {
         	scope.testf = function () {
 				console.log('hello nrst', scope.chatmsg);
 				scope.chatmsg = "";
+	        	wsService.send('/sendchat', 'hello');
         	}; 
         },
     };    

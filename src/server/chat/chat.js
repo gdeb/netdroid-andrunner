@@ -10,7 +10,8 @@ module.exports = function (logger, ws_server) {
 		logger.info(`Chat message from ${session.user}: ${JSON.stringify(msg)}`);
 		ws_server.broadcast({
 			url: '/new_msg',
-			from: session.user
+			from: session.user,
+			msg: msg.msg,
 		});
 	}
 };
