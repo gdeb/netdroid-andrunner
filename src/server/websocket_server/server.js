@@ -26,7 +26,7 @@ module.exports = function (logger, session) {
 		broadcast (msg) {
 			logger.debug(`Broadcasting message ${JSON.stringify(msg)}`);
 			for (let client of websocket_server.clients) {
-				client.send(msg);
+				client.send(JSON.stringify(msg));
 			}
 		}
 	};
@@ -39,6 +39,9 @@ module.exports = function (logger, session) {
 					logger.info(`New connection from user ${session.user}`);
 					session.websocket = socket;
 					socket.on('message', msg => dispatch(msg, session));
+					socket.on('close', function () {
+						logger.info(`${session.user} disconnected`);	
+					});
 				} else {
 					logger.info('Connection attempt from unlogged user. Connection closed');
 					socket.close();
@@ -58,7 +61,7 @@ module.exports = function (logger, session) {
 			return;
 		}
 		if (json_msg.url in routes) {
-			routes[json_msg.route](json_msg, session);
+			routes[json_msg.url](json_msg, session);
 		} else {
 			logger.warn(`No valid route for message ${msg}`);
 		}
