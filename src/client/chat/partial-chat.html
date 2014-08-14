@@ -1,6 +1,7 @@
 <h3>Chat</h3>
 <div id="chat-window">
   <div>Welcome to Netdroid.</div>
+  <div ng-repeat="msg in msg_list">{{msg.from}}: {{msg.msg}}</div>
 </div>
 <div id="chat-input"><div>></div>
 	<form ng-submit="testf()">

@@ -1,3 +1,5 @@
+/*jslint node: true */
+'use strict';
 
 angular.module('chat').directive('anrChat', function (wsService) {
     return {
@@ -5,13 +7,23 @@ angular.module('chat').directive('anrChat', function (wsService) {
         scope: {},
         templateUrl: 'templates/partial-chat.html',
         link: function (scope, element) {
-        	scope.test = "nrst";
-        	scope.chatmsg = "ab";
+        	scope.msg_list = [];
+        	scope.chatmsg = "";
         	scope.testf = function () {
-				console.log('hello nrst', scope.chatmsg);
-				scope.chatmsg = "";
-	        	wsService.send('/sendchat', 'hello');
+        		if (scope.chatmsg !== "") {
+	        		wsService.send('/sendchat', scope.chatmsg);
+					scope.chatmsg = "";        			
+        		}
         	}; 
+
+        	wsService.add_route({
+        		url:'/new_msg',
+        		controller: function (msg) {
+        			console.log('yep', msg);
+        			scope.msg_list.push(msg);
+        			scope.$apply();
+        		}
+        	});
         },
     };    
 });

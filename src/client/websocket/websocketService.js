@@ -1,4 +1,3 @@
-
 /*jslint node: true */
 'use strict';
 
@@ -32,7 +31,7 @@ angular.module('websocket').factory('wsService', function ($rootScope, authServi
 			console.error('Invalid route:', route);
 			return;
 		} 
-		routes[route.url] = route.controller;
+		routes[route.url] = route;
 	}
 
 	function send (url, msg) {
