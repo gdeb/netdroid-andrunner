@@ -7,7 +7,8 @@ module.exports = function (logger, session) {
 	let routes = {},
 		session_store = session.session_store,
 		cookie_parser = session.cookie_parser,
-		websocket_server;
+		websocket_server,
+		connected_users = {};
 
 	return {
 		start(port) {
@@ -28,7 +29,15 @@ module.exports = function (logger, session) {
 			for (let client of websocket_server.clients) {
 				client.send(JSON.stringify(msg));
 			}
-		}
+		},
+		send (user, msg) {
+			if (!(user in connected_users)) {
+				logger.warn(`Trying to send message to ${user}, but she/he is not connected.`);
+				return;
+			}
+			logger.debug(`Sending ${msg} to ${user}`);
+			connected_users[user].send(JSON.stringify(msg));
+		},
 	};
 
 	function handle_connection (socket) {
@@ -37,10 +46,11 @@ module.exports = function (logger, session) {
 			session_store.get(session_id, function (err, session) {
 				if ('user' in session) {
 					logger.info(`New connection from user ${session.user}`);
-					session.websocket = socket;
+					connected_users[session.user] = socket;
 					socket.on('message', msg => dispatch(msg, session));
 					socket.on('close', function () {
 						logger.info(`${session.user} disconnected`);	
+						delete connected_users[session.user];
 					});
 				} else {
 					logger.info('Connection attempt from unlogged user. Connection closed');
