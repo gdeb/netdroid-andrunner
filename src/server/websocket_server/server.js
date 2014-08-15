@@ -57,14 +57,16 @@ module.exports = function (logger) {
 		}
 
 		add_new_connection (socket, session) {
+			let self = this;
 			if ('user' in session) {
 				logger.info(`New connection from user ${session.user}`);
 				this._users[session.user] = socket;
-				this.emit('new_connection', session.user);
+				this.emit('user:connection', session.user);
 				socket.on('message', msg => this.dispatch(msg, session));
 				socket.on('close', function () {
-					logger.info(`${session.user} disconnected`);	
-					delete this._users[session.user];
+					logger.info(`${session.user} disconnected`);
+					self.emit('user:disconnection', session.user);
+					delete self._users[session.user];
 				});
 			} else {
 				logger.info('Connection attempt from unlogged user. Connection closed');
