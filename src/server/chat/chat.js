@@ -4,6 +4,10 @@
 module.exports = function (logger, ws_server) {
 	ws_server.add_route({url:'/sendchat', controller: send_chat});
 
+	ws_server.on('new_connection', function (user) {
+		logger.debug('YES', user);
+	});
+	
 	return {};
 
 	function send_chat(msg, session) {
