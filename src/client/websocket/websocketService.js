@@ -20,7 +20,8 @@ angular.module('websocket').factory('wsService', function ($rootScope, authServi
 	};
 
 	function open_connection () {
-		ws = new WebSocket('ws://0.0.0.0:8081');
+		let hostname = window.location.hostname;
+		ws = new WebSocket(`ws://${hostname}:8081`);
 		ws.addEventListener('message', function (msg) {
 			dispatch_msg(JSON.parse(msg.data));
 		});
