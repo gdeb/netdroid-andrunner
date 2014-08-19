@@ -2,7 +2,7 @@
 'use strict';
 
 require('colors');
-let utils = require('../common/utils.js');
+let utils = require('../../common/utils.js');
 
 //-----------------------------------------------------------------------------
 function log(type, color, module_name, ...args) {
