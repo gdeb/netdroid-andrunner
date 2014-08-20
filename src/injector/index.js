@@ -16,11 +16,13 @@ module.exports = function (config) {
 		add_module: add_module,
 		start: start,
 
-		modules: {},
+		modules: modules,
 		services: services,
 	};
 
-	function add_module (name, mod) {
+	function add_module (mod) {
+		let name = mod.name;
+		logger.debug(`loading ${name}`);
 		if (name in modules) {
 			logger.error(`module ${name} already defined...`);
 			return;
@@ -29,13 +31,17 @@ module.exports = function (config) {
 			module_options = config.settings[name] || {};
 
 		modules[name] = mod(module_logger, module_options);
-		let mod_services = modules[name].services || {};
-		for (let service of Object.keys(mod_services)) {
-			add_service(name, service, mod_services[service]);
+		modules[name].depends = modules[name].depends || [];
+
+		let mod_services = modules[name].services || [];
+		for (let service of mod_services) {
+			add_service(name, service);
 		}
 	}
 
-	function add_service (module_name, service_name, service) {
+	function add_service (module_name, service) {
+		let service_name = service.name;
+		logger.debug(`loading ${service_name}`);
 		let name = `${module_name}.${service_name}`;
 		if (name in service) {
 			logger.error(`service ${name} already defined`);
@@ -46,45 +52,45 @@ module.exports = function (config) {
 			module = modules[module_name];
 
 		services[name] = service(service_logger, options);
+		services[name].depends = services[name].depends || [];
 
+		if (!('activate' in services[name])) {
+			logger.error(`No 'activate' function in service ${name}`);
+			return;
+		}
 	}
 
 
 	function start () {
-		logger.info(`starting application`);
+		logger.info(`starting services/modules`);
 
 		let to_activate = [],
 			dependencies = [];
 
-		for (let m of Object.keys(modules)) {
-			if (('activate' in modules[m]) != ('depends' in modules[m])) {
-				logger.error(`Module ${m} need to have 'depends' and 'activate' properties`);
-				return;
-			}
-			if ('activate' in modules[m]) {
 
-				// add activate to list and to deps
+		for (let s of Object.keys(services)) {
+			to_activate.push(s);
+			for (let dep of services[s].depends) {
+				dependencies.push({from: dep, to: s});
 			}
 		}
-		console.log(modules);
-		console.log(services);
+
+		to_activate = utils.topological_sort(to_activate, dependencies);
+
+		for (let s of to_activate) {
+			logger.debug(`activating ${s}`);
+			let deps = services[s].depends.map(name => services[name].value);
+			services[s].value = services[s].activate(...deps);
+		}
+
+		for (let m of Object.keys(modules)) {
+			if ('activate' in modules[m]) {
+				logger.debug(`activating ${m}`);
+				let deps = modules[m].depends.map(name => services[name].value);
+				modules[m].activate(...deps);
+			}
+		}
+		logger.info(`application loaded`)
 	}
 
 };
-
-// function makeModule (options) {
-
-// 	return {
-// 		service
-// 	}
-// }
-
-// let loggerFactory = require('./loggerFactory');
-// module.exports = loggerFactory;
-
-// let loggerFactory,
-// 	logger,
-// 	modules = {};
-// 	 = Moebius('console', 'debug', {colored: true});
-// let logger = loggerFactory('moebius');
-

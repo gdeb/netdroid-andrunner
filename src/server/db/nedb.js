@@ -6,11 +6,10 @@ let Datastore = require('nedb'),
 
 let str = JSON.stringify;
 
-module.exports = function (logger, options) {
+module.exports = function adapter (logger, options) {
 	let collections = {},
 		folder = options.folder;
 
-	logger.debug(folder);
 	function in_collection(name, method, ...args) {
 		if (name in collections) {
 			collections[name][method](...args);
@@ -46,7 +45,6 @@ module.exports = function (logger, options) {
 	}
 
 	return {
-		depends: [],
 		activate () {
 			return {
 				load: load,

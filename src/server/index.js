@@ -18,7 +18,7 @@ let modules = ['db'];
 
 for (let name of modules) {
 	let mod = require('./' + name);
-	netdroid.add_module(name, mod);
+	netdroid.add_module(mod);
 }
 
 
@@ -26,6 +26,8 @@ for (let name of modules) {
 //---------------------------------------------------------------------
 if (require.main === module) { 
 	netdroid.start();
+ 	// console.log(require('util').inspect(netdroid, true, 10)); // 10 levels deep
+ 	console.log(netdroid);
 } else {
 	module.exports = netdroid;
 }
