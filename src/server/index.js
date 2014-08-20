@@ -14,7 +14,7 @@ let node_env = process.env.NODE_ENV,
 
 // Loading project modules 
 //---------------------------------------------------------------------
-let modules = ['db'];
+let modules = ['db', 'users'];
 
 for (let name of modules) {
 	let mod = require('./' + name);
@@ -27,22 +27,13 @@ for (let name of modules) {
 if (require.main === module) { 
 	netdroid.start();
  	// console.log(require('util').inspect(netdroid, true, 10)); // 10 levels deep
- 	console.log(netdroid);
+ 	// console.log(netdroid);
 } else {
 	module.exports = netdroid;
 }
 
 
 
-
-// let loggerFactory = Moebius('console', 'debug', {colored: true});
-// let logger = loggerFactory('testii');
-
-
-// logger.debug('yuieuopla');
-// logger.info('info');
-// logger.warn('yopla');
-// logger.error('error');
 
 // let loader = require('./loader.js'),
 // 	env = process.env.NODE_ENV,

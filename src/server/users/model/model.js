@@ -30,16 +30,5 @@ module.exports = function (logger, db, permission) {
 				}
 			});
 		},
-		add_initial_users () {
-			let created = db.load('users');
-			if (created) {
-				let roles = permission.user_roles;
-				for (let user of require('./data.json')) {
-					user.role = roles[user.role];
-					this.add(user);
-				}				
-			}
-
-		}
 	};
 };

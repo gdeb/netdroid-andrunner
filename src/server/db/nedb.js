@@ -45,14 +45,10 @@ module.exports = function adapter (logger, options) {
 	}
 
 	return {
-		activate () {
-			return {
-				load: load,
-				insert: insert,
-				find: find,
-				update: update,
-			};
-		}
+		load: load,
+		insert: insert,
+		find: find,
+		update: update,
 	};
 };
 

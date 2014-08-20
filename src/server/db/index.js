@@ -1,13 +1,9 @@
 /*jslint node: true */
 'use strict';
 
-// Module db
-
-module.exports = function db (logger, options) {
-	let adapter_file = `./${options.adapter}.js`;
-	
+module.exports = function db (logger, options) {	
 	return {
-		services: [require(adapter_file)] 
+		values: [require(`./${options.adapter}.js`)]
 	};
 };
 

@@ -2,12 +2,12 @@
 'use strict';
 
 
-module.exports = function (logger) {
-	let permission = require('../../../common/permission.json');
-	return {
-		link () {
-			return permission;
-		},
-	};
+module.exports = function permission () {
+	return require('../../../common/permission.json');
 };
 
+	// return {
+	// 	link () {
+	// 		return permission;
+	// 	},
+	// };

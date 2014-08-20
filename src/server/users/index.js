@@ -3,19 +3,21 @@
 
 // Module users
 
-module.exports = function (logger) {
+module.exports = function users (logger) {
 	return {
-		depends: ['db', 'users.permission'],
-		submodules: ['permission'],
+		values: [require('./permission')],
+		services: [require('./model')],
 
-		link (...deps) {
-			return require('./model.js')(logger, ...deps);
-		},
-
-		run (users) {
-			users.add_initial_users();
+		depends: ['db.adapter', 'users.permission', 'users.model'],
+		activate (db, permission, users) {			
+			let created = db.load('users');
+			if (created) {
+				let roles = permission.user_roles;
+				for (let user of require('./data.json')) {
+					user.role = roles[user.role];
+					users.add(user);
+				}				
+			}
 		}
 	};
 };
-
-
