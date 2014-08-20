@@ -1,17 +1,46 @@
 /*jslint node: true */
 'use strict';
 
-let Moebius = require('../moebius');
 
-let loggerFactory = Moebius('console', 'debug', {colored: true});
-let logger = loggerFactory('testii');
+// Loading project configuration into injector
+//---------------------------------------------------------------------
+require('autostrip-json-comments');
+
+let node_env = process.env.NODE_ENV,
+	env = node_env === 'production' ? 'production' : 'development',
+	project_config = require(`./${env}.json`),
+	netdroid = require('../injector')(project_config);
 
 
-logger.debug('yuieuopla');
-logger.info('info');
-logger.warn('yopla');
-logger.error('error');
-// require('autostrip-json-comments');
+// Loading project modules 
+//---------------------------------------------------------------------
+let modules = ['db'];
+
+for (let name of modules) {
+	let mod = require('./' + name);
+	netdroid.add_module(name, mod);
+}
+
+
+// Starting/Exporting the application (depends if running standalone)
+//---------------------------------------------------------------------
+if (require.main === module) { 
+	netdroid.start();
+} else {
+	module.exports = netdroid;
+}
+
+
+
+
+// let loggerFactory = Moebius('console', 'debug', {colored: true});
+// let logger = loggerFactory('testii');
+
+
+// logger.debug('yuieuopla');
+// logger.info('info');
+// logger.warn('yopla');
+// logger.error('error');
 
 // let loader = require('./loader.js'),
 // 	env = process.env.NODE_ENV,
@@ -29,3 +58,4 @@ logger.error('error');
 
 
 
+// let db = require('./db');

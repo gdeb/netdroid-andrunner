@@ -1,19 +1,33 @@
 /*jslint node: true */
 'use strict';
 
-require('colors');
-let utils = require('../../common/utils.js');
+let utils = require('../common/utils.js');
 
-//-----------------------------------------------------------------------------
-function log(type, color, module_name, ...args) {
-    args.unshift(utils.getTimeStamp(), type[color], `[${module_name}]`);
-    console.log(...args);
-}
-
-module.exports = {
-    debug: function (...args) { log('- debug -', 'cyan', ...args); },
-    info: function (...args) { log('- info  -', 'green', ...args); },
-    warn: function (...args) { log('- warn  -', 'yellow', ...args); },
-    error: function (...args) { log('- error -', 'red', ...args); },
+const LEVELS_STR = {
+	debug: '- debug -',
+	info: '- info  -',
+	warn: '- warn  -',
+	error: '- error -',
 };
 
+const COL_LEVELS_STR = {
+	debug: '\x1B[36m- debug -\x1B[39m',
+	info: '\x1B[32m- info  -\x1B[39m',
+	warn: '\x1B[33m- warn  -\x1B[39m',
+	error: '\x1B[31m- error -\x1B[39m',
+};
+
+function log (type, module_name, ...args) {
+	let timestamp = utils.getTimeStamp();
+    console.log(timestamp, type, `[${module_name}]`, ...args);
+}
+
+module.exports = function (options = {}) {
+	let levels = options.colored ? COL_LEVELS_STR : LEVELS_STR;
+	return {
+	    debug (...args) { log(levels.debug, ...args); },
+	    info (...args) { log(levels.info, ...args); },
+	    warn (...args) { log(levels.warn, ...args); },
+	    error (...args) { log(levels.error, ...args); },
+	};
+};

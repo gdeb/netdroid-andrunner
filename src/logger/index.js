@@ -1,33 +1,31 @@
 /*jslint node: true */
 'use strict';
 
-// Module Logger
-module.exports = function (options) {
-	let logger = require(`./${options.type}Logger.js`);
-
-	return {
-		make: make_logger,
-	};
-
-	function make_logger (name) {
-		let log_level = options[name] || options.log_level;
-		return {
-			debug: function (...args) {
-				if (log_level === 'debug')
-					logger.debug(name, ...args);
-			},
-			info: function (...args) {
-				if (log_level === 'debug' || log_level === 'info')
-					logger.info(name, ...args);
-			},
-			warn: function (...args) {
-				if (log_level !== 'error') 
-					logger.warn(name, ...args);
-			},
-			error: function (...args) {
-				logger.error(name, ...args);
-			}
-		};
-	}
+const LEVELS = {
+	'debug': 0,
+	'info': 1,
+	'warn': 2,
+	'error': 3,
 };
+
+module.exports = function (options) {
+	let type = options.type,
+		log_level = options.log_level;
+
+	let logger = require('./consoleLogger.js')(options);
+
+	return function (name, level = log_level) {
+		return {
+			debug: (...args) => log('debug', ...args),
+			info: (...args) => log('info', ...args),
+			warn: (...args) => log('warn', ...args),
+			error: (...args) => log('error', ...args),
+		};
+
+		function log (actual_level, ...args) {
+			if (LEVELS[level] <= LEVELS[actual_level])
+				logger[actual_level](name, ...args);
+		}
+	}
+}
 

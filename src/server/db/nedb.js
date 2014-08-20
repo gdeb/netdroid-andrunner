@@ -6,40 +6,55 @@ let Datastore = require('nedb'),
 
 let str = JSON.stringify;
 
-module.exports = function (logger, folder) {
-	let collections = {};
+module.exports = function (logger, options) {
+	let collections = {},
+		folder = options.folder;
 
+	logger.debug(folder);
 	function in_collection(name, method, ...args) {
 		if (name in collections) {
 			collections[name][method](...args);
 		} else {
 			logger.error(`No collection (${name},${method},${args})`);
-			throw new Error(`Collection ${name} does not exist.`);			
+			return;
 		}		
 	}
 
+	function load (name) {
+		logger.debug(`loading/creating collection ${name}`);
+		let filename = `${folder}/${name}.db`,
+			created = !fs.existsSync(filename);
+		collections[name] = new Datastore({
+			filename: filename,
+			autoload: true
+		});
+		return created;			
+	}
+
+	function insert (name, doc) {
+		logger.debug(`inserting ${str(doc)} in ${name}`);
+		in_collection(name, 'insert', doc);
+	}
+
+	function find (name, info, callback) {
+		in_collection(name, 'find', info, callback);
+	}
+
+	function update (name, info, callback) {
+		logger.debug(`updating ${name} with ${str(info)}`);
+		in_collection(name, 'update', info, callback);
+	}
+
 	return {
-		load (name) {
-			logger.debug(`loading/creating collection ${name}`);
-			let filename = `${folder}/${name}.db`,
-				created = !fs.existsSync(filename);
-			collections[name] = new Datastore({
-				filename: filename,
-				autoload: true
-			});
-			return created;			
-		},
-		insert (name, doc) {
-			logger.debug(`inserting ${str(doc)} in ${name}`);
-			in_collection(name, 'insert', doc);
-		},
-		find (name, info, callback) {
-			in_collection(name, 'find', info, callback);
-		},
-		update (name, info, callback) {
-			logger.debug(`updating ${name} with ${str(info)}`);
-			in_collection(name, 'update', info, callback);
-		},
+		depends: [],
+		activate () {
+			return {
+				load: load,
+				insert: insert,
+				find: find,
+				update: update,
+			};
+		}
 	};
 };
 

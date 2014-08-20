@@ -3,13 +3,17 @@
 
 // Module db
 
-module.exports = function (logger, options) {
-	let adapter = require(`./${options.adapter}.js`),
-		folder = options.folder;
+let adapter;
 
+module.exports = function (logger, options) {
+	logger.debug(`loading ${options.adapter}`);
+	let adapter_file = `./${options.adapter}.js`;
+	
 	return {
-		link () {
-			return adapter(logger, folder);
+		depends: [],
+		activate () {},
+		services: {
+			adapter: require(adapter_file)
 		},
 	};
 };

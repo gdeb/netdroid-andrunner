@@ -112,7 +112,7 @@ gulp.task('serve', function () {
     nodemon({
         script: '_build/server/index.js',
         ext: 'js json',
-        watch: ['_build/server'],
+        watch: ['_build/'],
     }).on('log', function (log) { console.log(log.colour); });
 
 });
