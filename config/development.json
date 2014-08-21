@@ -23,13 +23,13 @@
 		"db.adapter": {
 			"folder": "./_build/db"
 		},
-		"http_server": {
+		"http": {
 			"port": 8080
 		},
-		"http_server.session": {
+		"http.session": {
 			"secret": "go netdroid"
 		},
-		"websocket_server": {
+		"websocket": {
 			"port": 8081
 		}
 	}

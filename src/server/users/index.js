@@ -9,7 +9,7 @@ module.exports = function users (logger) {
 		services: [require('./model')],
 
 		depends: ['db.adapter', 'users.permission', 'users.model'],
-		activate (db, permission, users) {			
+		start (db, permission, users) {			
 			let created = db.load('users');
 			if (created) {
 				let roles = permission.user_roles;

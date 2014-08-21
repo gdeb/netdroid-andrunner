@@ -14,7 +14,7 @@ let node_env = process.env.NODE_ENV,
 
 // Loading project modules 
 //---------------------------------------------------------------------
-let modules = ['db', 'users'];
+let modules = ['db', 'users', 'http', 'websocket'];
 
 for (let name of modules) {
 	let mod = require('./' + name);

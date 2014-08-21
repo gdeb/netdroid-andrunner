@@ -26,6 +26,6 @@ module.exports = function (options) {
 			if (LEVELS[level] <= LEVELS[actual_level])
 				logger[actual_level](name, ...args);
 		}
-	}
-}
+	};
+};
 

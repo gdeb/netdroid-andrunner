@@ -6,7 +6,7 @@ module.exports = function model (logger, options) {
 
 	return {
 		depends: ['db.adapter', 'users.permission'],
-		activate (...deps) {
+		start (...deps) {
 			return require('./model.js')(logger, ...deps);
 		}
 	};

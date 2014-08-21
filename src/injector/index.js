@@ -65,14 +65,14 @@ module.exports = function (config) {
 		services[name] = service(service_logger, options);
 		services[name].depends = services[name].depends || [];
 
-		if (!('activate' in services[name])) {
-			logger.error(`No 'activate' function in service ${name}`);
+		if (!('start' in services[name])) {
+			logger.error(`No 'start' function in service ${name}`);
 		}
 	}
 
 
-	function add_value (module_name, value) {
-		let name = `${module_name}.${value.name}`;
+	function add_value (module_name, service) {
+		let name = `${module_name}.${service.name}`;
 		logger.debug(`loading ${name}`);
 		if (is_taken(name)) {
 			logger.error(`Value ${name} already defined`);
@@ -82,39 +82,41 @@ module.exports = function (config) {
 		let value_logger = loggerFactory(name),
 			options = config.settings[name] || {};
 
-		values[name] = {value: value(value_logger, options)}; 
+		let v = service(value_logger, options);
+
+		values[name] = {value: v}; 
 	}
 
 	function start () {
 		logger.info(`starting services/modules`);
 
-		let to_activate = Object.keys(values),
+		let to_start = Object.keys(values),
 			dependencies = [];
 
 
 		for (let s of Object.keys(services)) {
-			to_activate.push(s);
+			to_start.push(s);
 			for (let dep of services[s].depends) {
 				dependencies.push({from: dep, to: s});
 			}
 		}
-		to_activate = topological_sort(to_activate, dependencies);
+		to_start = topological_sort(to_start, dependencies);
 
-		for (let s of to_activate) {
+		for (let s of to_start) {
 			let service = get_service(s);
-			if ('activate' in service) {
-				logger.debug(`activating ${s}`);
+			if ('start' in service) {
+				logger.debug(`starting ${s}`);
 				let deps = service.depends.map(name => get_service(name).value);
-				services[s].value = services[s].activate(...deps);
+				services[s].value = services[s].start(...deps);
 
 			}
 		}
 
 		for (let m of Object.keys(modules)) {
-			if ('activate' in modules[m]) {
-				logger.debug(`activating ${m}`);
+			if ('start' in modules[m]) {
+				logger.debug(`starting ${m}`);
 				let deps = modules[m].depends.map(name => get_service(name).value);
-				modules[m].activate(...deps);
+				modules[m].start(...deps);
 			}
 		}
 		logger.info(`application loaded`);
@@ -129,7 +131,7 @@ module.exports = function (config) {
 			return services[name];
 		}
 		if (name in values) {
-			return values[name]
+			return values[name];
 		}
 		logger.error(`Service ${name} is not defined`);
 	}
