@@ -33,7 +33,7 @@ angular.module('netdroid').config(['$locationProvider', function($locationProvid
     $locationProvider.html5Mode(true);
 }]);
 
-angular.module('netdroid').run(function () {
-	document.getElementsByTagName('body')[0].style.display = 'block';
-});
+// angular.module('netdroid').run(function () {
+// 	document.getElementsByTagName('body')[0].style.display = 'block';
+// });
 
