@@ -6,9 +6,8 @@ let Datastore = require('nedb'),
 
 let str = JSON.stringify;
 
-module.exports = function adapter (logger, options) {
-	let collections = {},
-		folder = options.folder;
+module.exports = function adapter (logger, folder) {
+	let collections = {};
 
 	function in_collection(name, method, ...args) {
 		if (name in collections) {

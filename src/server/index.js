@@ -1,37 +1,43 @@
 /*jslint node: true */
 'use strict';
 
-
-// Loading project configuration into injector
-//---------------------------------------------------------------------
 require('autostrip-json-comments');
 
 let node_env = process.env.NODE_ENV,
 	env = node_env === 'production' ? 'production' : 'development',
-	project_config = require(`./${env}.json`),
-	netdroid = require('../injector')(project_config);
+	settings = require(`./${env}.json`),
+	injector = require('../injector');
 
-
-// Loading project modules 
 //---------------------------------------------------------------------
-let modules = ['db', 'users', 'http', 'websocket'];
+
+let modules = [
+	'db',
+	// 'users',
+	// 'http',
+	// 'websocket',
+	// 'chat',
+];
+
+injector.config(settings);
+injector.module('netdroid', modules);
 
 for (let name of modules) {
-	let mod = require('./' + name);
-	netdroid.add_module(mod);
+	require('./' + name);
 }
 
 
-// Starting/Exporting the application (depends if running standalone)
 //---------------------------------------------------------------------
 if (require.main === module) { 
-	netdroid.start();
- 	// console.log(require('util').inspect(netdroid, true, 10)); // 10 levels deep
- 	// console.log(netdroid);
-} else {
-	module.exports = netdroid;
-}
+	injector.start('netdroid');
+} 
 
+
+// let modules = ['db', 'users', 'http', 'websocket'];
+
+// for (let name of modules) {
+// 	let mod = require('./' + name);
+// 	netdroid.add_module(mod);
+// }
 
 
 
