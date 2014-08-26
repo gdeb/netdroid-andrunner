@@ -5,14 +5,4 @@ let injector = require('../../injector');
 
 let db = injector.module('db', []);
 
-db.service('db_adapter', {
-	config (db_type, db_folder) {
-		this.type = db_type;
-		this.folder = db_folder;
-	},
-	build (logger) {
-		return require('./nedb.js')(logger, this.folder);
-	}
-});
-
-
+require('./adapterService.js');

@@ -22,7 +22,7 @@ const LEVELS = {
 	'error': 3,
 };
 
-let type, log_level, logger;
+let type, log_level, logger, settings;
 //---------------------------------------------------------------------
 
 module.exports = {
@@ -30,8 +30,10 @@ module.exports = {
 		type = options.type || type;
 		log_level = options.log_level || log_level;
 		logger = consoleLogger(options);
+		settings = options;
 	},
 	make (name, level = log_level) {
+		level = (name in settings) ? settings[name] : log_level;
 		function log (actual_level, ...args) {
 			if (LEVELS[level] <= LEVELS[actual_level])
 				logger[actual_level](name, ...args);

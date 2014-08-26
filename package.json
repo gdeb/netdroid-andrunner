@@ -36,6 +36,7 @@
     "font-awesome": "^4.1.0",
     "gulp-flatten": "0.0.2",
     "jquery": "^2.1.1",
+    "lodash": "^2.4.1",
     "nedb": "^0.10.5",
     "node.extend": "^1.0.10",
     "rimraf": "^2.2.8",

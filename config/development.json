@@ -12,25 +12,15 @@
 	"logger": {
 		"type": "console",
 		"log_level": "debug",
-		"colored": true
+		"colored": true,
 		// "loader": "debug",
 		// "websocket_server": "debug"
 	},
 	"settings": {
-		"db": {
-			"adapter": "nedb"
-		},
-		"db.adapter": {
-			"folder": "./_build/db"
-		},
-		"http": {
-			"port": 8080
-		},
-		"http.session": {
-			"secret": "go netdroid"
-		},
-		"websocket": {
-			"port": 8081
-		}
+		"db_type": "nedb",
+		"db_folder": "./_build/db",
+		"http_port": 8080,
+		"session_secret": "go netdroid",
+		"ws_port": 8081
 	}
 }

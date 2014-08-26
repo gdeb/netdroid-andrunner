@@ -42,27 +42,46 @@ module.exports = {
 		return this.modules[name];
 	},
 	start (module_name) {
-		logger.info(`starting ${module_name}`);
+		logger.info(`=== starting ${module_name} ===`);
 
-		start_config_phase();
-
-		logger.info('build phase');
-
-		logger.info('run phase');
+		config_phase();
+		build_phase();
+		run_phase();
 
 		logger.info(this);
 	},
+	constant (name, value) {
+		make_constant(null, name, value);
+	}
 };
 
-function start_config_phase () {
-	logger.info('configuration phase');
+function config_phase () {
+	logger.info('--- configuration phase ---');
 	for (let name of Object.keys(services))	{
 		let service = services[name];
-		// logger.debug(name);
-		let dep_names = getParamNames(service.config);
-		
-		// logger.debug('deps', deps);
+		if ('config' in service) {
+			logger.debug('configuring', name);
+			let dep_names = getParamNames(service.config),
+				deps = dep_names.map(function (dep_name) {
+					if (dep_name === 'logger') {
+						return loggerFactory.make(name);
+					} else if (!(dep_name in constants)) {
+						logger.error(`Dependency '${dep_name}' cannot be found in constants`);
+					}
+					return constants[dep_name];
+				});
+			service.config(...deps);
+		}
 	}
+}
+
+function build_phase () {
+	logger.info('--- build phase ---');
+}
+
+function run_phase () {
+	logger.info('--- run phase ---');
+	// for (let name of )
 }
 
 function make_module (name, dependencies) {
@@ -97,9 +116,12 @@ function make_constant (module, constant_name, value) {
 	}
 	logger.debug('creating constant', constant_name);
 	constants[constant_name] = value;
-	module.constants[constant_name] = value;
-	return module;
+	if (module) {
+		module.constants[constant_name] = value;
+		return module;
+	}
 }
+
 
 function getParamNames(fn) {
     let str = fn.toString(),
