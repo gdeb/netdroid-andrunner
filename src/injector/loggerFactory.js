@@ -1,7 +1,7 @@
 /*jslint node: true */
 'use strict';
 
-let utils = require('../common/utils.js');
+let utils = require('./utils');
 
 const LEVELS_STR = {
 	debug: '- debug -',

@@ -78,7 +78,7 @@ class WS_Server extends EventEmitter {
 			this.emit('user:connection', session.user);
 			socket.on('message', msg => this.dispatch(msg, session));
 			socket.on('close', function () {
-				this.logger.info(`${session.user} disconnected`);
+				self.logger.info(`${session.user} disconnected`);
 				self.emit('user:disconnection', session.user);
 				delete self._users[session.user];
 			});

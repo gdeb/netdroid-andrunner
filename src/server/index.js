@@ -30,5 +30,7 @@ for (let name of modules) {
 //---------------------------------------------------------------------
 if (require.main === module) { 
 	injector.start('netdroid');
-} 
+} else {
+	module.exports = netdroid;
+}
 
