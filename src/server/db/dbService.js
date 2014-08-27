@@ -3,7 +3,7 @@
 
 let injector = require('../../injector');
 
-injector.module('db').service('db_adapter', {
+injector.module('db').service('DB', {
 	config (db_type, db_folder) {
 		this.type = db_type;
 		this.folder = db_folder;

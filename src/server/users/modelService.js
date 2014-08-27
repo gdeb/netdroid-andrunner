@@ -5,18 +5,28 @@ let injector = require('../../injector');
 
 let user = injector.module('user');
 
-user.service('user_model', {
-	build: user_model
+user.service('Users', {
+	build: user_model,
+	run (DB, permission, Users) {
+		let created = DB.load('users');
+		if (created) {
+			let roles = permission.user_roles;
+			for (let user of require('./data.json')) {
+				user.role = roles[user.role];
+				Users.add(user);
+			}				
+		}
+	}
 });
 
-function user_model (logger, db_adapter, permission) {
+function user_model (logger, DB, permission) {
 	return {
 		add (user) {
 			logger.debug(`adding ${JSON.stringify(user)} to users`);
-			db_adapter.insert('users', user);
+			DB.insert('users', user);
 		},
 		find (name, password, callback) {
-			db_adapter.find('users', {
+			DB.find('users', {
 				username: name, 
 				password: password
 			}, callback);
@@ -26,9 +36,9 @@ function user_model (logger, db_adapter, permission) {
 				username: name,
 				password: old_pw,
 			};
-			db_adapter.find('users', user_info, function (err, users) {
+			DB.find('users', user_info, function (err, users) {
 				if (users.length) {
-					db_adapter.update('users', user_info, {$set: {password: new_pw}}, function (err) {
+					DB.update('users', user_info, {$set: {password: new_pw}}, function (err) {
 						return cb(null, "success");
 					});
 				} else {
@@ -38,3 +48,16 @@ function user_model (logger, db_adapter, permission) {
 		},
 	};
 };
+
+// 		depends: ['db.adapter', 'users.permission', 'users.model'],
+// 		start (db, permission, users) {			
+// 			let created = db.load('users');
+// 			if (created) {
+// 				let roles = permission.user_roles;
+// 				for (let user of require('./data.json')) {
+// 					user.role = roles[user.role];
+// 					users.add(user);
+// 				}				
+// 			}
+// 		}
+// 	};
