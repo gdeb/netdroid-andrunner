@@ -5,7 +5,7 @@ let injector = require('../../injector');
 
 injector.module('http', []);
 
-require('./sessionService.js');
-require('./accessControlService.js');
-require('./serverService.js');
-require('./authenticationService.js');
+require('./sessionService');
+require('./accessControlService');
+require('./serverService');
+require('./authenticationService');

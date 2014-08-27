@@ -5,6 +5,6 @@ let injector = require('../../injector');
 
 injector.module('user', []);
 
-require('./permissionService.js');
-require('./modelService.js');
+require('./permissionService');
+require('./modelService');
 

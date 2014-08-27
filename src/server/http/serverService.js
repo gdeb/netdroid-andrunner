@@ -6,7 +6,7 @@ let injector = require('../../injector'),
     bodyParser = require('body-parser'),
     compression = require('compression');
 
-let middlewares = require('./middlewares.js');
+let middlewares = require('./middlewares');
 
 let http = injector.module('http');
 

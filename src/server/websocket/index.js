@@ -5,4 +5,4 @@ let injector = require('../../injector');
 
 injector.module('websocket', []);
 
-require('./ws_serverService.js');
+require('./ws_serverService');
