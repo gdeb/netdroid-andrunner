@@ -13,7 +13,7 @@ let node_env = process.env.NODE_ENV,
 
 let modules = [
 	'db',
-	// 'users',
+	'users',
 	// 'http',
 	// 'websocket',
 	// 'chat',

@@ -3,7 +3,8 @@
 
 let injector = require('../../injector');
 
+let user = injector.module('user');
 
-injector.module('user').service('permission', {
-	value: require('../../../common/permission.json')
+user.service('permission', {
+	value: require('../../common/permission.json'),
 });
