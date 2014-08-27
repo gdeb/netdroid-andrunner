@@ -1,14 +1,8 @@
 /*jslint node: true */
 'use strict';
 
-// Module db
+let injector = require('../../injector');
 
-module.exports = function (logger) {
-	return {
-		depends: ['websocket_server'],
-		link (...deps) {
-			return require('./chat.js')(logger, ...deps);
-		},
-	};
-};
+injector.module('chat', []);
 
+require('./chatService.js');
