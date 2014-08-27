@@ -1,7 +1,17 @@
 /*jslint node: true */
 'use strict';
 
-module.exports = function (logger, users, http_server) {
+let injector = require('../../injector');
+
+let http = injector.module('http');
+
+http.service('authentication', {
+	build (logger, Users, server) {
+		authentication(logger, Users, server);
+	}
+});
+
+function authentication (logger, users, http_server) {
 
 	function process_login (req, res) {
 		users.find(req.body.username, req.body.password, function (err, users) {

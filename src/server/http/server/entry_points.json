@@ -1,7 +1,0 @@
-[
-	{"url": "/", "access_level": "public"},
-	{"url": "/lobby", "access_level": "user"},
-	{"url": "/decks", "access_level": "user"},
-	{"url": "/cards", "access_level": "user"},
-	{"url": "/profile", "access_level": "user"}
-]

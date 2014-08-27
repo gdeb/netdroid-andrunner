@@ -1,0 +1,20 @@
+{
+	"entry_points": [
+		{"url": "/", "access_level": "public"},
+		{"url": "/lobby", "access_level": "user"},
+		{"url": "/decks", "access_level": "user"},
+		{"url": "/cards", "access_level": "user"},
+		{"url": "/profile", "access_level": "user"}
+	],
+	"static_files": [
+		{"url": "/vendor", "path": "./node_modules/angular/lib/"},
+		{"url": "/vendor", "path": "./node_modules/angular-route/"},
+		{"url": "/vendor", "path": "./node_modules/angular-cookies/src/"},
+		{"url": "/vendor", "path": "./node_modules/bootstrap/dist/"},
+		{"url": "/vendor", "path": "./node_modules/jquery/dist/"},
+		{"url": "/templates", "path": "./_build/html/"},
+		{"url": "/fonts", "path": "./node_modules/font-awesome/fonts"},
+		{"url": "/css", "path":"./node_modules/font-awesome/css/"},
+		{"url": "/static", "path":"./_build/static/"}
+	]
+}

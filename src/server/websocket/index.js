@@ -1,14 +1,8 @@
 /*jslint node: true */
 'use strict';
 
+let injector = require('../../injector');
 
-module.exports = function websocket (logger, options) {
+injector.module('websocket', []);
 
-	return {
-		services: [require('./server')],
-		depends: ['websocket.server'],
-		start (server) {
-			server.start(options.port);
-		},
-	};
-};
+require('./ws_serverService.js');

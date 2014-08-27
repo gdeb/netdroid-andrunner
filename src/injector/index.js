@@ -44,7 +44,7 @@ module.exports = {
 		return this.modules[name];
 	},
 	start (module_name) {
-		logger.info(`=== starting ${module_name} ===`);
+		logger.debug(`starting ${module_name}`);
 
 		config_phase();
 		build_phase();
@@ -160,6 +160,10 @@ function make_service (module, service_name, service) {
 	}
 	if ('value' in service) {
 		service.build = function () { return service.value; };
+	}
+	if (!('build' in service)) {
+		logger.error(`Service ${service_name} should have a 'build' or a 'value' key.`);
+		return;
 	}
 	services[service_name] = service;
 	module.services[service_name] = service;

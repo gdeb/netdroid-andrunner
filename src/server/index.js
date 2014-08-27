@@ -14,8 +14,8 @@ let node_env = process.env.NODE_ENV,
 let modules = [
 	'db',
 	'users',
-	// 'http',
-	// 'websocket',
+	'http',
+	'websocket',
 	// 'chat',
 ];
 
