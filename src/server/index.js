@@ -18,9 +18,9 @@ let modules = [
 	'chat',
 ];
 
-app.module('netdroid', modules);
+app.create_module('netdroid', modules);
 
-_.each(settings.settings, (value, name) => app.constant(name, value));
+_.each(settings.settings, (value, name) => app.create_constant(name, value));
 
 for (let name of modules) {
 	require('./' + name);

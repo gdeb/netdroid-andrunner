@@ -3,6 +3,6 @@
 
 let app = require('../../moebius');
 
-let db = app.module('db', []);
+app.create_module('db', []);
 
 require('./dbService.js');

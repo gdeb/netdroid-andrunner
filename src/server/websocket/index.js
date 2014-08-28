@@ -3,6 +3,6 @@
 
 let app = require('../../moebius');
 
-app.module('websocket', []);
+app.create_module('websocket', []);
 
 require('./ws_serverService');

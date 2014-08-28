@@ -3,6 +3,6 @@
 
 let app = require('../../moebius');
 
-app.module('chat', []);
+app.create_module('chat', []);
 
 require('./chatService.js');

@@ -24,11 +24,13 @@ const LEVELS = {
 
 //---------------------------------------------------------------------
 module.exports = {
-	config ({type, log_level}) {
-		this.type = type;
-		this.log_level = log_level;
+	config (options) {
+		this.type = options.type;
+		this.log_level = options.log_level;
+		this.options = options;
 	},
-	make (name, level = this.log_level) {
+	make (name) {
+		let level = this.options[name] || this.log_level;
 		return new ConsoleLogger (name, level);
 	},
 };

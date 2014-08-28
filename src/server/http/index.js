@@ -3,7 +3,7 @@
 
 let app = require('../../moebius');
 
-app.module('http', []);
+app.create_module('http', []);
 
 require('./sessionService');
 require('./accessControlService');

@@ -11,9 +11,8 @@
 	},
 	"logger": {
 		"type": "console",
-		"log_level": "debug",
-		"colored": true,
-		// "loader": "debug",
+		"log_level": "info",
+		"colored": true
 		// "websocket_server": "debug"
 	},
 	"settings": {

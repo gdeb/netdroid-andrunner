@@ -1,239 +1,165 @@
 /*jslint node: true */
 'use strict';
 
-// class Injector {
-// 	constructor (logger_options) {
-
-// 	},
-// 	create_module (name, dependencies) {
-// 		// add property to modules: injector.modules.http.add_service(...)
-// 	},
-// 	create_constant (name, value) {
-
-// 	},
-
-// 	start (module) {
-
-// 	}
-
-// }
-
-// class Constant {
-
-// }
-// class Module {
-
-// }
-
-// class Component {
-
-// }
-
-// class Service extends Component {
-
-// }
-
-// class Value extends Component {
-	
-// }
-
-// module.exports = {
-// 	config (logger_options) {
-// 		this.injector = new Injector(logger_options);
-// 	},
-// 	module (name, dependencies) {
-// 		if (dependencies) {
-// 			return this.injector.create_module(name, dependencies);
-// 		} else {
-// 			return this.
-// 		}
-// 		this.injector.module()
-// 	}
-// }
 let _ = require('lodash');
 
 let topological_sort = require('./topological_sort'),
 	utils = require('./utils'),
-	loggerFactory = require('./loggerFactory'),
-	logger;
+	loggerFactory = require('./loggerFactory');
 
-
-let modules = {},
-	services = {},
-	constants = {};
-
-module.exports = {
-	modules: modules,
-	services: services,
-	constants: constants,
-
-	config (options) {
+//---------------------------------------------------------------------
+module.exports = class Injector {
+	constructor (options) {
 		loggerFactory.config(options);
-		logger = loggerFactory.make('injector');
-		// settings = options.settings;
-	},
-	module (name, dependencies) {
-		if (!logger) {
-			throw new Error('Injector need to be configured first');
-		}
-		if (!dependencies) {
-			if (name in this.modules) {
-				return this.modules[name];
-			} else {
-				logger.error(`Module ${name} does not exist`);
-				return;
-			}
-		}
+		this.logger = loggerFactory.make('injector');
+
+		this.modules = {};
+		this.services = {};
+		this.constants = {};
+	}
+	create_module (name, dependencies = []) {
 		if (name in this.modules) {
-			logger.error(`Duplicate module name: ${name}`);
+			this.logger.error(`duplicate module name: ${name}`);
 			return;
 		}
-		logger.debug(`creating module ${name}`);
-		this.modules[name] = make_module (name, dependencies);
+		this.logger.debug(`creating module ${name}`);
+		this.modules[name] = new Module(this, name, dependencies);
 		return this.modules[name];
-	},
+	}
+	module (name) {
+		if (name in this.modules) {
+			return this.modules[name];
+		} else {
+			this.logger.error(`module ${name} does not exist`);
+			return;
+		}
+	}
+	create_constant (name, value) {
+		if (name in this.constants) {
+			this.logger.error(`duplicate constant name: ${name}`);
+		}
+		this.logger.debug(`creating constant ${name}, value ${value}`);
+		this.constants[name] = value;
+	}
+
 	start (module_name) {
-		logger.debug(`starting ${module_name}`);
+		this.logger.debug(`starting ${module_name}...`);
+		this.config_phase();
+		this.build_phase();
+		this.run_phase();
+	}
 
-		config_phase();
-		build_phase();
-		run_phase();
+	config_phase () {
+		this.logger.info('--- configuration phase ---');
+		_.each(this.services, service => service.config(this.constants));
+	}
 
-	},
-	constant (name, value) {
-		make_constant(null, name, value);
+	build_phase () {
+		let self = this;
+		this.logger.info('--- build phase ---');
+		let services = _.filter(this.services, s => s.is_buildable()),
+			dependencies = [];
+
+		_.each(services, function (service) {
+			for (let dep of service.build_deps) {
+				if (!(dep in self.services) && dep !== 'logger'){
+					self.logger.error(`Missing dependency for service ${service.name}: '${dep}'`);
+				} else if (dep !== 'logger') {
+					dependencies.push({from: self.services[dep], to: service});
+				}
+			}
+		});
+
+		let ordered_services = topological_sort(services, dependencies);
+
+		_.each(ordered_services, s => s.build(this.services));
+	}
+
+	run_phase () {
+		this.logger.info('--- run phase ---');
+		_.each(this.services, service => service.run(this.services));
 	}
 };
 
-function config_phase () {
-	logger.info('--- configuration phase ---');
-	for (let name of Object.keys(services))	{
-		let service = services[name];
-		if ('config' in service) {
-			_config_service(name, service);
+//---------------------------------------------------------------------
+class Module {
+	constructor (parent, name, dependencies) {
+		this.name = name;
+		this.dependencies = dependencies;
+		this.parent = parent;
+		this.logger = parent.logger;
+		this.services = {};
+	}
+	service (name, definition) {
+		this.logger.debug(`creating service ${this.name}/${name}`);
+		if (name in this.parent.services) {
+			this.logger.error(`duplicate service name: ${service}`);
+			return;					
 		}
+		var s;
+		try {
+			s = new Service(name, definition, this.logger);
+		} 
+		catch (error) {
+			this.logger.error(error.message);
+			return;
+		}
+		this.services[name] = s;
+		this.parent.services[name] = s;
 	}
 }
 
-function _config_service (name, service) {
-	logger.debug('configuring', name);
-	let dep_names = utils.getParamNames(service.config),
-		deps = dep_names.map(function (dep_name) {
-			if (dep_name === 'logger') {
-				return loggerFactory.make(name);
-			} else if (!(dep_name in constants)) {
-				logger.error(`Dependency '${dep_name}' cannot be found in constants`);
-			}
-			return constants[dep_name];
-		});
-	service.config(...deps);
-}
-
-function build_phase () {
-	logger.info('--- build phase ---');
-
-	let to_build = _.values(services),
-		dependencies = [];
-
-	_.each(services, function (service) {
-		for (let dep of service.build_deps) {
-			if (!(dep in services) && dep !== 'logger'){
-				logger.error(`Missing dependency for service ${service.name}: '${dep}'`);
-			} else if (dep !== 'logger') {
-				dependencies.push({from: services[dep], to: service});
-			}
+//---------------------------------------------------------------------
+class Service {
+	constructor (name, service, logger) {
+		if ('value' in service && 'build' in service) {
+			throw new Error(`service '${name}' shouldn't have a 'value' and a 'build' key`);
 		}
-	});
+		this.name = name;
+		this.service = service;
+		this.logger = logger;
 
-	to_build = topological_sort(to_build, dependencies);
+		this.config_deps = service.config ? utils.getParamNames(service.config) : [];
+		this.build_deps = service.build ? utils.getParamNames(service.build) : [];
+		this.run_deps = service.run ? utils.getParamNames(service.run) : [];
 
-	for (let service of to_build) {
-		logger.debug(`building ${service.name}`);
-		let deps = service.build_deps.map(function (name) {
-			if (name === 'logger') {
-				return loggerFactory.make(service.name);
-			} else {
-				return services[name]._value;
-			}
-
-		});
-		service._value = service.build(...deps);
-		// logger.error(service);
+		this._value = undefined;
 	}
-}
-
-function run_phase () {
-	logger.info('--- run phase ---');
-	_.each(services, function (service) {
-		if ('run' in service) {
-			run_service(service);
+	is_buildable () {
+		return ('build' in this.service) || ('value' in this.service);
+	}
+	config (constants) { 
+		if ('config' in this.service) {
+			this.logger.info(`configuring ${this.name}`);
+			let deps = this.select_deps(this.config_deps, constants);
+			this.service.config(...deps); 		
 		}
-	});
-}
-
-function run_service (service) {
-	logger.debug(`running ${service.name}`);
-	let deps = service.run_deps.map(function (name) {
-		if (name === 'logger') {
-			return loggerFactory.make(service.name);
+	}
+	build (services) { 
+		this.logger.info(`building ${this.name}`);
+		if ('value' in this.service) {
+			this._value = this.service.value;
 		} else {
-			return services[name]._value;
+			let deps = this.select_deps(this.build_deps, services);
+			this._value = this.service.build(...deps);
 		}
-	});
-	service.run(...deps);
-}
+	}
+	run (services) { 
+		if ('run' in this.service) {
+			this.logger.info(`running ${this.name}`);
+			let deps = this.select_deps (this.run_deps, services);
+			this.service.run(...deps); 
+		}
+	}
 
-function make_module (name, dependencies) {
-	let module = {
-		name: name,
-		dependencies: dependencies,
-		service : (...args) => make_service(module, ...args),
-		constant: (...args) => make_constant(module, ...args),
-
-		services: {},
-		constants: {},
-	};
-	return module;
-}
-
-
-function make_service (module, service_name, service) {
-	if (service_name in services) {
-		logger.error(`Duplicate service name: ${service_name}`);
-		return;		
-	}
-	logger.debug('creating service', service_name);
-	if ('value' in service && 'build' in service) {
-		logger.error(`Service '${service_name}' shouldn't have a value and a config key`);
-		return;
-	}
-	if ('value' in service) {
-		service.build = function () { return service.value; };
-	}
-	if (!('build' in service)) {
-		logger.error(`Service ${service_name} should have a 'build' or a 'value' key.`);
-		return;
-	}
-	services[service_name] = service;
-	module.services[service_name] = service;
-	service.name = service_name;
-	service.build_deps = utils.getParamNames(service.build);
-	if ('run' in service) {
-		service.run_deps = utils.getParamNames(service.run);
-	}
-	return module;
-}
-
-function make_constant (module, constant_name, value) {
-	if (constant_name in constants) {
-		logger.error(`Duplicate constant name: ${constant_name}`);
-		return;
-	}
-	logger.debug('creating constant', constant_name);
-	constants[constant_name] = value;
-	if (module) {
-		module.constants[constant_name] = value;
-		return module;
+	select_deps (names, obj) {
+		let self = this;
+		return names.map(function (name) {
+			if (name === 'logger') {
+				return loggerFactory.make(self.name);
+			} else {
+				return (obj[name] instanceof Service) ? obj[name]._value : obj[name];
+			}
+		});
 	}
 }
-

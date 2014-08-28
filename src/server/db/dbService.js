@@ -10,6 +10,6 @@ app.module('db').service('DB', {
 	},
 	build (logger) {
 		return require('./nedb.js')(logger, this.folder);
-	}
+	},
 });
 
