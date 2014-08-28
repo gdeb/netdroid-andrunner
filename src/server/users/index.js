@@ -1,9 +1,9 @@
 /*jslint node: true */
 'use strict';
 
-let injector = require('../../injector');
+let app = require('../../moebius');
 
-injector.module('user', []);
+app.module('user', []);
 
 require('./permissionService');
 require('./modelService');

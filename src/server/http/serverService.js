@@ -1,14 +1,14 @@
 /*jslint node: true */
 'use strict';
 
-let injector = require('../../injector'),
+let app = require('../../moebius'),
 	express = require('express'),
     bodyParser = require('body-parser'),
     compression = require('compression');
 
 let middlewares = require('./middlewares');
 
-let http = injector.module('http');
+let http = app.module('http');
 
 http.service('server', {
 	config (http_port) {

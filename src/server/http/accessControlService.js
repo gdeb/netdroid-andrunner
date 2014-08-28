@@ -1,9 +1,9 @@
 /*jslint node: true */
 'use strict';
 
-let injector = require('../../injector');
+let app = require('../../moebius');
 
-let http = injector.module('http');
+let http = app.module('http');
 
 http.service('accessControl', {
 	build (logger, Users, permission) {

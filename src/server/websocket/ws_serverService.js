@@ -1,11 +1,11 @@
 /*jslint node: true */
 'use strict';
 
-let injector = require('../../injector'),
+let app = require('../../moebius'),
 	WebSocketServer = require('ws').Server,
 	EventEmitter = require('events').EventEmitter;
 
-let websocket = injector.module('websocket');
+let websocket = app.module('websocket');
 
 websocket.service('ws_server', {
 	config (ws_port) {

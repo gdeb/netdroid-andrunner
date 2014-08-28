@@ -1,8 +1,8 @@
 /*jslint node: true */
 'use strict';
 
-let injector = require('../../injector');
+let app = require('../../moebius');
 
-let db = injector.module('db', []);
+let db = app.module('db', []);
 
 require('./dbService.js');

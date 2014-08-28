@@ -1,9 +1,9 @@
 /*jslint node: true */
 'use strict';
 
-let injector = require('../../injector');
+let app = require('../../moebius');
 
-let chat = injector.module('chat');
+let chat = app.module('chat');
 
 chat.service('chat', {
 	build (logger, ws_server) {

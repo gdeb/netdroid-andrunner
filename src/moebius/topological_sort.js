@@ -17,7 +17,6 @@ module.exports = function topological_sort(nodes, edges) {
 			}
 		} 
 	}
-
 	if (edges.length) {
 		throw new Error('not a directed acyclic graph');
 	} 

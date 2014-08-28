@@ -1,8 +1,8 @@
 /*jslint node: true */
 'use strict';
 
-let injector = require('../../injector');
+let app = require('../../moebius');
 
-injector.module('websocket', []);
+app.module('websocket', []);
 
 require('./ws_serverService');

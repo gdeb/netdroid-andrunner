@@ -7,7 +7,7 @@ let _ = require('lodash');
 let node_env = process.env.NODE_ENV,
 	env = node_env === 'production' ? 'production' : 'development',
 	settings = require(`./${env}.json`),
-	injector = require('../injector');
+	app = require('../moebius')(settings.logger);
 
 //---------------------------------------------------------------------
 let modules = [
@@ -18,10 +18,9 @@ let modules = [
 	'chat',
 ];
 
-injector.config(settings);
-injector.module('netdroid', modules);
+app.module('netdroid', modules);
 
-_.each(settings.settings, (value, name) => injector.constant(name, value));
+_.each(settings.settings, (value, name) => app.constant(name, value));
 
 for (let name of modules) {
 	require('./' + name);
@@ -29,8 +28,8 @@ for (let name of modules) {
 
 //---------------------------------------------------------------------
 if (require.main === module) { 
-	injector.start('netdroid');
+	app.start('netdroid');
 } else {
-	module.exports = netdroid;
+	module.exports = app;
 }
 

@@ -1,11 +1,11 @@
 /*jslint node: true */
 'use strict';
 
-let injector = require('../../injector'),
+let app = require('../../moebius'),
 	express_session = require('express-session'),
 	cookieParser = require('cookie-parser');
 
-let http = injector.module('http');
+let http = app.module('http');
 
 http.service('session', {
 	config (session_secret) {

@@ -1,13 +1,61 @@
 /*jslint node: true */
 'use strict';
 
+// class Injector {
+// 	constructor (logger_options) {
+
+// 	},
+// 	create_module (name, dependencies) {
+// 		// add property to modules: injector.modules.http.add_service(...)
+// 	},
+// 	create_constant (name, value) {
+
+// 	},
+
+// 	start (module) {
+
+// 	}
+
+// }
+
+// class Constant {
+
+// }
+// class Module {
+
+// }
+
+// class Component {
+
+// }
+
+// class Service extends Component {
+
+// }
+
+// class Value extends Component {
+	
+// }
+
+// module.exports = {
+// 	config (logger_options) {
+// 		this.injector = new Injector(logger_options);
+// 	},
+// 	module (name, dependencies) {
+// 		if (dependencies) {
+// 			return this.injector.create_module(name, dependencies);
+// 		} else {
+// 			return this.
+// 		}
+// 		this.injector.module()
+// 	}
+// }
 let _ = require('lodash');
 
 let topological_sort = require('./topological_sort'),
 	utils = require('./utils'),
 	loggerFactory = require('./loggerFactory'),
-	logger,
-	settings;
+	logger;
 
 
 let modules = {},
@@ -20,9 +68,9 @@ module.exports = {
 	constants: constants,
 
 	config (options) {
-		loggerFactory.config(options.logger);
+		loggerFactory.config(options);
 		logger = loggerFactory.make('injector');
-		settings = options.settings;
+		// settings = options.settings;
 	},
 	module (name, dependencies) {
 		if (!logger) {

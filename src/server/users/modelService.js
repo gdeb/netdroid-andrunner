@@ -1,9 +1,9 @@
 /*jslint node: true */
 'use strict';
 
-let injector = require('../../injector');
+let app = require('../../moebius');
 
-let user = injector.module('user');
+let user = app.module('user');
 
 user.service('Users', {
 	build: user_model,

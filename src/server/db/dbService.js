@@ -1,9 +1,9 @@
 /*jslint node: true */
 'use strict';
 
-let injector = require('../../injector');
+let app = require('../../moebius');
 
-injector.module('db').service('DB', {
+app.module('db').service('DB', {
 	config (db_type, db_folder) {
 		this.type = db_type;
 		this.folder = db_folder;
