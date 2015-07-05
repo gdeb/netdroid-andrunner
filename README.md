@@ -1,3 +1,5 @@
+WARNING: This project is abandoned.  I hope to restart it someday, using other hype technologies, such as reactjs, mercury, FRP, ...
+
 netdroid-andrunner
 ==================
 
